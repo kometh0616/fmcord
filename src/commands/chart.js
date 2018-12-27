@@ -38,6 +38,8 @@ exports.run = async (client, message, args) => {
   const [x, y] = axisArray;
   if (x > 5) return message.channel.send(`The first number of the grid size ` +
   `must not be bigger than 5 tiles!`);
+  if (y > 10) return message.channel.send(`The last number of the grid size ` +
+  `must not be bigger than 10 tiles!`);
 
   const { botOwnerID } = client.config;
   const Users = client.sequelize.import(`../models/Users.js`);
