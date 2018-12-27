@@ -4,10 +4,10 @@
   "description": "A last.fm Discord bot for The Static Server.",
   "main": "bot.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node bot"
   },
   "author": "Kometh",
-  "scripts"
   "license": "MIT",
   "dependencies": {
     "canvas": "^2.2.0",
