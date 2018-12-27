@@ -9,4 +9,4 @@ FMCord is written in a Javascript language. The libraries for development used a
 
 Want to report an issue/bug? Head over to "Issues" tab and submit one.
 
-You can invite the bot to your Discord server with this (link.)[https://discordapp.com/api/oauth2/authorize?client_id=521041865999515650&permissions=2048&scope=bot]
+You can invite the bot to your Discord server with this [link.](https://discordapp.com/api/oauth2/authorize?client_id=521041865999515650&permissions=2048&scope=bot)
