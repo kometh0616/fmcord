@@ -1,0 +1,21 @@
+{
+  "name": "fmcord",
+  "version": "1.0.0",
+  "description": "A last.fm Discord bot for The Static Server.",
+  "main": "bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kometh",
+  "license": "MIT",
+  "dependencies": {
+    "canvas": "^2.2.0",
+    "discord.js": "^11.4.2",
+    "node-fetch": "^2.3.0",
+    "sequelize": "^4.41.2",
+    "sqlite3": "^4.0.4"
+  },
+  "devDependencies": {
+    "eslint": "^5.10.0"
+  }
+}
