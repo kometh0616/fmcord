@@ -1,27 +1,10 @@
-Welcome to the Glitch BETA
-==========================
+# FMCord
 
-Click `Show` in the header to see your app live. Updates to your code will instantly deploy and update live.
+FMCord is a Discord bot with various Last.fm related utilities. It is created with a purpose to create album grids, but its capabilities are considered to be extended in the future.
 
-**Glitch** is the friendly community where you'll build the app of your dreams. Glitch lets you instantly create, remix, edit, and host an app, bot or site, and you can invite collaborators or helpers to simultaneously edit code with you.
+FMCord is written in a Javascript language. The libraries for development used are:
+- [Discord.js](https://discord.js.org/) - for interaction with Discord API
+- [node-canvas](https://www.npmjs.com/package/canvas) - for image manipulation
+- [node-fetch](https://www.npmjs.com/package/node-fetch) - for interaction with Last.fm API
 
-Find out more [about Glitch](https://glitch.com/about).
-
-
-Your Project
-------------
-
-On the front-end,
-- edit `public/client.js`, `public/style.css` and `views/index.html`
-- drag in `assets`, like images or music, to add them to your project
-
-On the back-end,
-- your app starts at `server.js`
-- add frameworks and packages in `package.json`
-- safely store app secrets in `.env` (nobody can see this but you and people you invite)
-
-
-Made by [Fog Creek](https://fogcreek.com/)
--------------------
-
-\ ゜o゜)ノ
+Want to report an issue/bug? Head over to "Issues" tab and submit one.
