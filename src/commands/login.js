@@ -20,6 +20,15 @@ exports.run = async (client, message, args) => {
     const data = await fetch(endpoint + query).then(r => r.json());
     if (data.error === 6) return message.reply(`no Last.fm user found with ` +
     `given nickname!`);
+    const alreadyExists = await Users.findOne({
+      where: {
+        discordUserID: message.author.id
+      }
+    });
+    if (alreadyExists) return message.reply(`you already have logged in via ` +
+    `this bot! Please do \`${client.config.prefix}logout\` if you want to ` +
+    `use a different account.`);
+    
     await Users.create({
       discordUserID: message.author.id,
       lastFMUsername: data.user.name
