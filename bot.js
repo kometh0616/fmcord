@@ -10,6 +10,8 @@ setInterval(() => {
   http.get(`http://${process.env.PROJECT_DOMAIN}.glitch.me/`);
 }, 280000);
 
+const x = null;
+
 const fs = require(`fs`);
 const { Client, Collection } = require(`discord.js`);
 const config = require(`./config.json`);
