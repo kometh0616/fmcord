@@ -40,6 +40,9 @@ exports.run = async (client, message, args) => {
   `the grid size must not be bigger than 5 tiles and the last number of ` +
   `the grid size must not be bigger than 10 tiles!`);
 
+  message.channel.startTyping();
+  setTimeout(message.channel.stopTyping, 5000);
+
   const { botOwnerID } = client.config;
   const Users = client.sequelize.import(`../models/Users.js`);
   try {
