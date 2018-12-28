@@ -4,8 +4,12 @@
   "description": "A last.fm Discord bot for The Static Server.",
   "main": "bot.js",
   "scripts": {
+<<<<<<< HEAD
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node bot"
+=======
+    "test": "echo \"Error: no test specified\" && exit 1"
+>>>>>>> 22ef401d24eb52a7637f4a02924a49430088a2cb
   },
   "author": "Kometh",
   "license": "MIT",
@@ -14,10 +18,18 @@
     "discord.js": "^11.4.2",
     "node-fetch": "^2.3.0",
     "sequelize": "^4.41.2",
+<<<<<<< HEAD
     "sqlite3": "^4.0.4",
     "express": "^4.16.4"
+=======
+    "sqlite3": "^4.0.4"
+>>>>>>> 22ef401d24eb52a7637f4a02924a49430088a2cb
   },
   "devDependencies": {
     "eslint": "^5.10.0"
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 22ef401d24eb52a7637f4a02924a49430088a2cb
