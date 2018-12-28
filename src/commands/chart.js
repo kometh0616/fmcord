@@ -122,7 +122,7 @@ exports.run = async (client, message, args) => {
     }
 
     const buffer = finalCanvas.toBuffer();
-    await msg.edit({file: buffer});
+    await message.channel.send({file: buffer});
 
   } catch (e) {
     console.error(e);
