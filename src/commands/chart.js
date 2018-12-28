@@ -40,7 +40,7 @@ exports.run = async (client, message, args) => {
   `the grid size must not be bigger than 5 tiles and the last number of ` +
   `the grid size must not be bigger than 10 tiles!`);
 
-  const msg = await message.reply(`please wait until your grid is done...`);
+  await message.reply(`please wait until your grid is done...`);
 
   const { botOwnerID } = client.config;
   const Users = client.sequelize.import(`../models/Users.js`);
@@ -122,7 +122,7 @@ exports.run = async (client, message, args) => {
     }
 
     const buffer = finalCanvas.toBuffer();
-    await msg.edit({file: buffer});
+    await message.channel.send({file: buffer});
 
   } catch (e) {
     console.error(e);
