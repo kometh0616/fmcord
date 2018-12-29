@@ -116,7 +116,8 @@ exports.run = async (client, message, args) => {
     for (let byChart = 0; byChart < 100 * y; byChart += 100) {
       for (let inChart = 15; inChart <= 15 * x; inChart += 15) {
         let yAxis = byChart + inChart;
-        fctx.fillText(names[i], x * 100 + 15, yAxis);
+        if (names[i] !== undefined)
+          fctx.fillText(names[i], x * 100 + 15, yAxis);
         i++;
       }
     }
