@@ -40,8 +40,6 @@ exports.run = async (client, message, args) => {
   `the grid size must not be bigger than 5 tiles and the last number of ` +
   `the grid size must not be bigger than 10 tiles!`);
 
-  await message.reply(`please wait until your grid is done...`);
-
   const { botOwnerID } = client.config;
   const Users = client.sequelize.import(`../models/Users.js`);
   try {
@@ -53,6 +51,7 @@ exports.run = async (client, message, args) => {
     if (!user) return message.reply(`you haven't registered your Last.fm ` +
     `user account to this bot! Please do so with \`&login <lastfm username>\` ` +
     `to be able to use this command!`);
+    await message.reply(`please wait until your grid is done...`);
     const query = querystring.stringify({
       method: `user.gettopalbums`,
       user: user.get(`lastFMUsername`),
