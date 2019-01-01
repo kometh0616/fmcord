@@ -73,7 +73,7 @@ exports.run = async (client, message, args) => {
       if (a.image[3][`#text`] !== ``) {
         proms.push(canvas.loadImage(a.image[3][`#text`]));
       } else {
-        proms.push(canvas.loadImage(`${process.env.PWD}/images/no_image.png`));
+        proms.push(canvas.loadImage(`${process.env.PWD}/images/no_album.png`));
       }
     });
     const imgs = await Promise.all(proms);
