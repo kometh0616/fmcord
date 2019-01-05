@@ -33,18 +33,10 @@
   let hiccedAt = 0;
   album.forEach(a => {
     if (a.image[3][`#text`].startsWith(`https://`)) {
-      links.push(a.image[3][`#text`]);
+      stream.write(`${a.image[3][`#text`]}\n`);
       proms.push(canvas.loadImage(a.image[3][`#text`]));
     } else {
       proms.push(canvas.loadImage(`${process.env.PWD}/images/no_album.png`));
     }
-  });
-  links.forEach(link => {
-    canvas.loadImage(link).then(() => {
-      hiccedAt++;
-    }).catch(err => {
-      message.channel.send(`Hicced up at: ${hiccedAt}`);
-      console.error(err.stack)
-    });
   });
 })();
