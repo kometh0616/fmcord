@@ -30,7 +30,7 @@
 
   const proms = [];
   const links = [];
-  let num = 1;
+  let hiccedAt = 0;
   album.forEach(a => {
     if (a.image[3][`#text`].startsWith(`https://`)) {
       links.push(a.image[3][`#text`]);
@@ -39,52 +39,12 @@
       proms.push(canvas.loadImage(`${process.env.PWD}/images/no_album.png`));
     }
   });
-  const imgs = await Promise.all(proms);
-
-  let iter = 0;
-  for (let yAxis = 0; yAxis < y * 100; yAxis += 100) {
-    if (imgs[iter] !== undefined) {
-      for (let xAxis = 0; xAxis < x * 100; xAxis += 100) {
-        if (imgs[iter] !== undefined) {
-          ctx.drawImage(imgs[iter], xAxis, yAxis, 100, 100);
-          iter++;
-        } else break;
-      }
-    } else break;
-  }
-
-  const names = [];
-  album.forEach(a => names.push(`${a.artist.name} - ${a.name}`));
-  let longestNum = -Infinity;
-  let longestName;
-  names.forEach(name => {
-    if (longestNum < name.length) {
-      longestNum = name.length;
-      longestName = name;
-    }
+  links.forEach(link => {
+    canvas.loadImage(link).then(() => {
+      hiccedAt++;
+    }).catch(err => {
+      message.channel.send(`Hicced up at: ${hiccedAt}`);
+      console.error(err.stack)
+    });
   });
-
-  const { width } = ctx.measureText(longestName);
-  const xAxis = x * 100 + 60 + width;
-  let yAxis = y * 100;
-  const finalCanvas = canvas.createCanvas(xAxis, yAxis);
-  const fctx = finalCanvas.getContext(`2d`);
-  fctx.fillStyle = `black`;
-  fctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
-  fctx.drawImage(canv, 0, 0);
-  fctx.fillStyle = `white`;
-  fctx.font = `12px helvetica`;
-  let i = 0;
-  for (let byChart = 0; byChart < 100 * y; byChart += 100) {
-    for (let inChart = 15; inChart <= 15 * x; inChart += 15) {
-      let yAxis = byChart + inChart;
-      if (names[i] !== undefined)
-        fctx.fillText(names[i], x * 100 + 15, yAxis);
-      i++;
-    }
-  }
-
-  const buffer = finalCanvas.toBuffer();
-  await message.channel.send({file: buffer});
-
 })();
