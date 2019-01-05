@@ -7,7 +7,7 @@ canvas.registerFont(`${process.env.PWD}/helvetica.ttf`, {
 
 exports.run = async (client, message, args) => {
   const usageWarning = `Incorrect usage of a command! Correct usage ` +
-  `would be: \`&chart <time period> <grid size>\``;
+  `would be: \`&artistchart <time period> <grid size>\``;
   let period;
 
   switch (args[0]) {
