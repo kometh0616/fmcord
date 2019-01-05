@@ -29,11 +29,11 @@
   const ctx = canv.getContext(`2d`);
 
   const proms = [];
+  const links = [];
   let num = 1;
   album.forEach(a => {
-    stream.write(`${num}. ${a.image[3][`#text`]}\n`);
-    num++;
-    if (a.image[3][`#text`]) {
+    if (a.image[3][`#text`].startsWith(`https://`)) {
+      links.push(a.image[3][`#text`]);
       proms.push(canvas.loadImage(a.image[3][`#text`]));
     } else {
       proms.push(canvas.loadImage(`${process.env.PWD}/images/no_album.png`));
