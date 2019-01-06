@@ -12,6 +12,6 @@ exports.run = async (client, message, args) => {
     });
   } catch (e) {
     console.log(e);
-    message.reply(e, {code: `js`, split: true});
+    message.channel.send(`${e}`, {code: `js`, split: true});
   }
 };
