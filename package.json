@@ -14,12 +14,8 @@
     "discord.js": "^11.4.2",
     "node-fetch": "^2.3.0",
     "sequelize": "^4.41.2",
-<<<<<<< HEAD
     "sqlite3": "^4.0.4",
     "express": "^4.16.4"
-=======
-    "sqlite3": "^4.0.6"
->>>>>>> 1162c65fe5a4f741b459ac47a38b68d7f8a01de6
   },
   "devDependencies": {
     "eslint": "^5.10.0",
