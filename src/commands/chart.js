@@ -49,8 +49,13 @@ exports.run = async (client, message, args) => {
       }
     });
     if (!user) return message.reply(`you haven't registered your Last.fm ` +
+<<<<<<< HEAD
     `user account to this bot! Please do so with \`&login <lastfm username>\` ` +
     `to be able to use this command!`);
+=======
+    `user account to this bot! Please do so with \`${client.config.prefix}` +
+    `login <lastfm username>\` to be able to use this command!`);
+>>>>>>> 1162c65fe5a4f741b459ac47a38b68d7f8a01de6
     await message.reply(`please wait until your grid is done...`);
     const query = querystring.stringify({
       method: `user.gettopalbums`,
@@ -70,7 +75,7 @@ exports.run = async (client, message, args) => {
 
     const proms = [];
     album.forEach(a => {
-      if (a.image[3][`#text`] !== ``) {
+      if (a.image[3][`#text`].length > 0) {
         proms.push(canvas.loadImage(a.image[3][`#text`]));
       } else {
         proms.push(canvas.loadImage(`${process.env.PWD}/images/no_album.png`));

@@ -55,6 +55,8 @@ exports.run = async (client, message, args) => {
       else break;
     }
   }
+  if (matches.length === 0) return message.reply(`you and `
+  + `${user.get(`lastFMUsername`)} share no common artists.`);
   matches.sort((a, b) => a.difference - b.difference);
   const embed = new RichEmbed()
     .setColor(message.member.displayColor)
