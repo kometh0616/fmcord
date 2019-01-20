@@ -49,11 +49,11 @@ exports.run = async (client, message, args) => {
       }
     });
     if (!user) return message.reply(`you haven't registered your Last.fm ` +
-    `user account to this bot! Please do so with \`&login <lastfm username>\` ` +
-    `to be able to use this command!`);
+    `user account to this bot! Please do so with \`${client.config.prefix}` +
+    `login <lastfm username>\` to be able to use this command!`);
     await message.reply(`please wait until your grid is done...`);
     const query = querystring.stringify({
-      method: `user.gettopartists`,
+      method: `user.gettopalbums`,
       user: user.get(`lastFMUsername`),
       period: period,
       limit: `${x*y}`,
@@ -63,17 +63,17 @@ exports.run = async (client, message, args) => {
     const endpoint = `http://ws.audioscrobbler.com/2.0/?`;
     const data = await fetch(endpoint + query).then(r => r.json());
 
-    const { artist } = data.topartists;
+    const { album } = data.topalbums;
 
     const canv = canvas.createCanvas(x*100, y*100);
     const ctx = canv.getContext(`2d`);
 
     const proms = [];
-    artist.forEach(a => {
-      if (a.image[3][`#text`] !== ``) {
+    album.forEach(a => {
+      if (a.image[3][`#text`].length > 0) {
         proms.push(canvas.loadImage(a.image[3][`#text`]));
       } else {
-        proms.push(canvas.loadImage(`${process.env.PWD}/images/no_artist.png`));
+        proms.push(canvas.loadImage(`${process.env.PWD}/images/no_album.png`));
       }
     });
     const imgs = await Promise.all(proms);
@@ -91,7 +91,7 @@ exports.run = async (client, message, args) => {
     }
 
     const names = [];
-    artist.forEach(a => names.push(`${a.name} - ${a.playcount} plays`));
+    album.forEach(a => names.push(`${a.artist.name} - ${a.name}`));
     let longestNum = -Infinity;
     let longestName;
     names.forEach(name => {
