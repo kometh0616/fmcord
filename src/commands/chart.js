@@ -7,7 +7,7 @@ canvas.registerFont(`${process.env.PWD}/helvetica.ttf`, {
 
 exports.run = async (client, message, args) => {
   const usageWarning = `Incorrect usage of a command! Correct usage ` +
-  `would be: \`&albumchart <time period> <grid size>\``;
+  `would be: \`&chart <time period> <grid size>\``;
   let period;
 
   switch (args[0]) {
@@ -49,13 +49,8 @@ exports.run = async (client, message, args) => {
       }
     });
     if (!user) return message.reply(`you haven't registered your Last.fm ` +
-<<<<<<< HEAD
-    `user account to this bot! Please do so with \`&login <lastfm username>\` ` +
-    `to be able to use this command!`);
-=======
     `user account to this bot! Please do so with \`${client.config.prefix}` +
     `login <lastfm username>\` to be able to use this command!`);
->>>>>>> 1162c65fe5a4f741b459ac47a38b68d7f8a01de6
     await message.reply(`please wait until your grid is done...`);
     const query = querystring.stringify({
       method: `user.gettopalbums`,
