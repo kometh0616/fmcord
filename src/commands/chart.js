@@ -1,4 +1,4 @@
-const querystring = require(`querystring`);
+const { stringify } = require(`querystring`);
 const fetch = require(`node-fetch`);
 const canvas = require(`canvas`);
 canvas.registerFont(`${process.env.PWD}/helvetica.ttf`, {
@@ -51,8 +51,8 @@ exports.run = async (client, message, args) => {
     if (!user) return message.reply(`you haven't registered your Last.fm ` +
     `user account to this bot! Please do so with \`${client.config.prefix}` +
     `login <lastfm username>\` to be able to use this command!`);
-    await message.reply(`please wait until your grid is done...`);
-    const query = querystring.stringify({
+    await message.channel.send(`Please wait until your grid is done...`);
+    const query = stringify({
       method: `user.gettopalbums`,
       user: user.get(`lastFMUsername`),
       period: period,
@@ -122,7 +122,7 @@ exports.run = async (client, message, args) => {
     }
 
     const buffer = finalCanvas.toBuffer();
-    await message.channel.send({file: buffer});
+    await message.reply(`here is your grid.`, { file: buffer });
 
   } catch (e) {
     console.error(e);
