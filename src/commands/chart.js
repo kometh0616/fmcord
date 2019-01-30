@@ -60,8 +60,8 @@ exports.run = async (client, message, args) => {
       api_key: client.config.lastFM.apikey,
       format: `json`,
     });
-    const endpoint = `http://ws.audioscrobbler.com/2.0/?`;
-    const data = await fetch(endpoint + query).then(r => r.json());
+    const data = await fetch(client.config.lastFM.endpoint + query)
+      .then(r => r.json());
 
     const { album } = data.topalbums;
 

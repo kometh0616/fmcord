@@ -24,7 +24,6 @@ exports.run = async (client, message, args) => {
   const user = await Users.findOne({ where: { discordUserID: userID } });
   if (!user) return message.channel.send(`This user hasn't logged ` +
   `on to my system.`);
-  const endpoint = `http://ws.audioscrobbler.com/2.0/?`;
   const authorParams = {
     method: `user.gettopartists`,
     user: author.get(`lastFMUsername`),
@@ -37,8 +36,10 @@ exports.run = async (client, message, args) => {
   userParams.user = user.get(`lastFMUsername`);
   const authorQuery = stringify(authorParams);
   const userQuery = stringify(userParams);
-  const authorData = await fetch(endpoint + authorQuery).then(toJson);
-  const userData = await fetch(endpoint + userQuery).then(toJson);
+  const authorData = await fetch(client.config.lastFM.endpoint + authorQuery)
+    .then(toJson);
+  const userData = await fetch(client.config.lastFM.endpoint + userQuery)
+    .then(toJson);
   const matches = [];
   for (const a of userData.topartists.artist) {
     const match = authorData.topartists.artist.find(x => x.name === a.name);
