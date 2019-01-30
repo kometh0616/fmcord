@@ -1,0 +1,11 @@
+{
+  "prefix": "&",
+  "discordToken": "NTIxMDQxODY1OTk5NTE1NjUw.Du2p4Q.d_liGwp2FvlmreIuwwOTnHA-Ivk",
+  "lastFM": {
+    "apikey": "deee6f7049b98d3f4166ee3f49d9c379",
+    "secret": "513073482fe24e62c3e3d49d22045376",
+    "endpoint": "http://ws.audioscrobbler.com/2.0/?"
+  },
+  "botOwnerID": "209635318503047168"
+}
+
