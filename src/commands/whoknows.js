@@ -10,7 +10,7 @@ exports.run = async (client, message, args) => {
     const artistName = args.join(` `);
     if (!artistName) return message.reply(`you haven't defined an artist!`);
     const know = [];
-    const params =  {
+    const params = {
       method: `artist.getinfo`,
       artist: artistName,
       api_key: client.config.lastFM.apikey,
