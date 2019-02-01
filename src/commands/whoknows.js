@@ -1,7 +1,7 @@
 const fetch = require(`node-fetch`);
 const { stringify } = require(`querystring`);
 const { RichEmbed } = require(`discord.js`);
-const sortingFunc = (a, b) => parseInt(a.plays) - parseInt(b.plays);
+const sortingFunc = (a, b) => parseInt(b.plays) - parseInt(a.plays);
 
 
 exports.run = async (client, message, args) => {
@@ -19,8 +19,11 @@ exports.run = async (client, message, args) => {
     const query = stringify(params);
     const { artist } = await fetch(client.config.lastFM.endpoint + query)
       .then(r => r.json());
+
+    if (!artist) return message.reply(`there is no such artist as ` +
+    `\`${artistName}\` in Last.fm.`);
+
     for (const [id, member] of message.guild.members) {
-      if (id === message.member.id) continue;
       const dbParams = { where: { discordUserID: id } };
       const user = await Users.findOne(dbParams);
       if (!user) continue;
@@ -43,7 +46,10 @@ exports.run = async (client, message, args) => {
     `${artist.name}.`);
     know.sort(sortingFunc);
     let description = ``;
-    know.forEach(k => description += `${k.name} - **${k.plays}** plays\n`);
+    let x = 0;
+    know.forEach(k => {
+      description += `${++x}. ${k.name} - **${k.plays}** plays\n`;
+    });
     const embed = new RichEmbed()
       .setColor(message.member.displayColor)
       .setTitle(`Who knows ${artist.name}?`)
