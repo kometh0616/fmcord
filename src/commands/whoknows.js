@@ -46,7 +46,10 @@ exports.run = async (client, message, args) => {
     `${artist.name}.`);
     know.sort(sortingFunc);
     let description = ``;
-    know.forEach(k => description += `${k.name} - **${k.plays}** plays\n`);
+    let x = 0;
+    know.forEach(k => {
+      description += `${++x}. ${k.name} - **${k.plays}** plays\n`;
+    });
     const embed = new RichEmbed()
       .setColor(message.member.displayColor)
       .setTitle(`Who knows ${artist.name}?`)
