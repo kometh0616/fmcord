@@ -128,9 +128,6 @@ exports.run = async (client, message, args) => {
     console.error(e);
     await message.channel.send(`<@${botOwnerID}>, something is NOT ok.`);
   }
-<<<<<<< HEAD:src/commands/chart.js
-};
-=======
 };
 
 exports.help = {
@@ -140,4 +137,3 @@ exports.help = {
   usage: `albumchart <time period> <grid size>`,
   notes: `In time period, you can have "weekly", "monthly" or "overall".`
 };
->>>>>>> 765f53d9f0651aa1ffe29d982f33fd72b9e2d528:src/commands/albumchart.js
