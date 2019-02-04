@@ -7,7 +7,7 @@ canvas.registerFont(`${process.env.PWD}/helvetica.ttf`, {
 
 exports.run = async (client, message, args) => {
   const usageWarning = `Incorrect usage of a command! Correct usage ` +
-  `would be: \`&albumchart <time period> <grid size>\``;
+  `would be: \`&chart <time period> <grid size>\``;
   let period;
 
   switch (args[0]) {
@@ -131,7 +131,7 @@ exports.run = async (client, message, args) => {
 };
 
 exports.help = {
-  name: `albumchart`,
+  name: `chart`,
   description: `Builds a grid out of your favourite album covers with names ` +
   `to the side.`,
   usage: `albumchart <time period> <grid size>`,
