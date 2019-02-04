@@ -131,7 +131,7 @@ exports.run = async (client, message, args) => {
 };
 
 exports.help = {
-  name: `albumchart`,
+  name: `chart`,
   description: `Builds a grid out of your favourite album covers with names ` +
   `to the side.`,
   usage: `albumchart <time period> <grid size>`,
