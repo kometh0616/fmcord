@@ -20,3 +20,9 @@ exports.run = async (client, message) => {
     await message.channel.send(`<@${botOwnerID}>, something is NOT ok.`);
   }
 };
+
+exports.help = {
+  name: `logout`,
+  description: `Logs you out of the bot's system.`,
+  usage: `logout`
+};

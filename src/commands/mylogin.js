@@ -19,3 +19,10 @@ exports.run = async (client, message) => {
     `NOT ok.`);
   }
 };
+
+exports.help = {
+  name: `mylogin`,
+  description: `Shows you a Last.fm username you have registered yourself ` +
+  `with, if any.`,
+  usage: `mylogin`
+};

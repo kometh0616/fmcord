@@ -72,3 +72,12 @@ exports.run = async (client, message, args) => {
   });
   await message.channel.send({embed});
 };
+
+exports.help = {
+  name: `taste`,
+  description: `Compares artists you and a mentioned user listen to, and ` +
+  `amounts of plays you both have.`,
+  usage: `taste <user mention>`,
+  notes: `This only works in a guild and only if both of the users are ` +
+  `registered to the bot.`
+};
