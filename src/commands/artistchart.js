@@ -7,7 +7,7 @@ canvas.registerFont(`${process.env.PWD}/helvetica.ttf`, {
 
 exports.run = async (client, message, args) => {
   const usageWarning = `Incorrect usage of a command! Correct usage ` +
-  `would be: \`&chart <time period> <grid size>\``;
+  `would be: \`&artistchart <time period> <grid size>\``;
   let period;
 
   switch (args[0]) {
@@ -53,7 +53,7 @@ exports.run = async (client, message, args) => {
     `login <lastfm username>\` to be able to use this command!`);
     await message.channel.send(`Please wait until your grid is done...`);
     const query = stringify({
-      method: `user.gettopalbums`,
+      method: `user.gettopartists`,
       user: user.get(`lastFMUsername`),
       period: period,
       limit: `${x*y}`,
@@ -63,17 +63,17 @@ exports.run = async (client, message, args) => {
     const data = await fetch(client.config.lastFM.endpoint + query)
       .then(r => r.json());
 
-    const { album } = data.topalbums;
+    const { artist } = data.topartists;
 
     const canv = canvas.createCanvas(x*100, y*100);
     const ctx = canv.getContext(`2d`);
 
     const proms = [];
-    album.forEach(a => {
+    artist.forEach(a => {
       if (a.image[3][`#text`].length > 0) {
         proms.push(canvas.loadImage(a.image[3][`#text`]));
       } else {
-        proms.push(canvas.loadImage(`${process.env.PWD}/images/no_album.png`));
+        proms.push(canvas.loadImage(`${process.env.PWD}/images/no_artist.png`));
       }
     });
     const imgs = await Promise.all(proms);
@@ -91,7 +91,7 @@ exports.run = async (client, message, args) => {
     }
 
     const names = [];
-    album.forEach(a => names.push(`${a.artist.name} - ${a.name}`));
+    artist.forEach(a => names.push(`${a.name} - ${a.playcount} plays`));
     let longestNum = -Infinity;
     let longestName;
     names.forEach(name => {
@@ -128,4 +128,12 @@ exports.run = async (client, message, args) => {
     console.error(e);
     await message.channel.send(`<@${botOwnerID}>, something is NOT ok.`);
   }
+};
+
+exports.help = {
+  name: `artistchart`,
+  description: `Builds a grid out of your favourite artist images with names ` +
+  `to the side.`,
+  usage: `artistchart <time period> <grid size>`,
+  notes: `In time period, you can have "weekly", "monthly" or "overall".`
 };

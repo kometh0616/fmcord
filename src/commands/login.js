@@ -41,3 +41,12 @@ exports.run = async (client, message, args) => {
     await message.channel.send(`<@${botOwnerID}>, something is NOT ok.`);
   }
 };
+
+exports.help = {
+  name: `login`,
+  description: `Logs you into the bot system.`,
+  usage: `login <last.fm username>`,
+  notes: `You will only be registered to the bot. You won't be able to ` +
+  `perform any administrative actions to your Last.fm account, and no ` +
+  `one else will be able to do so through the bot.`
+};

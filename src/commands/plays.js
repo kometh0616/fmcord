@@ -36,3 +36,9 @@ exports.run = async (client, message, args) => {
     await message.channel.send(`<@${botOwnerID}>, something is NOT ok.`);
   }
 };
+
+exports.help = {
+  name: `plays`,
+  description: `Shows you how many times you have played an artist.`,
+  usage: `plays <artist name>`
+};

@@ -64,3 +64,11 @@ exports.run = async (client, message, args) => {
     await message.channel.send(`<@${botOwnerID}>, something is NOT ok.`);
   }
 };
+
+exports.help = {
+  name: `whoknows`,
+  description: `Checks if anyone in a guild listens to a certain artist.`,
+  usage: `whoknows <artist name>`,
+  notes: `This feature might be quite slow, because it sends a lot of API ` +
+  `requests. Also, it only works in a guild.`
+};
