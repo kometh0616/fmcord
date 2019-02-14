@@ -63,6 +63,9 @@ exports.run = async (client, message, args) => {
     const data = await fetch(client.config.lastFM.endpoint + query)
       .then(r => r.json());
 
+    if (data.error) return message.reply(`there was an issue trying to ` +
+    `fetch your albums. Please try again later.`);
+
     const { album } = data.topalbums;
 
     const canv = canvas.createCanvas(x*100, y*100);
