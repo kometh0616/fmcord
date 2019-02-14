@@ -65,6 +65,9 @@ exports.run = async (client, message, args) => {
 
     const { artist } = data.topartists;
 
+    if (data.error) return message.reply(`there was an issue trying to ` +
+    `fetch your albums. Please try again later.`);
+
     const canv = canvas.createCanvas(x*100, y*100);
     const ctx = canv.getContext(`2d`);
 
