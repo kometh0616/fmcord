@@ -45,11 +45,10 @@ exports.run = async (client, message, args) => {
     if (know.length === 0) return message.reply(`no one here listens to ` +
     `${artist.name}.`);
     know.sort(sortingFunc);
-    let description = ``;
     let x = 0;
-    know.forEach(k => {
-      description += `${++x}. ${k.name} - **${k.plays}** plays\n`;
-    });
+    let description = know
+      .map(k => `${++x}. ${k.name} - **${k.plays}** plays`)
+      .join(`\n`);
     const embed = new RichEmbed()
       .setColor(message.member.displayColor)
       .setTitle(`Who knows ${artist.name} in ${message.member.guild.name}?`)
