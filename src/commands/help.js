@@ -67,10 +67,10 @@ exports.run = async (client, message, args) => {
         }
       });
     } else {
-      let helpMessage = ``;
-      for (const [name, com] of client.commands)
-        if (com.help)
-          helpMessage += `**${prefix}${name}** - ${com.help.description}\n`;
+      const helpMessage = client.commands
+        .filter(x => x.help)
+        .map(x => `**${prefix}${x.help.name}** - ${x.help.description}`)
+        .join(`\n`);
       await message.channel.send(helpMessage);
     }
   } catch (e) {
