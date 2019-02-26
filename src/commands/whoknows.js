@@ -47,6 +47,7 @@ exports.run = async (client, message, args) => {
     know.sort(sortingFunc);
     let x = 0;
     let description = know
+      .filter(k => k.plays !== `0`)
       .map(k => `${++x}. ${k.name} - **${k.plays}** plays`)
       .join(`\n`);
     const embed = new RichEmbed()
