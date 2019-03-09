@@ -135,8 +135,8 @@ exports.run = async (client, message, args) => {
 
 exports.help = {
   name: `chart`,
-  description: `Builds a grid out of your favourite album covers with names ` +
-  `to the side.`,
+  description: `Builds a grid out of your most listened album covers with` +
+  `names to the side.`,
   usage: `albumchart <time period> <grid size>`,
   notes: `In time period, you can have "weekly", "monthly" or "overall".`
 };
