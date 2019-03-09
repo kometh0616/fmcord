@@ -135,7 +135,7 @@ exports.run = async (client, message, args) => {
 
 exports.help = {
   name: `artistchart`,
-  description: `Builds a grid out of your most listened artist images with` +
+  description: `Builds a grid out of your most listened artists with` +
   `names to the side.`,
   usage: `artistchart <time period> <grid size>`,
   notes: `In time period, you can have "weekly", "monthly" or "overall".`
