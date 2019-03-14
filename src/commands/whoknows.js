@@ -25,30 +25,38 @@ exports.run = async (client, message, args) => {
 
     const guild = await message.guild.fetchMembers();
 
-    for (const [id, member] of guild.members) {
-      const dbParams = { where: { discordUserID: id } };
-      const user = await Users.findOne(dbParams);
-      if (!user) continue;
-      const queryParams = Object.assign({}, params);
-      queryParams.username = user.get(`lastFMUsername`);
-      const query = stringify(queryParams);
-      const { artist } = await fetch(client.config.lastFM.endpoint + query)
-        .then(r => r.json());
+    const fetchPlays = () => {
+      return new Promise(async res => {
+        for (const [id, member] of guild.members) {
+          const dbParams = { where: { discordUserID: id } };
+          const user = await Users.findOne(dbParams);
+          if (!user) continue;
+          const queryParams = Object.assign({}, params);
+          queryParams.username = user.get(`lastFMUsername`);
+          const query = stringify(queryParams);
+          const { artist } = await fetch(client.config.lastFM.endpoint + query)
+            .then(r => r.json());
 
-      if (!artist.stats.userplaycount) continue;
+          if (!artist.stats.userplaycount) continue;
 
-      const data = {
-        name: member.user.username,
-        plays: artist.stats.userplaycount
-      };
-      if (know.length !== 10) know.push(data);
-      else break;
-    }
-    if (know.length === 0) return message.reply(`no one here listens to ` +
+          const data = {
+            name: member.user.username,
+            plays: artist.stats.userplaycount
+          };
+          if (know.length !== 10) know.push(data);
+          else res(know);
+        }
+        res(know);
+      });
+    };
+
+    const arr = await fetchPlays();
+
+    if (arr.length === 0) return message.reply(`no one here listens to ` +
     `${artist.name}.`);
-    know.sort(sortingFunc);
+    arr.sort(sortingFunc);
     let x = 0;
-    let description = know
+    let description = arr
       .filter(k => k.plays !== `0`)
       .map(k => `${++x}. ${k.name} - **${k.plays}** plays`)
       .join(`\n`);
