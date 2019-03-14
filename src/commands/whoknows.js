@@ -43,8 +43,7 @@ exports.run = async (client, message, args) => {
             name: member.user.username,
             plays: artist.stats.userplaycount
           };
-          if (know.length !== 10) know.push(data);
-          else res(know);
+          know.push(data);
         }
         res(know);
       });
