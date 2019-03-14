@@ -23,7 +23,9 @@ exports.run = async (client, message, args) => {
     if (!artist) return message.reply(`there is no such artist as ` +
     `\`${artistName}\` in Last.fm.`);
 
-    for (const [id, member] of message.guild.members) {
+    const guild = await message.guild.fetchMembers();
+
+    for (const [id, member] of guild.members) {
       const dbParams = { where: { discordUserID: id } };
       const user = await Users.findOne(dbParams);
       if (!user) continue;
