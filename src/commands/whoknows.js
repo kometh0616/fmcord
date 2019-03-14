@@ -51,7 +51,6 @@ exports.run = async (client, message, args) => {
 
     let arr = await fetchPlays();
     arr = arr.slice(0, 10);
-    console.log(arr);
 
     if (arr.length === 0) return message.reply(`no one here listens to ` +
     `${artist.name}.`);
