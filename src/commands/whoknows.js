@@ -43,14 +43,15 @@ exports.run = async (client, message, args) => {
             name: member.user.username,
             plays: artist.stats.userplaycount
           };
-          if (know.length !== 10) know.push(data);
-          else res(know);
+          know.push(data);
         }
         res(know);
       });
     };
 
-    const arr = await fetchPlays();
+    let arr = await fetchPlays();
+    arr = arr.slice(0, 10);
+    console.log(arr);
 
     if (arr.length === 0) return message.reply(`no one here listens to ` +
     `${artist.name}.`);
