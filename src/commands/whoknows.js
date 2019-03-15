@@ -50,14 +50,15 @@ exports.run = async (client, message, args) => {
     };
 
     let arr = await fetchPlays();
+    console.log(arr);
 
-    arr = arr.sort(sortingFunc).slice(0, 10);
-
-    if (arr.length === 0) return message.reply(`no one here listens to ` +
-    `${artist.name}.`);
+    if (arr.length === 0 || arr.every(x => x.plays === `0`))
+      return message.reply(`no one here listens to ${artist.name}.`);
     arr.sort(sortingFunc);
     let x = 0;
     let description = arr
+      .sort(sortingFunc)
+      .slice(0, 10)
       .filter(k => k.plays !== `0`)
       .map(k => `${++x}. ${k.name} - **${k.plays}** plays`)
       .join(`\n`);
