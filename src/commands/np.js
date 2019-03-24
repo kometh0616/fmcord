@@ -33,9 +33,11 @@ exports.run = async (client, message) => {
     const userQuery = stringify(userParams);
     const userData = await fetch(endpoint + userQuery).then(r => r.json());
     const embed = new RichEmbed()
-      .addField(`Current:`, `**${track.artist[`#text`]}** - ${track.name}`)
+      .addField(`Current:`, `**${track.name}** - ${track.artist[`#text`]} ` +
+        `| ${track.album[`#text`] ? track.album[`#text`] : `no album`}`)
       .addField(`Previous:`,
-        `**${prevTrack.artist[`#text`]}** - ${prevTrack.name}`)
+        `**${prevTrack.name}** - ${prevTrack.artist[`#text`]} | ` +
+        `${prevTrack.album[`#text`] ? prevTrack.album[`#text`] : `no album`}`)
       .setColor(message.member.displayColor)
       .setTitle(`Last tracks from ${lUsername}`)
       .setURL(profileLink)

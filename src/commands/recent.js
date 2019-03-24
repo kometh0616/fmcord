@@ -31,12 +31,14 @@ exports.run = async (client, message) => {
     const nowPlaying = data.recenttracks.track.find(x => x[`@attr`].nowplaying);
     const prevTracks = data.recenttracks.track
       .slice(0, 5)
-      .map(x => `**${x.artist[`#text`]}** - ${x.name}`)
+      .map(x => `**${x.name}** - ${x.artist[`#text`]} ` +
+        `| ${x.album[`#text`] ? x.album[`#text`] : `no album`}`)
       .join(`\n`);
     const embed = new RichEmbed();
     if (nowPlaying)
       embed.addField(`Current:`,
-        `**${nowPlaying.artist[`#text`]}** - ${nowPlaying.name}`);
+        `**${nowPlaying.name}** - ${nowPlaying.artist[`#text`]} ` +
+        `| ${nowPlaying.album[`#text`] ? nowPlaying.album[`#text`] : `no album`}`);
     embed.addField(`Previous:`, prevTracks);
     embed.setColor(message.member.displayColor);
     embed.setTitle(`Last tracks from ${lUsername}`);
