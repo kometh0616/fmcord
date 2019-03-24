@@ -1,5 +1,4 @@
 exports.run = async (client, message) => {
-  const { botOwnerID } = client.config;
   try {
     const oldDate = Date.now();
     const msg = await message.channel.send(`Pong!`);
@@ -7,6 +6,6 @@ exports.run = async (client, message) => {
     await msg.edit(`Pong! The ping is ${ping}ms.`);
   } catch (e) {
     console.error(e.stack);
-    await message.channel.send(`<@${botOwnerID}>, something is NOT ok!`);
+    await message.channel.send(client.replies.error);
   }
 };

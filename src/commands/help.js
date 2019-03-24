@@ -1,6 +1,6 @@
 const { RichEmbed } = require(`discord.js`);
 exports.run = async (client, message, args) => {
-  const { prefix, botOwnerID } = client.config;
+  const { prefix } = client.config;
   try {
     if (args[0] === `--manual`) {
       const haveHelp = client.commands.filter(x => x.help);
@@ -75,7 +75,7 @@ exports.run = async (client, message, args) => {
     }
   } catch (e) {
     console.error(e);
-    await message.channel.send(`<@${botOwnerID}>, something is NOT ok.`);
+    await message.channel.send(client.replies.error);
   }
 };
 

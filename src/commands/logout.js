@@ -1,5 +1,4 @@
 exports.run = async (client, message) => {
-  const { botOwnerID } = client.config;
   const Users = client.sequelize.import(`../models/Users.js`);
   try {
     const user = await Users.findOne({
@@ -17,7 +16,7 @@ exports.run = async (client, message) => {
     + `succesfully!`);
   } catch (e) {
     console.error(e);
-    await message.channel.send(`<@${botOwnerID}>, something is NOT ok.`);
+    await message.channel.send(client.replies.error);
   }
 };
 

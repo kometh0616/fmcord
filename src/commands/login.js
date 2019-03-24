@@ -2,8 +2,6 @@ const querystring = require(`querystring`);
 const fetch = require(`node-fetch`);
 
 exports.run = async (client, message, args) => {
-  const { botOwnerID } = client.config;
-
   const Users = client.sequelize.import(`../models/Users.js`);
   const username = args.join(` `);
   if (!args[0]) return message.reply(`you must define a Last.fm username!`);
@@ -38,7 +36,7 @@ exports.run = async (client, message, args) => {
     `perform any administrative actions to it.`);
   } catch (e) {
     console.log(e);
-    await message.channel.send(`<@${botOwnerID}>, something is NOT ok.`);
+    await message.channel.send(client.replies.error);
   }
 };
 

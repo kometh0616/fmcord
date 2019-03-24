@@ -70,9 +70,8 @@ exports.run = async (client, message, args) => {
       .setTimestamp();
     await message.channel.send({embed});
   } catch (e) {
-    const { botOwnerID } = client.config;
     console.error(e);
-    await message.channel.send(`<@${botOwnerID}>, something is NOT ok.`);
+    await message.channel.send(client.replies.error);
   }
 };
 

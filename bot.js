@@ -27,6 +27,7 @@ const client = new Client();
 client.config = config;
 client.commands = new Collection();
 client.sequelize = sequelize;
+client.replies = require(`./replies.js`);
 
 fs.readdir(`./src/commands/`, (err, files) => {
   if (err) throw err;

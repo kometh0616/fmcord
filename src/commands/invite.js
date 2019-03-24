@@ -5,8 +5,7 @@ exports.run = async (client, message) => {
     `${invite}`);
   } catch (e) {
     console.error(e);
-    await message.channel.send(`Something went wrong while executing this ` +
-    `command`);
+    await message.channel.send(client.replies.error);
   }
 };
 

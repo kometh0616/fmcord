@@ -2,7 +2,6 @@ const { stringify } = require(`querystring`);
 const fetch = require(`node-fetch`);
 
 exports.run = async (client, message, args) => {
-  const { botOwnerID } = client.config;
   const artistName = args.join(` `);
   if (!artistName) return message.reply(`you have not defined an artist!`);
   const Users = client.sequelize.import(`../models/Users.js`);
@@ -12,9 +11,7 @@ exports.run = async (client, message, args) => {
         discordUserID: message.author.id
       }
     });
-    if (!user) return message.reply(`you haven't registered your Last.fm ` +
-    `user account to this bot! Please do so with \`${client.config.prefix}` +
-    `login <lastfm username>\` to be able to use this command!`);
+    if (!user) return message.reply(client.replies.noLogin);
     const query = stringify({
       method: `artist.getinfo`,
       username: user.get(`lastFMUsername`),
@@ -33,7 +30,7 @@ exports.run = async (client, message, args) => {
 
   } catch (e) {
     console.log(e);
-    await message.channel.send(`<@${botOwnerID}>, something is NOT ok.`);
+    await message.channel.send(client.replies.error);
   }
 };
 
