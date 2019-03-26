@@ -53,3 +53,11 @@ exports.run = async (client, message) => {
     await message.channel.send(client.replies.error);
   }
 };
+
+exports.help = {
+  name: `recent`,
+  description: `Shows you recent tracks you have listened to.`,
+  usage: `recent`,
+  notes: `If you are listening to a song when invoking this command, it will ` +
+  `show your currently listened song as well.`
+};

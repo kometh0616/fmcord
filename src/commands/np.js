@@ -51,3 +51,9 @@ exports.run = async (client, message) => {
     await message.channel.send(client.replies.error);
   }
 };
+
+exports.help = {
+  name: `np`,
+  description: `Shows you a song you are listening to right now.`,
+  usage: `np`
+};
