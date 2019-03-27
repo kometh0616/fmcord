@@ -15,7 +15,6 @@ exports.run = async (client, message) => {
     `user account to this bot! Please do so with \`${client.config.prefix}` +
     `login <lastfm username>\` to be able to use this command!`);
     const lUsername = user.get(`lastFMUsername`);
-    const profileLink = `https://last.fm/user/${lUsername}`;
     const params = {
       method: `user.getrecenttracks`,
       user: lUsername,
@@ -40,7 +39,7 @@ exports.run = async (client, message) => {
         `${prevTrack.album[`#text`] ? prevTrack.album[`#text`] : `no album`}`)
       .setColor(message.member.displayColor)
       .setTitle(`Last tracks from ${lUsername}`)
-      .setURL(profileLink)
+      .setURL(userData.user.url)
       .setThumbnail(track.image[2][`#text`])
       .setFooter(`Command invoked by ${message.author.tag} with a total ` +
         `of ${userData.user.playcount} scrobbles.`)
