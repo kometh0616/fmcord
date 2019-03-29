@@ -8,37 +8,47 @@ canvas.registerFont(`${process.env.PWD}/helvetica.ttf`, {
 exports.run = async (client, message, args) => {
   const usageWarning = `Incorrect usage of a command! Correct usage ` +
   `would be: \`&artistchart <time period> <grid size>\``;
-  let period;
+  let period, vals, x, y;
 
-  switch (args[0]) {
-  case `weekly`:
-    period = `7day`;
-    break;
-  case `monthly`:
-    period = `1month`;
-    break;
-  case `alltime`:
-    period = `overall`;
-    break;
-  default:
-    return message.channel.send(usageWarning);
+  if (!args[0]) {
+    period = `weekly`,
+    vals = [`5`, `5`];
+    [x, y] = [parseInt(vals[0]), parseInt(vals[1])];
+  } else {
+    switch (args[0]) {
+    case `weekly`:
+      period = `7day`;
+      break;
+    case `monthly`:
+      period = `1month`;
+      break;
+    case `alltime`:
+      period = `overall`;
+      break;
+    default:
+      period = `weekly`;
+      break;
+    }
+
+    if (!args[1]) return message.channel.send(usageWarning);
+
+    vals = args[1].split(`x`);
+    if (vals === args[1] || vals.length !== 2) {
+      return message.channel.send(usageWarning);
+
+    }
+
+    const axisArray = [parseInt(vals[0]), parseInt(vals[1])];
+    if (axisArray.some(isNaN))
+      return message.channel.send(usageWarning);
+
+    const [x, y] = axisArray;
+
+    if (x > 5 || y > 10) return message.channel.send(`The first number of ` +
+    `the grid size must not be bigger than 5 tiles and the last number of ` +
+    `the grid size must not be bigger than 10 tiles!`);
+
   }
-
-  if (!args[1]) return message.channel.send(usageWarning);
-
-  const vals = args[1].split(`x`);
-  if (vals === args[1] || vals.length !== 2)
-    return message.channel.send(usageWarning);
-
-  const axisArray = [parseInt(vals[0]), parseInt(vals[1])];
-  if (axisArray.some(isNaN))
-    return message.channel.send(usageWarning);
-
-
-  const [x, y] = axisArray;
-  if (x > 5 || y > 10) return message.channel.send(`The first number of ` +
-  `the grid size must not be bigger than 5 tiles and the last number of ` +
-  `the grid size must not be bigger than 10 tiles!`);
 
   const Users = client.sequelize.import(`../models/Users.js`);
   try {
