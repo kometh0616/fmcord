@@ -11,7 +11,7 @@ exports.run = async (client, message, args) => {
   let period, vals, x, y;
 
   if (!args[0]) {
-    period = `weekly`,
+    period = `7day`,
     vals = [`5`, `5`];
     [x, y] = [parseInt(vals[0]), parseInt(vals[1])];
   } else {
