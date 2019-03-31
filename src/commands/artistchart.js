@@ -42,7 +42,7 @@ exports.run = async (client, message, args) => {
     if (axisArray.some(isNaN))
       return message.channel.send(usageWarning);
 
-    const [x, y] = axisArray;
+    [x, y] = axisArray;
 
     if (x > 5 || y > 10) return message.channel.send(`The first number of ` +
     `the grid size must not be bigger than 5 tiles and the last number of ` +
