@@ -11,7 +11,7 @@ exports.run = async (client, message) => {
     if (!user) return message.reply(client.replies.noLogin);
     const URL = `https://last.fm/user/${user.get(`lastFMUsername`)}`;
     const userCrowns = await Crowns.findAll({
-      attributes: [`artistName`, `artistPlays`]
+      attributes: [`userID`, `artistName`, `artistPlays`]
     },
     {
       where: {
@@ -24,9 +24,11 @@ exports.run = async (client, message) => {
       .map(x => {
         return {
           name: x.artistName,
-          plays: parseInt(x.artistPlays)
+          plays: parseInt(x.artistPlays),
+          userID: x.userID
         };
       })
+      .filter(x => x.userID === message.author.id)
       .sort((a,b) => b.plays - a.plays)
       .slice(0, 10)
       .map(x => `${++num}. **${x.name}** with ${x.plays} plays`)
