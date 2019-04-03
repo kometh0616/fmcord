@@ -58,7 +58,6 @@ exports.run = async (client, message, args) => {
     const hasCrown = await Crowns.findOne({
       where: {
         guildID: message.guild.id,
-        userID: sorted.userID,
         artistName: artist.name
       }
     });
@@ -69,6 +68,23 @@ exports.run = async (client, message, args) => {
       artistName: artist.name,
       artistPlays: sorted.plays
     });
+
+    else {
+      const userID = hasCrown.userID;
+      const plays = hasCrown.artistPlays;
+      if (userID !== sorted.userID || plays !== sorted.plays) {
+        await Crowns.update({
+          userID: sorted.userID,
+          artistPlays: sorted.plays,
+        },
+        {
+          where: {
+            guildID: message.guild.id,
+            artistName: artist.name,
+          }
+        });
+      }
+    }
 
     if (arr.length === 0 || arr.every(x => x.plays === `0`))
       return message.reply(`no one here listens to ${artist.name}.`);
