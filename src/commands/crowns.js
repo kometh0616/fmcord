@@ -11,26 +11,26 @@ exports.run = async (client, message) => {
     if (!user) return message.reply(client.replies.noLogin);
     const URL = `https://last.fm/user/${user.get(`lastFMUsername`)}`;
     const userCrowns = await Crowns.findAll({
-      attributes: [`guildID`, `userID`, `artistName`, `artistPlays`]
-    },
-    {
       where: {
         userID: message.author.id,
         guildID: message.guild.id
       }
     });
     let num = 0;
-    const description = userCrowns
+    const validCrowns = userCrowns
       .map(x => {
         return {
-          name: x.artistName,
-          plays: parseInt(x.artistPlays),
-          userID: x.userID,
-          guildID: x.guildID
+          name: x.get(`artistName`),
+          plays: parseInt(x.get(`artistPlays`)),
+          userID: x.get(`userID`),
+          guildID: x.get(`guildID`)
         };
       })
-      .filter(x => x.userID === message.author.id &&
-      message.guild.id === x.guildID)
+      .filter(x => message.guild.id === x.guildID
+      && message.author.id == x.userID);
+    if (validCrowns.length === 0)
+      return message.reply(`you have no crowns in this guild.`);
+    const description = validCrowns
       .sort((a,b) => b.plays - a.plays)
       .slice(0, 10)
       .map(x => `${++num}. **${x.name}** with ${x.plays} plays`)
@@ -53,7 +53,7 @@ exports.run = async (client, message) => {
       await msg.react(`➡`);
       await msg.react(`❌`);
       let page = 0;
-      let finalPage = Math.ceil(userCrowns.length / 10);
+      let finalPage = Math.ceil(userCrowns.length / 10) - 1;
 
       const listenKeys = async (reaction, user) => {
         if (reaction.message.id === msg.id && user.id === message.author.id) {
@@ -64,15 +64,19 @@ exports.run = async (client, message) => {
             const description = userCrowns
               .map(x => {
                 return {
-                  name: x.artistName,
-                  plays: parseInt(x.artistPlays)
+                  name: x.get(`artistName`),
+                  plays: parseInt(x.get(`artistPlays`)),
+                  userID: x.get(`userID`),
+                  guildID: x.get(`guildID`)
                 };
               })
+              .filter(x => message.guild.id === x.guildID
+              && message.author.id == x.userID)
               .sort((a,b) => b.plays - a.plays)
               .slice(offset, offset + 10)
               .map(x => `${++num}. **${x.name}** with ${x.plays} plays`)
               .join(`\n`) + `\n\nTotal amount of crowns: ` +
-              `**${userCrowns.length}**`;
+            `**${userCrowns.length}**`;
             const embed = new RichEmbed()
               .setTitle(title)
               .setColor(message.member.displayColor)
@@ -89,10 +93,14 @@ exports.run = async (client, message) => {
             const description = userCrowns
               .map(x => {
                 return {
-                  name: x.artistName,
-                  plays: parseInt(x.artistPlays)
+                  name: x.get(`artistName`),
+                  plays: parseInt(x.get(`artistPlays`)),
+                  userID: x.get(`userID`),
+                  guildID: x.get(`guildID`)
                 };
               })
+              .filter(x => message.guild.id === x.guildID
+                && message.author.id == x.userID)
               .sort((a,b) => b.plays - a.plays)
               .slice(offset, offset + 10)
               .map(x => `${++num}. **${x.name}** with ${x.plays} plays`)

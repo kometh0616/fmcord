@@ -7,6 +7,7 @@ const sortingFunc = (a, b) => parseInt(b.plays) - parseInt(a.plays);
 exports.run = async (client, message, args) => {
   try {
     const Users = client.sequelize.import(`../models/Users.js`);
+    const Crowns = client.sequelize.import(`../models/Crowns.js`);
     const artistName = args.join(` `);
     if (!artistName) return message.reply(`you haven't defined an artist!`);
     const know = [];
@@ -41,6 +42,7 @@ exports.run = async (client, message, args) => {
 
           const data = {
             name: member.user.username,
+            userID: member.user.id,
             plays: artist.stats.userplaycount
           };
           know.push(data);
@@ -50,6 +52,23 @@ exports.run = async (client, message, args) => {
     };
 
     let arr = await fetchPlays();
+
+    // Giving a top-ranking listener in the guild his crown, if he still has none.
+    const sorted = arr.sort(sortingFunc)[0];
+    const hasCrown = await Crowns.findOne({
+      where: {
+        guildID: message.guild.id,
+        userID: sorted.userID,
+        artistName: artist.name
+      }
+    });
+
+    if (hasCrown === null && sorted.plays !== 0) await Crowns.create({
+      guildID: message.guild.id,
+      userID: sorted.userID,
+      artistName: artist.name,
+      artistPlays: sorted.plays
+    });
 
     if (arr.length === 0 || arr.every(x => x.plays === `0`))
       return message.reply(`no one here listens to ${artist.name}.`);
