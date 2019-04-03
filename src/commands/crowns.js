@@ -30,7 +30,7 @@ exports.run = async (client, message) => {
         };
       })
       .filter(x => x.userID === message.author.id &&
-      message.guild.id)
+      message.guild.id === x.guildID)
       .sort((a,b) => b.plays - a.plays)
       .slice(0, 10)
       .map(x => `${++num}. **${x.name}** with ${x.plays} plays`)
