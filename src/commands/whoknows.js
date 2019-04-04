@@ -8,8 +8,31 @@ exports.run = async (client, message, args) => {
   try {
     const Users = client.sequelize.import(`../models/Users.js`);
     const Crowns = client.sequelize.import(`../models/Crowns.js`);
-    const artistName = args.join(` `);
-    if (!artistName) return message.reply(`you haven't defined an artist!`);
+    let artistName = args.join(` `);
+    if (!artistName) {
+      const user = await Users.findOne({
+        where: {
+          discordUserID: message.author.id
+        }
+      });
+      if (!user) return message.reply(`you haven't registered your Last.fm ` +
+      `account, therefore, I can't check what you're listening to. To set ` +
+      `your Last.fm nickname, do \`&login <lastfm username\`.`);
+      const username = user.lastFMUsername;
+      const params = {
+        method: `user.getrecenttracks`,
+        user: username,
+        api_key: client.config.lastFM.apikey,
+        format: `json`
+      };
+      const query = stringify(params);
+      const data = await fetch(client.config.lastFM.endpoint + query)
+        .then(r => r.json());
+      const track = data.recenttracks.track[0];
+      if (!track[`@attr`])
+        return message.reply(`currently, you are not listening to anything.`);
+      else artistName = track.artist[`#text`];
+    }
     const know = [];
     const params = {
       method: `artist.getinfo`,
@@ -112,7 +135,9 @@ exports.run = async (client, message, args) => {
 
 exports.help = {
   name: `whoknows`,
-  description: `Checks if anyone in a guild listens to a certain artist.`,
+  description: `Checks if anyone in a guild listens to a certain artist. If ` +
+  `no artist is defined, the bot will try to look up an artist you are ` +
+  `currently listening to.`,
   usage: `whoknows <artist name>`,
   notes: `This feature might be quite slow, because it sends a lot of API ` +
   `requests. Also, it only works in a guild.`

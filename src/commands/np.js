@@ -11,9 +11,7 @@ exports.run = async (client, message) => {
         discordUserID: message.author.id
       }
     });
-    if (!user) return message.reply(`you haven't registered your Last.fm ` +
-    `user account to this bot! Please do so with \`${client.config.prefix}` +
-    `login <lastfm username>\` to be able to use this command!`);
+    if (!user) return message.reply(client.replies.noLogin);
     const lUsername = user.get(`lastFMUsername`);
     const params = {
       method: `user.getrecenttracks`,
