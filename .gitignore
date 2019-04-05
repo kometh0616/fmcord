@@ -4,3 +4,5 @@ node_modules
 shrinkwrap.yaml
 .glitch-assets
 watch.json
+yarn.lock
+.vscode/*
