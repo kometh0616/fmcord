@@ -29,6 +29,8 @@ exports.run = async (client, message) => {
       // worth of scrobbles
       if (timestamp === null) {
         timestamp = moment().subtract(1, `days`);
+      } else {
+        timestamp = moment(timestamp);
       }
 
       const lUsername = user.get(`lastFMUsername`);
