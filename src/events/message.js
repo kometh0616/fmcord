@@ -7,7 +7,7 @@ module.exports = async (client, message) => {
     const matchChannel = x => x.channelID === message.channel.id;
     const command = client.commands.get(commandName);
     if (!command) return;
-    else {
+    else if (message.guild) {
       const Disables = client.sequelize.import(`../models/Disables.js`);
       const dCommands = await Disables.findAll({
         where: {
@@ -23,6 +23,6 @@ module.exports = async (client, message) => {
         return message.reply(`this command was disabled in this server.`);
       else
         command.run(client, message, args);
-    }
+    } else command.run(client, message, args);
   }
 };
