@@ -1,6 +1,6 @@
 exports.run = async (client, message, args) => {
   try {
-    if (!message.member.hasPermission(`MANAGE_SERVER`, false, true, true))
+    if (!message.member.hasPermission(`MANAGE_GUILD`, false, true, true))
       return message.reply(`you don't have a **Manage Server** permission ` +
     `to invoke this command.`);
     const Disables = client.sequelize.import(`../models/Disables.js`);
