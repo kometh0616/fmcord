@@ -50,7 +50,7 @@ exports.run = async (client, message, args) => {
     const guild = await message.guild.fetchMembers();
 
     const fetchPlays = () => {
-      return new Promise(async res => {
+      return new Promise(async (res, rej) => {
         for (const [id, member] of guild.members) {
           const dbParams = { where: { discordUserID: id } };
           const user = await Users.findOne(dbParams);
@@ -58,15 +58,24 @@ exports.run = async (client, message, args) => {
           const queryParams = Object.assign({}, params);
           queryParams.username = user.get(`lastFMUsername`);
           const query = stringify(queryParams);
-          const { artist } = await fetch(client.config.lastFM.endpoint + query)
+          const req = await fetch(client.config.lastFM.endpoint + query)
             .then(r => r.json());
 
-          if (!artist.stats.userplaycount) continue;
+          console.log(req);
+
+          if (req.error) rej({
+            apiError: true,
+            info: {
+              code: req.error,
+              message: req.message,
+            }
+          });
+          if (!req.artist.stats.userplaycount) continue;
 
           const data = {
             name: member.user.username,
             userID: member.user.id,
-            plays: artist.stats.userplaycount
+            plays: req.artist.stats.userplaycount
           };
           know.push(data);
         }
@@ -92,7 +101,7 @@ exports.run = async (client, message, args) => {
       artistPlays: sorted.plays
     });
 
-    else {
+    else if (hasCrown !== null) {
       const userID = hasCrown.userID;
       const plays = hasCrown.artistPlays;
       if (userID !== sorted.userID || plays !== sorted.plays) {
@@ -128,6 +137,12 @@ exports.run = async (client, message, args) => {
       .setTimestamp();
     await message.channel.send({embed});
   } catch (e) {
+    if (e.apiError) {
+      return message.channel.send(`API error occured while running the command. ` +
+      `Please try again later.
+Error code: ${e.info.code}
+Error message: ${e.info.message}`);
+    }
     console.error(e);
     await message.channel.send(client.replies.error);
   }
