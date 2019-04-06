@@ -4,8 +4,10 @@
   "description": "A last.fm Discord bot for The Static Server.",
   "main": "bot.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node bot"
+    "start": "node bot",
+    "lint": "eslint src *.js",
+    "lint-fix": "eslint src *.js --fix",
+    "test": "npm run lint"
   },
   "author": "Kometh",
   "license": "MIT",
