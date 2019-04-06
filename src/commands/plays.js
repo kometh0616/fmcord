@@ -59,6 +59,8 @@ exports.run = async (client, message, args) => {
 
 exports.help = {
   name: `plays`,
-  description: `Shows you how many times you have played an artist.`,
+  description: `Shows you how many times you have played an artist. If no ` +
+  `artist is defined, the bot will look up an artist you are currently ` +
+  `listening to.`,
   usage: `plays <artist name>`
 };
