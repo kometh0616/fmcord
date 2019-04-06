@@ -27,7 +27,7 @@ exports.run = async (client, message) => {
         };
       })
       .filter(x => message.guild.id === x.guildID
-      && message.author.id == x.userID);
+      && message.author.id === x.userID);
     if (validCrowns.length === 0)
       return message.reply(`you have no crowns in this guild.`);
     const description = validCrowns
