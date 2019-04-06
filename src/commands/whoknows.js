@@ -85,7 +85,7 @@ exports.run = async (client, message, args) => {
       }
     });
 
-    if (hasCrown === null || sorted.plays !== `0`) await Crowns.create({
+    if (hasCrown === null && sorted.plays !== `0`) await Crowns.create({
       guildID: message.guild.id,
       userID: sorted.userID,
       artistName: artist.name,
