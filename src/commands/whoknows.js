@@ -104,7 +104,7 @@ exports.run = async (client, message, args) => {
     else if (hasCrown !== null) {
       const userID = hasCrown.userID;
       const plays = hasCrown.artistPlays;
-      if (userID !== sorted.userID || plays !== sorted.plays) {
+      if (userID !== sorted.userID || plays < sorted.plays) {
         await Crowns.update({
           userID: sorted.userID,
           artistPlays: sorted.plays,
