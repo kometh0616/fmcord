@@ -8,7 +8,7 @@ exports.run = async (client, message) => {
         discordUserID: message.author.id
       }
     });
-    if (!user) return message.reply(client.replies.noLogin);
+    if (!user) return message.reply(client.snippets.noLogin);
     const URL = `https://last.fm/user/${user.get(`lastFMUsername`)}`;
     const userCrowns = await Crowns.findAll({
       where: {
@@ -126,7 +126,7 @@ exports.run = async (client, message) => {
     }
   } catch (e) {
     console.error(e);
-    await message.channel.send(client.replies.error);
+    await message.channel.send(client.snippets.error);
   }
 };
 

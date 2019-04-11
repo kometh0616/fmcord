@@ -34,7 +34,7 @@ exports.run = async (client, message, args) => {
         discordUserID: message.author.id
       }
     });
-    if (!user) return message.reply(client.replies.noLogin);
+    if (!user) return message.reply(client.snippets.noLogin);
     const query = stringify({
       method: `artist.getinfo`,
       username: user.get(`lastFMUsername`),
@@ -53,7 +53,7 @@ exports.run = async (client, message, args) => {
 
   } catch (e) {
     console.log(e);
-    await message.channel.send(client.replies.error);
+    await message.channel.send(client.snippets.error);
   }
 };
 

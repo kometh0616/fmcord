@@ -144,7 +144,7 @@ Error code: ${e.info.code}
 Error message: ${e.info.message}`);
     }
     console.error(e);
-    await message.channel.send(client.replies.error);
+    await message.channel.send(client.snippets.error);
   }
 };
 

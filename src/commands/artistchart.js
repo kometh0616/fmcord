@@ -57,7 +57,7 @@ exports.run = async (client, message, args) => {
         discordUserID: message.author.id,
       }
     });
-    if (!user) return message.reply(client.replies.noLogin);
+    if (!user) return message.reply(client.snippets.noLogin);
     await message.channel.send(`Please wait until your grid is done...`);
     const query = stringify({
       method: `user.gettopartists`,
@@ -136,7 +136,7 @@ exports.run = async (client, message, args) => {
 
   } catch (e) {
     console.error(e);
-    await message.channel.send(client.replies.error);
+    await message.channel.send(client.snippets.error);
   }
 };
 

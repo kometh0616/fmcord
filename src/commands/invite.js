@@ -5,7 +5,7 @@ exports.run = async (client, message) => {
     `${invite}`);
   } catch (e) {
     console.error(e);
-    await message.channel.send(client.replies.error);
+    await message.channel.send(client.snippets.error);
   }
 };
 
@@ -14,5 +14,4 @@ exports.help = {
   description: `Sends you a bot invitation link, by which you can invite this ` +
   `bot to your server.`,
   usage: `invite`
-
 };

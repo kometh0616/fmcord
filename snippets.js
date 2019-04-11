@@ -5,5 +5,7 @@ module.exports = {
   `user account to this bot! Please do so with \`${config.prefix}` +
   `login <lastfm username>\` to be able to use this command!`,
   error: `There was an error trying to execute the ` +
-  `command. Please try again later.`
+  `command. Please try again later.`,
+  github: `https://github.com/kometh0616/fmcord`,
+  getSource: (cmd) => `https://github.com/kometh0616/fmcord/blob/master/src/commands/${cmd}.js`
 };

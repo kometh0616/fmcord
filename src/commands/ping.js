@@ -6,6 +6,6 @@ exports.run = async (client, message) => {
     await msg.edit(`Pong! The ping is ${ping}ms.`);
   } catch (e) {
     console.error(e.stack);
-    await message.channel.send(client.replies.error);
+    await message.channel.send(client.snippets.error);
   }
 };

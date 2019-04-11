@@ -75,7 +75,7 @@ exports.run = async (client, message, args) => {
     }
   } catch (e) {
     console.error(e);
-    await message.channel.send(client.replies.error);
+    await message.channel.send(client.snippets.error);
   }
 };
 

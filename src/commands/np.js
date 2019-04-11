@@ -11,7 +11,7 @@ exports.run = async (client, message) => {
         discordUserID: message.author.id
       }
     });
-    if (!user) return message.reply(client.replies.noLogin);
+    if (!user) return message.reply(client.snippets.noLogin);
     const lUsername = user.get(`lastFMUsername`);
     const params = {
       method: `user.getrecenttracks`,
@@ -45,7 +45,7 @@ exports.run = async (client, message) => {
     await message.channel.send({ embed });
   } catch (e) {
     console.error(e);
-    await message.channel.send(client.replies.error);
+    await message.channel.send(client.snippets.error);
   }
 };
 

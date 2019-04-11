@@ -36,7 +36,7 @@ exports.run = async (client, message, args) => {
     `perform any administrative actions to it.`);
   } catch (e) {
     console.log(e);
-    await message.channel.send(client.replies.error);
+    await message.channel.send(client.snippets.error);
   }
 };
 

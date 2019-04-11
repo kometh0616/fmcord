@@ -16,7 +16,7 @@ exports.run = async (client, message, args) => {
         discordUserID: message.author.id
       }
     });
-    if (!author) return message.reply(client.replies.noLogin);
+    if (!author) return message.reply(client.snippets.noLogin);
     let userID = message.mentions.users.first().id;
     if (!userID) return message.channel.send(`Couldn't find the user ` +
     `in Discord. Make sure you mentioned a valid user correctly and try again!`);
@@ -72,7 +72,7 @@ exports.run = async (client, message, args) => {
     await message.channel.send({embed});
   } catch (e) {
     console.error(e);
-    await message.channel.send(client.replies.error);
+    await message.channel.send(client.snippets.error);
   }
 };
 

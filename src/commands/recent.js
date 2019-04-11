@@ -50,7 +50,7 @@ exports.run = async (client, message) => {
     await message.channel.send({ embed });
   } catch (e) {
     console.error(e);
-    await message.channel.send(client.replies.error);
+    await message.channel.send(client.snippets.error);
   }
 };
 

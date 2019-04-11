@@ -14,7 +14,7 @@ exports.run = async (client, message) => {
     });
 
     if (!user) {
-      return message.reply(client.replies.noLogin);
+      return message.reply(client.snippets.noLogin);
     }
 
     // Get timestamp from database and attempt to get
@@ -73,7 +73,7 @@ exports.run = async (client, message) => {
     }
   } catch (ex) {
     console.error(ex);
-    await message.channel.send(client.replies.error);
+    await message.channel.send(client.snippets.error);
   }
 };
 
