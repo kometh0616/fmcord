@@ -36,7 +36,7 @@ exports.run = async (client, message) => {
 };
 
 exports.help = {
-  name: `npyt`,
+  name: `ytnp`,
   description: `Gets a YouTube link of the current playing track`,
   usage: `ytnp`
 };
