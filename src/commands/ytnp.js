@@ -23,7 +23,7 @@ exports.run = async (client, message) => {
           for (var item of result.data.items) {
             if (item.id.kind === `youtube#video`) {
               var url = `https://youtu.be/${item.id.videoId}`;
-              message.reply(`${message.author.username} is listening to ${current.name} by ${current.artist[`#text`]}: ${url}`);
+              message.channel.send(`${message.author.username} is listening to ${current.name} by ${current.artist[`#text`]}: ${url}`);
 
               break;
             }
