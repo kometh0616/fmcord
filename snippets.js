@@ -7,5 +7,6 @@ module.exports = {
   error: `There was an error trying to execute the ` +
   `command. Please try again later.`,
   github: `https://github.com/kometh0616/fmcord`,
-  getSource: (cmd) => `https://github.com/kometh0616/fmcord/blob/master/src/commands/${cmd}.js`
+  getSource: (cmd) => `https://github.com/kometh0616/fmcord/blob/master/src/commands/${cmd}.js`,
+  notPlaying: `You're not currently listening to anything`
 };
