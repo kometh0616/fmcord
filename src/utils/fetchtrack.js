@@ -1,6 +1,6 @@
 const { stringify } = require(`querystring`);
 const fetch = require(`node-fetch`);
-const { fetchuser } = require(`../utils/fetchuser`)
+const { fetchuser } = require(`../utils/fetchuser`);
 
 /**
  * Fetches track info from LastFM.

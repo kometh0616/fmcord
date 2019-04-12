@@ -25,10 +25,10 @@ exports.run = async (client, message, args) => {
     console.error(e);
     await message.channel.send(client.snippets.error);
   }
-}
+};
 
 exports.help = {
   name: `yt`,
   description: `Gets a YouTube link of a searched song or video`,
   usage: `yt <search query>`
-}
+};

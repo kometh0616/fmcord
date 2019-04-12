@@ -3,7 +3,7 @@ const { fetchtrack } = require(`../utils/fetchtrack`);
 
 exports.run = async (client, message) => {
   try {
-    var ft = new fetchtrack(client, message)
+    var ft = new fetchtrack(client, message);
     var current = await ft.getcurrenttrack();
 
     if (current) {
@@ -27,7 +27,7 @@ exports.run = async (client, message) => {
         }
       });
     } else {
-      await message.reply(client.snippets.notPlaying)
+      await message.reply(client.snippets.notPlaying);
     }
   } catch (e) {
     console.error(e);
