@@ -1,6 +1,10 @@
 const { google } = require(`googleapis`);
 
 exports.run = async (client, message, args) => {
+  if (args.length == 0) {
+    return message.reply(`You need to input something to search`);
+  }
+
   try {
     var yt = google.youtube({
       version: `v3`,
@@ -15,10 +19,16 @@ exports.run = async (client, message, args) => {
       }
 
       if (result && result.data.items.length > 0) {
-        var top = result.data.items[0];
-        var url = `https://youtu.be/${top.id.videoId}`;
+        for (var item of result.data.items) {
+          if (item.id.kind === `youtube#video`) {
+            var url = `https://youtu.be/${item.id.videoId}`;
+            message.reply(`Result for "**${args.join(` `)}**": ${url}`);
 
-        message.reply(`Result for "**${args.join(` `)}**": ${url}`);
+            break;
+          }
+        }
+      } else {
+        message.reply(`No results for "${args.join(` `)}" found`);
       }
     });
   } catch (e) {
