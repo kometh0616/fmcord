@@ -24,7 +24,7 @@ exports.run = async (client, message) => {
     const track = data.recenttracks.track[0];
     const prevTrack = data.recenttracks.track[1];
     if (!track[`@attr`])
-      return message.reply(`currently, you are not listening to anything.`);
+      return message.reply(client.snippets.notPlaying);
     const userParams = Object.assign({}, params);
     userParams.method = `user.getinfo`;
     const userQuery = stringify(userParams);

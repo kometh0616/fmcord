@@ -6,5 +6,8 @@
         "secret": "",
         "endpoint": "https://ws.audioscrobbler.com/2.0/?"
     },
+    "youtube": {
+      "apikey": ""
+    },
     "botOwnerID": ""
 }
