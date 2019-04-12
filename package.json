@@ -12,16 +12,16 @@
   "author": "Kometh",
   "license": "MIT",
   "dependencies": {
-    "canvas": "^2.2.0",
+    "canvas": "^2.4.1",
     "discord.js": "^11.4.2",
     "express": "^4.16.4",
     "googleapis": "^39.2.0",
     "node-fetch": "^2.3.0",
-    "sequelize": "^4.41.2",
+    "sequelize": "^5.3.3",
     "sqlite3": "^4.0.4"
   },
   "devDependencies": {
-    "eslint": "^5.10.0",
+    "eslint": "^5.16.0",
     "md5": "^2.2.1"
   }
 }
