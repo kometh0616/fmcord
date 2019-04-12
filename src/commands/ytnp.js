@@ -20,10 +20,16 @@ exports.run = async (client, message) => {
         }
 
         if (result && result.data.items.length > 0) {
-          var top = result.data.items[0];
-          var url = `https://youtu.be/${top.id.videoId}`;
+          for (var item of result.data.items) {
+            if (item.id.kind === `youtube#video`) {
+              var url = `https://youtu.be/${item.id.videoId}`;
+              message.reply(`${message.author.username} is listening to ${current.name} by ${current.artist[`#text`]}: ${url}`);
 
-          message.channel.send(`${message.author.username} is listening to ${current.name} by ${current.artist[`#text`]}: ${url}`);
+              break;
+            }
+          }
+        } else {
+          message.reply(`Couldn't find a YouTube video for the track you're listening to.`);
         }
       });
     } else {
