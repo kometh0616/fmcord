@@ -4,9 +4,10 @@ FMCord is a Discord bot with various Last.fm related utilities. It is created wi
 
 FMCord is written in a Javascript language. The libraries for development used are:
 - [Discord.js](https://discord.js.org/) - for interaction with Discord API
+- [googleapis](https://developers.google.com/api-client-library/) - For using YouTube search API
+- [moment.js](https://momentjs.com) - For DateTime manipulation
 - [node-canvas](https://www.npmjs.com/package/canvas) - for image manipulation
 - [node-fetch](https://www.npmjs.com/package/node-fetch) - for interaction with Last.fm API
-- [moment.js](https://momentjs.com) - For DateTime manipulation
 
 Want to report an issue/bug? Head over to "Issues" tab and submit one, or join an [official FMCord Discord Server](https://discord.gg/BrJ6zEk) and ask your questions there.
 
