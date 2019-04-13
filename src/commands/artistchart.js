@@ -113,7 +113,7 @@ exports.run = async (client, message, args) => {
 
     const { width } = ctx.measureText(longestName);
     const xAxis = x * 100 + 60 + width;
-    let yAxis = y * 100;
+    const yAxis = y * 100;
     const finalCanvas = canvas.createCanvas(xAxis, yAxis);
     const fctx = finalCanvas.getContext(`2d`);
     fctx.fillStyle = `black`;
@@ -124,7 +124,7 @@ exports.run = async (client, message, args) => {
     let i = 0;
     for (let byChart = 0; byChart < 100 * y; byChart += 100) {
       for (let inChart = 15; inChart <= 15 * x; inChart += 15) {
-        let yAxis = byChart + inChart;
+        const yAxis = byChart + inChart;
         if (names[i] !== undefined)
           fctx.fillText(names[i], x * 100 + 15, yAxis);
         i++;

@@ -53,7 +53,7 @@ exports.run = async (client, message) => {
       await msg.react(`➡`);
       await msg.react(`❌`);
       let page = 0;
-      let finalPage = Math.ceil(userCrowns.length / 10) - 1;
+      const finalPage = Math.ceil(userCrowns.length / 10) - 1;
 
       const listenKeys = async (reaction, user) => {
         if (reaction.message.id === msg.id && user.id === message.author.id) {
@@ -71,7 +71,7 @@ exports.run = async (client, message) => {
                 };
               })
               .filter(x => message.guild.id === x.guildID
-              && message.author.id == x.userID)
+              && message.author.id === x.userID)
               .sort((a,b) => b.plays - a.plays)
               .slice(offset, offset + 10)
               .map(x => `${++num}. **${x.name}** with ${x.plays} plays`)
@@ -100,7 +100,7 @@ exports.run = async (client, message) => {
                 };
               })
               .filter(x => message.guild.id === x.guildID
-                && message.author.id == x.userID)
+                && message.author.id === x.userID)
               .sort((a,b) => b.plays - a.plays)
               .slice(offset, offset + 10)
               .map(x => `${++num}. **${x.name}** with ${x.plays} plays`)

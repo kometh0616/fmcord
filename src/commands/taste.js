@@ -17,7 +17,7 @@ exports.run = async (client, message, args) => {
       }
     });
     if (!author) return message.reply(client.snippets.noLogin);
-    let userID = message.mentions.users.first().id;
+    const userID = message.mentions.users.first().id;
     if (!userID) return message.channel.send(`Couldn't find the user ` +
     `in Discord. Make sure you mentioned a valid user correctly and try again!`);
     const user = await Users.findOne({ where: { discordUserID: userID } });

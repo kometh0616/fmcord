@@ -7,7 +7,7 @@ exports.run = async (client, message, args) => {
     const isValid = client.commands.has(args[0].toLowerCase());
     if (!isValid) return message.reply(`I don't recognise a command ` +
       `${args[0]}.`);
-    let dbParams = {
+    const dbParams = {
       where: {
         guildID: message.guild.id,
         cmdName: args[0].toLowerCase()
