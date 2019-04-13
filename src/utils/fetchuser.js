@@ -19,7 +19,9 @@ class Fetchuser {
     });
 
     if (!user) {
-      return this.message.reply(this.client.snippets.noLogin);
+      // this.message.reply(this.client.snippets.noLogin);
+
+      return false;
     }
 
     return user;
@@ -29,7 +31,9 @@ class Fetchuser {
    * Gets the lastFMUsername from the user object.
    */
   async username() {
-    return (await this.get()).get(`lastFMUsername`);
+    var user = await this.get();
+
+    return (user) ? user.get(`lastFMUsername`) : null;
   }
 }
 
