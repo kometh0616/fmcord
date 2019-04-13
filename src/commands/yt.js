@@ -2,7 +2,7 @@ const { google } = require(`googleapis`);
 
 exports.run = async (client, message, args) => {
   if (args.length == 0) {
-    return message.reply(`You need to input something to search`);
+    return message.reply(`you need to input something to search.`);
   }
 
   try {
@@ -22,13 +22,13 @@ exports.run = async (client, message, args) => {
         for (var item of result.data.items) {
           if (item.id.kind === `youtube#video`) {
             var url = `https://youtu.be/${item.id.videoId}`;
-            message.reply(`Result for "**${args.join(` `)}**": ${url}`);
+            message.reply(`Result for \`${args.join(` `)}\`: ${url}`);
 
             break;
           }
         }
       } else {
-        message.reply(`No results for "${args.join(` `)}" found`);
+        message.reply(`no results for \`${args.join(` `)}\` found.`);
       }
     });
   } catch (e) {

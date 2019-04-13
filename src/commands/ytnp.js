@@ -27,13 +27,13 @@ exports.run = async (client, message) => {
             for (var item of result.data.items) {
               if (item.id.kind === `youtube#video`) {
                 var url = `https://youtu.be/${item.id.videoId}`;
-                message.channel.send(`${message.author.username} is listening to ${current.name} by ${current.artist[`#text`]}: ${url}`);
+                message.channel.send(`\`${message.author.username}\` is listening to \`${current.name}\` by \`${current.artist[`#text`]}\`: ${url}`);
 
                 break;
               }
             }
           } else {
-            message.reply(`Couldn't find a YouTube video for the track you're listening to.`);
+            message.reply(`couldn't find a YouTube video for the track you're listening to.`);
           }
         });
       } else {
