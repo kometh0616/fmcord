@@ -15,16 +15,16 @@ class Fetchtrack {
    * Gets the list of recently played tracks.
    */
   async getrecenttracks() {
-    var user = new fetchuser(this.client, this.message);
-    var { apikey, endpoint } = this.client.config.lastFM;
+    const user = new fetchuser(this.client, this.message);
+    const { apikey, endpoint } = this.client.config.lastFM;
 
-    var query = stringify({
+    const query = stringify({
       method: `user.getrecenttracks`,
       user: await user.username(),
       api_key: apikey,
       format: `json`
     });
-    var data = await fetch(endpoint + query).then(r => r.json());
+    const data = await fetch(endpoint + query).then(r => r.json());
 
     return data.recenttracks;
   }
@@ -33,7 +33,7 @@ class Fetchtrack {
    * Gets the current playing track. Return false if nothing is playing.
    */
   async getcurrenttrack() {
-    var recent = await this.getrecenttracks().then(r => r.track[0]);
+    const recent = await this.getrecenttracks().then(r => r.track[0]);
 
     return (recent[`@attr`]) ? recent : false;
   }
@@ -42,8 +42,8 @@ class Fetchtrack {
    * Gets the last played track (will not get current track unless stopped)
    */
   async getlasttrack() {
-    var recent = await this.getrecenttracks();
-    var current = await this.getcurrenttrack();
+    const recent = await this.getrecenttracks();
+    const current = await this.getcurrenttrack();
 
     if (current) {
       return recent.track[1];

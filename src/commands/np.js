@@ -8,22 +8,22 @@ const { fetchtrack } = require(`../utils/fetchtrack`);
 exports.run = async (client, message) => {
   try {
     const { apikey, endpoint } = client.config.lastFM;
-    var user = new fetchuser(client, message);
+    const user = new fetchuser(client, message);
 
     if (await user.get()) {
-      var ft = new fetchtrack(client, message);
-      var track = await ft.getcurrenttrack(client, message);
+      const ft = new fetchtrack(client, message);
+      const track = await ft.getcurrenttrack(client, message);
 
       if (track) {
-        var prevTrack = await ft.getlasttrack(client, message);
-        var query = stringify({
+        const prevTrack = await ft.getlasttrack(client, message);
+        const query = stringify({
           method: `user.getinfo`,
           user: await user.username(),
           api_key: apikey,
           format: `json`
         });
 
-        var userData = await fetch(endpoint + query).then(r => r.json());
+        const userData = await fetch(endpoint + query).then(r => r.json());
         const embed = new RichEmbed()
           .addField(`Current:`, `**${track.name}** - ${track.artist[`#text`]} ` +
             `| ${track.album[`#text`] ? track.album[`#text`] : `no album`}`)

@@ -83,7 +83,7 @@ exports.run = async (client, message, args) => {
       });
     };
 
-    let arr = await fetchPlays();
+    const arr = await fetchPlays();
 
     // Giving a top-ranking listener in the guild his crown, if he still has none.
     const sorted = arr.sort(sortingFunc)[0];
@@ -122,7 +122,7 @@ exports.run = async (client, message, args) => {
       return message.reply(`no one here listens to ${artist.name}.`);
     arr.sort(sortingFunc);
     let x = 0;
-    let description = arr
+    const description = arr
       .sort(sortingFunc)
       .slice(0, 10)
       .filter(k => k.plays !== `0`)

@@ -11,8 +11,8 @@ class Fetchuser {
    * Gets the user object from the database.
    */
   async get() {
-    var Users = this.client.sequelize.import(`../models/Users.js`);
-    var user = await Users.findOne({
+    const Users = this.client.sequelize.import(`../models/Users.js`);
+    const user = await Users.findOne({
       where: {
         discordUserID: this.message.author.id
       }
@@ -31,7 +31,7 @@ class Fetchuser {
    * Gets the lastFMUsername from the user object.
    */
   async username() {
-    var user = await this.get();
+    const user = await this.get();
 
     return (user) ? user.get(`lastFMUsername`) : null;
   }

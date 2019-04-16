@@ -20,7 +20,7 @@ exports.run = async (client, message) => {
     // Get timestamp from database and attempt to get
     // the time difference from then and now
     let timestamp = user.get(`lastDailyTimestamp`);
-    let diff = (timestamp !== null) ? moment(timestamp).diff(moment(), `hours`) : 0;
+    const diff = (timestamp !== null) ? moment(timestamp).diff(moment(), `hours`) : 0;
 
     // Either there's no timestamp, or the difference is < 0
     // so we want to re-calculate the daily
