@@ -14,7 +14,7 @@ exports.run = async (client, message, args) => {
 
     // Prevent user from running `taste` command on themselves
     if (message.mentions.users.first().id === message.author.id) {
-      return message.reply('You cannot taste yourself')
+      return message.reply(`You cannot taste yourself`);
     }
 
     const author = await Users.findOne({
