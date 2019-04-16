@@ -11,16 +11,18 @@ class Fetchuser {
    * Gets the user object from the database.
    */
   async get() {
+    return await this.getById(this.message.author.id);
+  }
+
+  async getById(id) {
     const Users = this.client.sequelize.import(`../models/Users.js`);
     const user = await Users.findOne({
       where: {
-        discordUserID: this.message.author.id
+        discordUserID: id
       }
     });
 
     if (!user) {
-      // this.message.reply(this.client.snippets.noLogin);
-
       return false;
     }
 
@@ -32,6 +34,12 @@ class Fetchuser {
    */
   async username() {
     const user = await this.get();
+
+    return (user) ? user.get(`lastFMUsername`) : null;
+  }
+
+  async usernameFromId(id) {
+    const user = await this.getById(id);
 
     return (user) ? user.get(`lastFMUsername`) : null;
   }
