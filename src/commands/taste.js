@@ -1,12 +1,16 @@
 const { RichEmbed } = require(`discord.js`);
 const { stringify } = require(`querystring`);
 const fetch = require(`node-fetch`);
+const { fetchuser } = require(`../utils/fetchuser`);
+
 const toJson = r => r.json();
 const difference = (a, b) => {
   if (a > b) return a - b;
   else return b - a;
 };
+
 exports.run = async (client, message, args) => {
+  const fetchUser = new fetchuser(client, message);
   try {
     const Users = client.sequelize.import(`../models/Users.js`);
     if (!args[0]) return message.reply(`specify a user you want to compare ` +
@@ -17,11 +21,7 @@ exports.run = async (client, message, args) => {
       return message.reply(`You cannot taste yourself`);
     }
 
-    const author = await Users.findOne({
-      where: {
-        discordUserID: message.author.id
-      }
-    });
+    const author = await fetchUser.get();
     if (!author) return message.reply(client.snippets.noLogin);
     const userID = message.mentions.users.first().id;
     if (!userID) return message.channel.send(`Couldn't find the user ` +

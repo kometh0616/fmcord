@@ -1,15 +1,12 @@
 const { stringify } = require(`querystring`);
 const fetch = require(`node-fetch`);
+const { fetchuser } = require(`../utils/fetchuser`);
 
 exports.run = async (client, message, args) => {
+  const fetchUser = new fetchuser(client, message);
   let artistName = args.join(` `);
-  const Users = client.sequelize.import(`../models/Users`);
+  const user = await fetchUser.get();
   if (!artistName) {
-    const user = await Users.findOne({
-      where: {
-        discordUserID: message.author.id
-      }
-    });
     if (!user) return message.reply(`you haven't registered your Last.fm ` +
     `account, therefore, I can't check what you're listening to. To set ` +
     `your Last.fm nickname, do \`&login <lastfm username\`.`);
@@ -29,11 +26,6 @@ exports.run = async (client, message, args) => {
     else artistName = track.artist[`#text`];
   }
   try {
-    const user = await Users.findOne({
-      where: {
-        discordUserID: message.author.id
-      }
-    });
     if (!user) return message.reply(client.snippets.noLogin);
     const query = stringify({
       method: `artist.getinfo`,

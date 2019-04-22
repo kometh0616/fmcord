@@ -1,11 +1,10 @@
+const { fetchuser } = require(`../utils/fetchuser`);
+
 exports.run = async (client, message) => {
+  const fetchUser = new fetchuser(client, message);
   const Users = client.sequelize.import(`../models/Users.js`);
   try {
-    const user = await Users.findOne({
-      where: {
-        discordUserID: message.author.id
-      }
-    });
+    const user = await fetchUser.get();
     if (!user) return message.reply(`your instance hasn't been found.`);
     await Users.destroy({
       where: {

@@ -2,22 +2,20 @@ const fetch = require(`node-fetch`);
 const { stringify } = require(`querystring`);
 const { RichEmbed } = require(`discord.js`);
 const sortingFunc = (a, b) => parseInt(b.plays) - parseInt(a.plays);
+const { fetchuser } = require(`../utils/fetchuser`);
 
 
 exports.run = async (client, message, args) => {
+  const fetchUser = new fetchuser(client, message);
   try {
     const Users = client.sequelize.import(`../models/Users.js`);
     const Crowns = client.sequelize.import(`../models/Crowns.js`);
     let artistName = args.join(` `);
+    const user = await fetchUser.get();
     if (!artistName) {
-      const user = await Users.findOne({
-        where: {
-          discordUserID: message.author.id
-        }
-      });
       if (!user) return message.reply(`you haven't registered your Last.fm ` +
       `account, therefore, I can't check what you're listening to. To set ` +
-      `your Last.fm nickname, do \`&login <lastfm username\`.`);
+      `your Last.fm nickname, do \`&login <lastfm username>\`.`);
       const username = user.lastFMUsername;
       const params = {
         method: `user.getrecenttracks`,

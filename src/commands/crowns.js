@@ -1,13 +1,10 @@
 const { RichEmbed } = require(`discord.js`);
+const { fetchuser } = require(`../utils/fetchuser`);
 exports.run = async (client, message) => {
   try {
+    const fetchUser = new fetchuser(client, message);
     const Crowns = client.sequelize.import(`../models/Crowns.js`);
-    const Users = client.sequelize.import(`../models/Users.js`);
-    const user = await Users.findOne({
-      where: {
-        discordUserID: message.author.id
-      }
-    });
+    const user = await fetchUser.get();
     if (!user) return message.reply(client.snippets.noLogin);
     const URL = `https://last.fm/user/${user.get(`lastFMUsername`)}`;
     const userCrowns = await Crowns.findAll({

@@ -1,11 +1,9 @@
+const { fetchuser } = require(`../utils/fetchuser`);
+
 exports.run = async (client, message) => {
-  const Users = client.sequelize.import(`../models/Users.js`);
+  const fetchUser = new fetchuser(client, message);
   try {
-    const user = await Users.findOne({
-      where: {
-        discordUserID: message.author.id
-      }
-    });
+    const user = await fetchUser.get();
     if (!user) await message.reply(`you haven't logged into my system. You ` +
     `can do so by doing \`${client.config.prefix}login ` +
     `<your last.fm username>\`.`);

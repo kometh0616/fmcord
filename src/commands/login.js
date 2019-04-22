@@ -1,7 +1,9 @@
 const querystring = require(`querystring`);
 const fetch = require(`node-fetch`);
+const { fetchuser } = require(`../utils/fetchuser`);
 
 exports.run = async (client, message, args) => {
+  const fetchUser = new fetchuser(client, message);
   const Users = client.sequelize.import(`../models/Users.js`);
   const username = args.join(` `);
   if (!args[0]) return message.reply(`you must define a Last.fm username!`);
@@ -18,11 +20,7 @@ exports.run = async (client, message, args) => {
       .then(r => r.json());
     if (data.error === 6) return message.reply(`no Last.fm user found with ` +
     `given nickname!`);
-    const alreadyExists = await Users.findOne({
-      where: {
-        discordUserID: message.author.id
-      }
-    });
+    const alreadyExists = await fetchUser.get();
     if (alreadyExists) return message.reply(`you already have logged in via ` +
     `this bot! Please do \`${client.config.prefix}logout\` if you want to ` +
     `use a different account.`);

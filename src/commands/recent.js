@@ -1,19 +1,14 @@
 const { stringify } = require(`querystring`);
 const fetch = require(`node-fetch`);
 const { RichEmbed } = require(`discord.js`);
+const { fetchuser } = require(`../utils/fetchuser`);
 
 exports.run = async (client, message) => {
+  const fetchUser = new fetchuser(client, message);
   try {
     const { apikey, endpoint } = client.config.lastFM;
-    const Users = client.sequelize.import(`../models/Users.js`);
-    const user = await Users.findOne({
-      where: {
-        discordUserID: message.author.id
-      }
-    });
-    if (!user) return message.reply(`you haven't registered your Last.fm ` +
-    `user account to this bot! Please do so with \`${client.config.prefix}` +
-    `login <lastfm username>\` to be able to use this command!`);
+    const user = await fetchUser.get();
+    if (!user) return message.reply(client.snippets.noLogin);
     const lUsername = user.get(`lastFMUsername`);
     const profileLink = `https://last.fm/user/${lUsername}`;
     const params = {

@@ -1,4 +1,5 @@
 const { stringify } = require(`querystring`);
+const { fetchuser } = require(`../utils/fetchuser`);
 const fetch = require(`node-fetch`);
 const canvas = require(`canvas`);
 canvas.registerFont(`${process.env.PWD}/NotoSans-Regular.ttf`, {
@@ -6,6 +7,7 @@ canvas.registerFont(`${process.env.PWD}/NotoSans-Regular.ttf`, {
 });
 
 exports.run = async (client, message, args) => {
+  const fetchUser = new fetchuser(client, message);
   const usageWarning = `Incorrect usage of a command! Correct usage ` +
   `would be: \`&artistchart <time period> <grid size>\``;
   let period, vals, x, y;
@@ -50,13 +52,8 @@ exports.run = async (client, message, args) => {
 
   }
 
-  const Users = client.sequelize.import(`../models/Users.js`);
   try {
-    const user = await Users.findOne({
-      where: {
-        discordUserID: message.author.id,
-      }
-    });
+    const user = await fetchUser.get();
     if (!user) return message.reply(client.snippets.noLogin);
     await message.channel.send(`Please wait until your grid is done...`);
     const query = stringify({
@@ -75,7 +72,7 @@ exports.run = async (client, message, args) => {
     if (data.error) return message.reply(`there was an issue trying to ` +
     `fetch your albums. Please try again later.`);
 
-    const canv = canvas.createCanvas(x*100, y*100);
+    const canv = canvas.createCanvas(x * 100, y * 100);
     const ctx = canv.getContext(`2d`);
 
     const proms = [];
