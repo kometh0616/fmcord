@@ -23,25 +23,28 @@ exports.run = async (client, message) => {
     userParams.method = `user.getinfo`;
     const userQuery = stringify(userParams);
     const userData = await fetch(endpoint + userQuery).then(r => r.json());
-    const nowPlaying = data.recenttracks.track.find(x => x[`@attr`].nowplaying);
+    const nowPlaying = data.recenttracks.track[0];
+    const sliceArgs = nowPlaying[`@attr`] && nowPlaying[`@attr`].nowplaying ?
+      [1, 6] : [0, 5];
     const prevTracks = data.recenttracks.track
-      .slice(0, 5)
+      .slice(...sliceArgs)
       .map(x => `**${x.name}** - ${x.artist[`#text`]} ` +
         `| ${x.album[`#text`] ? x.album[`#text`] : `no album`}`)
       .join(`\n`);
     const embed = new RichEmbed();
-    if (nowPlaying)
+    if (nowPlaying[`@attr`] && nowPlaying[`@attr`].nowplaying)
       embed.addField(`Current:`,
         `**${nowPlaying.name}** - ${nowPlaying.artist[`#text`]} ` +
         `| ${nowPlaying.album[`#text`] ? nowPlaying.album[`#text`] : `no album`}`);
-    embed.addField(`Previous:`, prevTracks);
-    embed.setColor(message.member.displayColor);
-    embed.setTitle(`Last tracks from ${lUsername}`);
-    embed.setURL(profileLink);
-    embed.setThumbnail(data.recenttracks.track[0].image[2][`#text`]);
-    embed.setFooter(`Command invoked by ${message.author.tag} with a total ` +
-      `of ${userData.user.playcount} scrobbles.`);
-    embed.setTimestamp();
+    embed
+      .addField(`Previous:`, prevTracks)
+      .setColor(message.member.displayColor)
+      .setTitle(`Last tracks from ${lUsername}`)
+      .setURL(profileLink)
+      .setThumbnail(data.recenttracks.track[0].image[2][`#text`])
+      .setFooter(`Command invoked by ${message.author.tag} with a total ` +
+      `of ${userData.user.playcount} scrobbles.`)
+      .setTimestamp();
     await message.channel.send({ embed });
   } catch (e) {
     console.error(e);
