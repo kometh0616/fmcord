@@ -59,8 +59,6 @@ exports.run = async (client, message, args) => {
           const req = await fetch(client.config.lastFM.endpoint + query)
             .then(r => r.json());
 
-          console.log(req);
-
           if (req.error) rej({
             apiError: true,
             info: {

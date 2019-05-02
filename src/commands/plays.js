@@ -44,7 +44,7 @@ exports.run = async (client, message, args) => {
     `**${stats.userplaycount}** times.`);
 
   } catch (e) {
-    console.log(e);
+    console.error(e);
     await message.channel.send(client.snippets.error);
   }
 };
