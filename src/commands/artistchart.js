@@ -1,4 +1,9 @@
-const { stringify } = require(`querystring`);
+/*
+
+Command was taken down until further notice. Last.fm no longer
+provides artist images, making the command obsolete.
+
+ const { stringify } = require(`querystring`);
 const { fetchuser } = require(`../utils/fetchuser`);
 const fetch = require(`node-fetch`);
 const canvas = require(`canvas`);
@@ -143,4 +148,4 @@ exports.help = {
   `names to the side.`,
   usage: `artistchart <time period> <grid size>`,
   notes: `In time period, you can have "weekly", "monthly" or "overall".`
-};
+}; */
