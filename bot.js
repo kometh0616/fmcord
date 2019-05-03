@@ -3,10 +3,9 @@ const express = require(`express`);
 const fs = require(`fs`);
 const { Client, Collection } = require(`discord.js`);
 const config = require(`./config.json`);
-const bodyParser = require(`body-parser`);
+const DBL = require(`dblapi.js`);
 
 const app = express();
-const dbl = express();
 
 app.get(`/`, (request, response) => {
   console.log(Date.now() + ` Ping Received`);
@@ -32,26 +31,14 @@ client.commands = new Collection();
 client.sequelize = sequelize;
 client.snippets = require(`./snippets.js`);
 
-const port = `5000`;
-dbl.use(bodyParser.json());
-dbl.use(bodyParser.urlencoded({ extended: true }));
+const dbl = new DBL(config.dbl.apikey, client);
 
-dbl.post(`/dblwebhook`, (req, res) => {
-  const { body, headers } = req;
-  if (headers && headers.authorization === config.dbl.webhookPass) {
-    res.status(200).send();
-    let text = `User with ID ${body.user} voted in discordbots.org ` +
-  `at ${new Date().toUTCString()}. Vote type is ${body.type}.`;
-    if (body.isWeekend) text += ` Weekend multiplier applies.`;
-    fs.writeFile(`votelog.txt`, `${text}\n`, err => {
-      if (err) throw err;
-      console.log(`discordbots.org vote registered.`);
-    });
-  } else res.status(403).send();
+dbl.on(`posted`, () => {
+  console.log(`Server count posted to discordbots.org!`);
 });
 
-dbl.listen(port, () => {
-  console.log(`Listening for port ${port}...`);
+dbl.on(`error`, e => {
+  console.error(`DBL error: ${e}`);
 });
 
 fs.readdir(`./src/commands/`, (err, files) => {
