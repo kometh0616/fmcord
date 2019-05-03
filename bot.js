@@ -14,6 +14,7 @@ const fs = require(`fs`);
 const { Client, Collection } = require(`discord.js`);
 const config = require(`./config.json`);
 const Sequelize = require(`sequelize`);
+const DBL = require(`dblapi.js`);
 
 const sequelize = new Sequelize(`database`, `user`, `password`, {
   host: `localhost`,
@@ -27,6 +28,25 @@ client.config = config;
 client.commands = new Collection();
 client.sequelize = sequelize;
 client.snippets = require(`./snippets.js`);
+
+const dbl = new DBL(client.config.dbl.apikey, {
+  webhookPort: 5000,
+  webhookAuth: client.config.dbl.webhookPass
+}, client);
+
+dbl.webhook.on(`ready`, hook => {
+  console.log(`Webhook running at http://${hook.hostname}:${hook.port}${hook.path}`);
+});
+
+dbl.webhook.on(`vote`, vote => {
+  let text = `User with ID ${vote.user} voted in discordbots.org ` +
+  `at ${new Date().toUTCString()}. Vote type is ${vote.type}.`;
+  if (vote.isWeekend) text += ` Weekend multiplier applies.`;
+  fs.writeFile(`votelog.txt`, `${text}\n`, err => {
+    if (err) throw err;
+    console.log(`discordbots.org vote registered.`);
+  });
+});
 
 fs.readdir(`./src/commands/`, (err, files) => {
   if (err) throw err;
