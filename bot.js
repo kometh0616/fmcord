@@ -1,6 +1,7 @@
 const http = require(`http`);
 const express = require(`express`);
 const app = express();
+const server = http.createServer(app);
 app.get(`/`, (request, response) => {
   console.log(Date.now() + ` Ping Received`);
   response.sendStatus(200);
@@ -30,8 +31,8 @@ client.sequelize = sequelize;
 client.snippets = require(`./snippets.js`);
 
 const dbl = new DBL(client.config.dbl.apikey, {
-  webhookPort: 5000,
-  webhookAuth: client.config.dbl.webhookPass
+  webhookAuth: client.config.dbl.webhookPass,
+  webhookServer: server
 }, client);
 
 dbl.webhook.on(`ready`, hook => {
@@ -46,6 +47,10 @@ dbl.webhook.on(`vote`, vote => {
     if (err) throw err;
     console.log(`discordbots.org vote registered.`);
   });
+});
+
+server.listen(5000, () => {
+  console.log(`Listening to port 5000...`);
 });
 
 fs.readdir(`./src/commands/`, (err, files) => {
