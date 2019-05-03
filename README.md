@@ -1,7 +1,5 @@
 # FMCord
 
-[![Discord Bots](https://discordbots.org/api/widget/521041865999515650.svg)](https://discordbots.org/bot/521041865999515650)
-
 FMCord is a Discord bot with a large variety of Last.fm related utilities and commands. Currently, the bot can:
 
 - Create varying album and artist charts
