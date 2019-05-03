@@ -1,7 +1,13 @@
 const http = require(`http`);
 const express = require(`express`);
+const fs = require(`fs`);
+const { Client, Collection } = require(`discord.js`);
+const config = require(`./config.json`);
+const bodyParser = require(`body-parser`);
+
 const app = express();
-const server = http.createServer(app);
+const dbl = express();
+
 app.get(`/`, (request, response) => {
   console.log(Date.now() + ` Ping Received`);
   response.sendStatus(200);
@@ -11,11 +17,7 @@ setInterval(() => {
   http.get(`http://${process.env.PROJECT_DOMAIN}.glitch.me/`);
 }, 280000);
 
-const fs = require(`fs`);
-const { Client, Collection } = require(`discord.js`);
-const config = require(`./config.json`);
 const Sequelize = require(`sequelize`);
-const DBL = require(`dblapi.js`);
 
 const sequelize = new Sequelize(`database`, `user`, `password`, {
   host: `localhost`,
@@ -30,27 +32,26 @@ client.commands = new Collection();
 client.sequelize = sequelize;
 client.snippets = require(`./snippets.js`);
 
-const dbl = new DBL(client.config.dbl.apikey, {
-  webhookAuth: client.config.dbl.webhookPass,
-  webhookServer: server
-}, client);
+const port = `5000`;
+dbl.use(bodyParser.json());
+dbl.use(bodyParser.urlencoded({ extended: true }));
 
-dbl.webhook.on(`ready`, hook => {
-  console.log(`Webhook running at http://${hook.hostname}:${hook.port}${hook.path}`);
+dbl.post(`/dblwebhook`, (req, res) => {
+  const { body, headers } = req;
+  if (headers && headers.authorization === config.dbl.webhookPass) {
+    res.status(200).send();
+    let text = `User with ID ${body.user} voted in discordbots.org ` +
+  `at ${new Date().toUTCString()}. Vote type is ${body.type}.`;
+    if (body.isWeekend) text += ` Weekend multiplier applies.`;
+    fs.writeFile(`votelog.txt`, `${text}\n`, err => {
+      if (err) throw err;
+      console.log(`discordbots.org vote registered.`);
+    });
+  } else res.status(403).send();
 });
 
-dbl.webhook.on(`vote`, vote => {
-  let text = `User with ID ${vote.user} voted in discordbots.org ` +
-  `at ${new Date().toUTCString()}. Vote type is ${vote.type}.`;
-  if (vote.isWeekend) text += ` Weekend multiplier applies.`;
-  fs.writeFile(`votelog.txt`, `${text}\n`, err => {
-    if (err) throw err;
-    console.log(`discordbots.org vote registered.`);
-  });
-});
-
-server.listen(5000, () => {
-  console.log(`Listening to port 5000...`);
+dbl.listen(port, () => {
+  console.log(`Listening for port ${port}...`);
 });
 
 fs.readdir(`./src/commands/`, (err, files) => {
