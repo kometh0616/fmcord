@@ -1,4 +1,5 @@
 const { RichEmbed } = require(`discord.js`);
+const ReactionInterface = require(`../utils/ReactionInterface`);
 exports.run = async (client, message, args) => {
   const { prefix } = client.config;
   try {
@@ -35,41 +36,20 @@ exports.run = async (client, message, args) => {
       if (sorted[currentPage][1].help.notes)
         embed.addField(`Note:`, sorted[currentPage][1].help.notes);
       const msg = await message.channel.send({ embed });
-      await msg.react(`⬅`);
-      await msg.react(`➡`);
-      await msg.react(`❌`);
-      client.on(`messageReactionAdd`, async (reaction, user) => {
-        if (reaction.message.id === msg.id &&
-            user.id === message.author.id) {
-          if (reaction.emoji.name === `⬅` && currentPage !== 0) {
-            currentPage--;
-            const embed = updateEmbed(currentPage);
-            await msg.edit({ embed });
-          } else if (reaction.emoji.name === `➡` && currentPage !== amount - 1) {
-            currentPage++;
-            const embed = updateEmbed(currentPage);
-            await msg.edit({ embed });
-          } else if (reaction.emoji.name === `❌`) {
-            await msg.delete();
-          }
+      const rl = new ReactionInterface(msg, message.author);
+      await rl.setKey(`⬅`, async () => {
+        if (currentPage !== 0) {
+          const embed = updateEmbed(--currentPage);
+          await msg.edit({ embed });
         }
       });
-      client.on(`messageReactionRemove`, async (reaction, user) => {
-        if (reaction.message.id === msg.id &&
-            user.id === message.author.id) {
-          if (reaction.emoji.name === `⬅` && currentPage !== 0) {
-            currentPage--;
-            const embed = updateEmbed(currentPage);
-            await msg.edit({ embed });
-          } else if (reaction.emoji.name === `➡` && currentPage !== amount - 1) {
-            currentPage++;
-            const embed = updateEmbed(currentPage);
-            await msg.edit({ embed });
-          } else if (reaction.emoji.name === `❌`) {
-            await msg.delete();
-          }
+      await rl.setKey(`➡`, async () => {
+        if (currentPage !== amount) {
+          const embed = updateEmbed(++currentPage);
+          await msg.edit({ embed });
         }
       });
+      await rl.setKey(`❌`, rl.destroy);
     } else {
       const helpMessage = client.commands
         .filter(x => x.help)

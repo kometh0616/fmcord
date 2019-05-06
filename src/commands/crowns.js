@@ -1,5 +1,7 @@
 const { RichEmbed } = require(`discord.js`);
 const { fetchuser } = require(`../utils/fetchuser`);
+const ReactionInterface = require(`../utils/ReactionInterface`);
+
 exports.run = async (client, message) => {
   try {
     const fetchUser = new fetchuser(client, message);
@@ -31,9 +33,10 @@ exports.run = async (client, message) => {
       .sort((a,b) => b.plays - a.plays)
       .slice(0, 10)
       .map(x => `${++num}. **${x.name}** with ${x.plays} plays`)
-      .join(`\n`) + `\n\nTotal amount of crowns: **${userCrowns.length}**`;
+      .join(`\n`) + `\n\nTotal amount of crowns: **${validCrowns.length}**`;
     const title = `Crowns of ${user.get(`lastFMUsername`)} ` +
     `in ${message.guild.name}`;
+    const footer = `Command invoked by ${message.author.tag}`;
     if (description.length === 0)
       return message.reply(`you have no crowns in this guild.`);
     const embed = new RichEmbed()
@@ -41,85 +44,46 @@ exports.run = async (client, message) => {
       .setColor(message.member.displayColor)
       .setURL(URL)
       .setDescription(description)
-      .setFooter(`Command invoked by ${message.author.tag}`)
+      .setFooter(footer)
       .setTimestamp()
       .setThumbnail(message.author.avatarURL);
     const msg = await message.channel.send({ embed });
-    if (userCrowns.length > 10) {
-      await msg.react(`⬅`);
-      await msg.react(`➡`);
-      await msg.react(`❌`);
-      let page = 0;
-      const finalPage = Math.ceil(userCrowns.length / 10) - 1;
-
-      const listenKeys = async (reaction, user) => {
-        if (reaction.message.id === msg.id && user.id === message.author.id) {
-          if (reaction.emoji.name === `⬅` && page !== 0) {
-            page--;
-            const offset = page * 10;
-            let num = offset;
-            const description = userCrowns
-              .map(x => {
-                return {
-                  name: x.get(`artistName`),
-                  plays: parseInt(x.get(`artistPlays`)),
-                  userID: x.get(`userID`),
-                  guildID: x.get(`guildID`)
-                };
-              })
-              .filter(x => message.guild.id === x.guildID
-              && message.author.id === x.userID)
-              .sort((a,b) => b.plays - a.plays)
-              .slice(offset, offset + 10)
-              .map(x => `${++num}. **${x.name}** with ${x.plays} plays`)
-              .join(`\n`) + `\n\nTotal amount of crowns: ` +
-            `**${userCrowns.length}**`;
-            const embed = new RichEmbed()
-              .setTitle(title)
-              .setColor(message.member.displayColor)
-              .setURL(URL)
-              .setDescription(description)
-              .setFooter(`Command invoked by ${message.author.tag}`)
-              .setTimestamp()
-              .setThumbnail(message.author.avatarURL);
-            await msg.edit({ embed });
-          } else if (reaction.emoji.name === `➡` && page !== finalPage) {
-            page++;
-            const offset = page * 10;
-            let num = offset;
-            const description = userCrowns
-              .map(x => {
-                return {
-                  name: x.get(`artistName`),
-                  plays: parseInt(x.get(`artistPlays`)),
-                  userID: x.get(`userID`),
-                  guildID: x.get(`guildID`)
-                };
-              })
-              .filter(x => message.guild.id === x.guildID
-                && message.author.id === x.userID)
-              .sort((a,b) => b.plays - a.plays)
-              .slice(offset, offset + 10)
-              .map(x => `${++num}. **${x.name}** with ${x.plays} plays`)
-              .join(`\n`) + `\n\nTotal amount of crowns: ` +
-              `**${userCrowns.length}**`;
-            const embed = new RichEmbed()
-              .setTitle(title)
-              .setColor(message.member.displayColor)
-              .setURL(URL)
-              .setDescription(description)
-              .setFooter(`Command invoked by ${message.author.tag}`)
-              .setTimestamp()
-              .setThumbnail(message.author.avatarURL);
-            await msg.edit({ embed });
-          } else if (reaction.emoji.name === `❌`) {
-            await msg.delete();
-          }
+    if (validCrowns.length > 10) {
+      const rl = new ReactionInterface(msg, message.author);
+      const length = Math.ceil(userCrowns.length / 10);
+      let offset = 0, page = 1;
+      const func = async off => {
+        let num = off;
+        const description = validCrowns
+          .sort((a, b) => b.plays - a.plays)
+          .slice(off, off + 10)
+          .map(x => `${++num}. **${x.name}** with ${x.plays} plays`)
+          .join(`\n`) + `\n\nTotal amount of crowns: **${validCrowns.length}**`;
+        const embed = new RichEmbed()
+          .setTitle(title)
+          .setColor(message.member.displayColor)
+          .setURL(URL)
+          .setDescription(description)
+          .setFooter(`Command invoked by ${message.author.tag}`)
+          .setTimestamp()
+          .setThumbnail(message.author.avatarURL);
+        await msg.edit({ embed });
+      };
+      const toFront = () => {
+        if (page !== length) {
+          offset += 10, page++;
+          func(offset);
         }
       };
-
-      client.on(`messageReactionAdd`, listenKeys);
-      client.on(`messageReactionRemove`, listenKeys);
+      const toBack = () => {
+        if (page !== 1) {
+          offset -= 10, page--;
+          func(offset);
+        }
+      };
+      await rl.setKey(`⬅`, toBack);
+      await rl.setKey(`➡`, toFront);
+      await rl.setKey(`❌`, rl.destroy);
     }
   } catch (e) {
     console.error(e);
