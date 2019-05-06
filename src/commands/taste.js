@@ -3,6 +3,9 @@ const { stringify } = require(`querystring`);
 const fetch = require(`node-fetch`);
 const { fetchuser } = require(`../utils/fetchuser`);
 
+const matchErr = `you can't compare your taste with your taste, ` +
+`that's illogical.`;
+
 const toJson = r => r.json();
 const difference = (a, b) => {
   if (a > b) return a - b;
@@ -16,16 +19,25 @@ exports.run = async (client, message, args) => {
     if (!args[0]) return message.reply(`specify a user you want to compare ` +
     `tastes with!`);
 
-    // Prevent user from running `taste` command on themselves
-    if (message.mentions.users.first().id === message.author.id) {
-      return message.reply(`You cannot taste yourself`);
-    }
-
     const author = await fetchUser.get();
     if (!author) return message.reply(client.snippets.noLogin);
-    const userID = message.mentions.users.first().id;
+    let userID;
+    const mention = message.mentions.users.first();
+    if (mention && mention.id === message.author.id)
+      return message.reply(matchErr);
+    if (mention) userID = mention.id;
+    else {
+      const typed = mention ? mention.id : message.guild.members.find(x => {
+        const user = args.join(` `).toLowerCase();
+        return user === x.user.username.toLowerCase();
+      });
+      if (typed) {
+        if (typed.id === message.author.id) return message.reply(matchErr);
+        else userID = typed.id;
+      }
+    }
     if (!userID) return message.channel.send(`Couldn't find the user ` +
-    `in Discord. Make sure you mentioned a valid user correctly and try again!`);
+    `in Discord. Make sure you provided a valid user correctly and try again!`);
     const user = await Users.findOne({ where: { discordUserID: userID } });
     if (!user) return message.channel.send(`This user hasn't logged ` +
     `on to my system.`);
