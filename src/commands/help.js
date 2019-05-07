@@ -37,19 +37,19 @@ exports.run = async (client, message, args) => {
         embed.addField(`Note:`, sorted[currentPage][1].help.notes);
       const msg = await message.channel.send({ embed });
       const rl = new ReactionInterface(msg, message.author);
-      await rl.setKey(`⬅`, async () => {
+      await rl.setKey(client.snippets.arrowLeft, async () => {
         if (currentPage !== 0) {
           const embed = updateEmbed(--currentPage);
           await msg.edit({ embed });
         }
       });
-      await rl.setKey(`➡`, async () => {
+      await rl.setKey(client.snippets.arrowRight, async () => {
         if (currentPage !== amount) {
           const embed = updateEmbed(++currentPage);
           await msg.edit({ embed });
         }
       });
-      await rl.setKey(`❌`, rl.destroy);
+      await rl.setKey(client.snippets.exit, rl.destroy);
     } else {
       const helpMessage = client.commands
         .filter(x => x.help)

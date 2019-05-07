@@ -81,9 +81,9 @@ exports.run = async (client, message) => {
           func(offset);
         }
       };
-      await rl.setKey(`⬅`, toBack);
-      await rl.setKey(`➡`, toFront);
-      await rl.setKey(`❌`, rl.destroy);
+      await rl.setKey(client.snippets.arrowLeft, toBack);
+      await rl.setKey(client.snippets.arrowRight, toFront);
+      await rl.setKey(client.snippets.exit, rl.destroy);
     }
   } catch (e) {
     console.error(e);

@@ -8,5 +8,8 @@ module.exports = {
   `command. Please try again later.`,
   github: `https://github.com/kometh0616/fmcord`,
   getSource: (cmd) => `https://github.com/kometh0616/fmcord/blob/master/src/commands/${cmd}.js`,
-  notPlaying: `currently, you're not listening to anything.`
+  notPlaying: `currently, you're not listening to anything.`,
+  arrowLeft: `⬅`,
+  arrowRight: `➡`,
+  exit: `❌`,
 };
