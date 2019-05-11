@@ -21,7 +21,7 @@ module.exports = async (client, message) => {
         return message.reply(`this command has been disabled in this channel.`);
       else if (dCommands.some(x => x.guildDisabled))
         return message.reply(`this command has been disabled in this server.`);
-      else
+      else if (message.channel.type !== `dm`)
         command.run(client, message, args);
     } else command.run(client, message, args);
   }

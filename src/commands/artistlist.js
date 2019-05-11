@@ -5,7 +5,7 @@ const { stringify } = require(`querystring`);
 
 exports.run = async (client, message, args) => {
   const usageWarning = `Wrong usage of a command, correct usage is ` +
-  `\`${client.config.prefix}artistlist <time period> <grid size>\`.`;
+  `\`${client.config.prefix}artistlist <time period> <list length>\`.`;
   try {
     const { endpoint, apikey } = client.config.lastFM;
     const fetchUser = new fetchuser(client, message);

@@ -10,6 +10,7 @@ exports.run = async (client, message, args) => {
   try {
     const Users = client.sequelize.import(`../models/Users.js`);
     const Crowns = client.sequelize.import(`../models/Crowns.js`);
+    const Notifs = client.sequelize.import(`../models/Notifs.js`);
     let artistName = args.join(` `);
     const user = await fetchUser.get();
     if (!artistName) {
@@ -110,6 +111,17 @@ exports.run = async (client, message, args) => {
             guildID: message.guild.id,
             artistName: artist.name,
           }
+        });
+        const notifiable = await Notifs.findOne({
+          where: {
+            userID: hasCrown.userID
+          }
+        });
+        if (notifiable) client.emit(`crownTaken`, {
+          prevOwner: hasCrown.userID,
+          newOwner: sorted.userID,
+          guild: message.guild.name,
+          artist: artist.name
         });
       }
     }
