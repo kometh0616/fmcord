@@ -67,7 +67,7 @@ exports.run = async (client, message, args) => {
         .filter(x => message.guild.id === x.guildID
         && member.user.id === x.userID);
       if (validCrowns.length === 0)
-        return message.reply(`you have no crowns in this guild.`);
+        return message.reply(`no crowns found.`);
       const description = validCrowns
         .sort((a,b) => b.plays - a.plays)
         .slice(0, 10)
@@ -77,7 +77,7 @@ exports.run = async (client, message, args) => {
       `in ${message.guild.name}`;
       const footer = `Command invoked by ${message.author.tag}`;
       if (description.length === 0)
-        return message.reply(`you have no crowns in this guild.`);
+        return message.reply(`no crowns found.`);
       const embed = new RichEmbed()
         .setTitle(title)
         .setColor(message.member.displayColor)
