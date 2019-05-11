@@ -2,7 +2,7 @@ const { stringify } = require(`querystring`);
 const { fetchuser } = require(`../utils/fetchuser`);
 const fetch = require(`node-fetch`);
 const canvas = require(`canvas`);
-canvas.registerFont(`${process.env.PWD}/NotoSans-Regular.ttf`, {
+canvas.registerFont(`${process.env.PWD}/NotoSansCJK-Regular.ttc`, {
   family: `noto-sans`
 });
 
