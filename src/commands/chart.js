@@ -2,8 +2,8 @@ const { stringify } = require(`querystring`);
 const { fetchuser } = require(`../utils/fetchuser`);
 const fetch = require(`node-fetch`);
 const canvas = require(`canvas`);
-canvas.registerFont(`${process.env.PWD}/NotoSans-Regular.ttf`, {
-  family: `noto-sans`
+canvas.registerFont(`${process.env.PWD}/keifont.ttf`, {
+  family: `keifont`
 });
 
 exports.run = async (client, message, args) => {
@@ -113,7 +113,7 @@ exports.run = async (client, message, args) => {
     fctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
     fctx.drawImage(canv, 0, 0);
     fctx.fillStyle = `white`;
-    fctx.font = `12px noto-sans`;
+    fctx.font = `12px keifont`;
     let i = 0;
     for (let byChart = 0; byChart < 100 * y; byChart += 100) {
       for (let inChart = 15; inChart <= 15 * x; inChart += 15) {
