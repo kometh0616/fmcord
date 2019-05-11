@@ -105,7 +105,7 @@ exports.run = async (client, message, args) => {
     });
 
     const { width } = ctx.measureText(longestName);
-    const xAxis = x * 100 + 60 + width;
+    const xAxis = x * 100 + 120 + width;
     const yAxis = y * 100;
     const finalCanvas = canvas.createCanvas(xAxis, yAxis);
     const fctx = finalCanvas.getContext(`2d`);

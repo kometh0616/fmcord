@@ -31,15 +31,17 @@ client.commands = new Collection();
 client.sequelize = sequelize;
 client.snippets = require(`./snippets.js`);
 
-const dbl = new DBL(config.dbl.apikey, client);
+if (process.argv[2] !== `--no-dbl`) {
+  const dbl = new DBL(config.dbl.apikey, client);
 
-dbl.on(`posted`, () => {
-  console.log(`Server count posted to discordbots.org!`);
-});
+  dbl.on(`posted`, () => {
+    console.log(`Server count posted to discordbots.org!`);
+  });
 
-dbl.on(`error`, e => {
-  console.error(`DBL error: ${e}`);
-});
+  dbl.on(`error`, e => {
+    console.error(`DBL error: ${e}`);
+  });
+}
 
 fs.readdir(`./src/commands/`, (err, files) => {
   if (err) throw err;
