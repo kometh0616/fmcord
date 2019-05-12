@@ -31,21 +31,23 @@ exports.run = async (client, message, args) => {
       return message.channel.send(usageWarning);
     }
 
-    if (!args[1]) return message.channel.send(usageWarning);
+    if (!args[1]) {
+      vals = [`5`, `5`];
+      [x, y] = [parseInt(vals[0]), parseInt(vals[1])];
+    } else {
+      vals = args[1].split(`x`);
+      if (vals === args[1] || vals.length !== 2)
+        return message.channel.send(usageWarning);
 
-    vals = args[1].split(`x`);
-    if (vals === args[1] || vals.length !== 2)
-      return message.channel.send(usageWarning);
+      const axisArray = [parseInt(vals[0]), parseInt(vals[1])];
+      if (axisArray.some(isNaN))
+        return message.channel.send(usageWarning);
 
-    const axisArray = [parseInt(vals[0]), parseInt(vals[1])];
-    if (axisArray.some(isNaN))
-      return message.channel.send(usageWarning);
-
-
-    [x, y] = axisArray;
-    if (x > 5 || y > 10) return message.channel.send(`The first number of ` +
-    `the grid size must not be bigger than 5 tiles and the last number of ` +
-    `the grid size must not be bigger than 10 tiles!`);
+      [x, y] = axisArray;
+      if (x > 5 || y > 10) return message.channel.send(`The first number of ` +
+      `the grid size must not be bigger than 5 tiles and the last number of ` +
+      `the grid size must not be bigger than 10 tiles!`);
+    }
   }
 
   try {
