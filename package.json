@@ -1,6 +1,6 @@
 {
   "name": "fmcord",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "A last.fm Discord bot for The Static Server.",
   "main": "bot.js",
   "scripts": {
