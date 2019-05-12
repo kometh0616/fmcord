@@ -2,13 +2,15 @@
 
 FMCord is a Discord bot with a large variety of Last.fm related utilities and commands. Currently, the bot can:
 
-- Create varying album and artist charts
+- Create varying album charts
 - Tell you what artists you have in similar with other users
 - Tell who has the most plays of a certain artist
 - Show you what artists you have the most listens of in a server
 - Give you the number of tracks you have played in last 24h hours
 - Fetch searched tracks from YouTube
 - Show the current song(s) you're playing
+- Create a crown hierarchy system in your server
+- Show you a list of your favorite artists/songs
 Other minor commands exist as well, and more are being planned
 
 FMCord also has small moderation support which allows admins/mods to disable certain commands on a channel or whole server. Get started by typing &help --manual!
