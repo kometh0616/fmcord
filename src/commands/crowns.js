@@ -45,7 +45,7 @@ exports.run = async (client, message, args) => {
       }
       const fetchUser = new fetchuser(client, message);
       const Crowns = client.sequelize.import(`../models/Crowns.js`);
-      const user = await fetchUser.get();
+      const user = await fetchUser.getById(member.id);
       if (!user) return message.reply(client.snippets.noLogin);
       const URL = `https://last.fm/user/${user.get(`lastFMUsername`)}`;
       const userCrowns = await Crowns.findAll({
