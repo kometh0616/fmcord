@@ -28,6 +28,7 @@ const sequelize = new Sequelize(`database`, `user`, `password`, {
 const client = new Client();
 client.config = config;
 client.commands = new Collection();
+client.cooldowns = [];
 client.sequelize = sequelize;
 client.snippets = require(`./snippets.js`);
 
