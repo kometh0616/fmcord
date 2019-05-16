@@ -120,7 +120,7 @@ exports.run = async (client, message, args) => {
         }
       });
       const plays = hasCrown.artistPlays;
-      if (isUser && (userID !== sorted.userID || plays < sorted.plays)) {
+      if (userID !== sorted.userID || plays < sorted.plays) {
         await Crowns.update({
           userID: sorted.userID,
           artistPlays: sorted.plays,
@@ -136,7 +136,7 @@ exports.run = async (client, message, args) => {
             userID: hasCrown.userID
           }
         });
-        if (notifiable) client.emit(`crownTaken`, {
+        if (notifiable && isUser) client.emit(`crownTaken`, {
           prevOwner: hasCrown.userID,
           newOwner: sorted.userID,
           guild: message.guild.name,
