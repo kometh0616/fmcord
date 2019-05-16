@@ -3,6 +3,7 @@ const { stringify } = require(`querystring`);
 const { RichEmbed } = require(`discord.js`);
 const sortingFunc = (a, b) => parseInt(b.plays) - parseInt(a.plays);
 const { fetchuser } = require(`../utils/fetchuser`);
+const { Op } = require(`sequelize`);
 
 
 exports.run = async (client, message, args) => {
@@ -101,17 +102,25 @@ exports.run = async (client, message, args) => {
       }
     });
 
-    if (hasCrown === null && sorted.plays !== `0`) await Crowns.create({
-      guildID: message.guild.id,
-      userID: sorted.userID,
-      artistName: artist.name,
-      artistPlays: sorted.plays
-    });
+    if (hasCrown === null && sorted.plays !== `0`) {
+      await Crowns.create({
+        guildID: message.guild.id,
+        userID: sorted.userID,
+        artistName: artist.name,
+        artistPlays: sorted.plays
+      });
+    }
+
 
     else if (hasCrown !== null) {
       const userID = hasCrown.userID;
+      const isUser = await Users.findOne({
+        where: {
+          [Op.or]: [{discordUserID: userID}, {discordUserID: sorted.userID}]
+        }
+      });
       const plays = hasCrown.artistPlays;
-      if (userID !== sorted.userID || plays < sorted.plays) {
+      if (isUser && (userID !== sorted.userID || plays < sorted.plays)) {
         await Crowns.update({
           userID: sorted.userID,
           artistPlays: sorted.plays,
