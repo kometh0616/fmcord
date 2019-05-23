@@ -5,13 +5,13 @@ const { RichEmbed } = require(`discord.js`);
 exports.run = async (client, message, args) => {
   try {
     const fetchUser = new fetchuser(client, message);
-    let method, 
-      period, 
-      rootProp, 
-      subProp, 
-      mappingFunc, 
+    let method,
+      period,
+      rootProp,
+      subProp,
+      mappingFunc,
       num = 0,
-      amount = 10;
+      amount;
     const per = new Map()
       .set(`7day`, `weekly`)
       .set(`1month`, `monthly`)
@@ -57,7 +57,7 @@ exports.run = async (client, message, args) => {
       amount = parseInt(args[2]);
     if (isNaN(amount))
       amount = 10;
-    else if (amount > 25) return message.reply(`your list mustn't be bigger than 25 ` + 
+    else if (amount > 25) return message.reply(`your list mustn't be bigger than 25 ` +
     `elements.`);
     const user = await fetchUser.get();
     if (!user) return message.reply(client.snippets.noLogin);
