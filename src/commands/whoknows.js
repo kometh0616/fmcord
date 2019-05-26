@@ -120,7 +120,7 @@ exports.run = async (client, message, args) => {
         }
       });
       const plays = hasCrown.artistPlays;
-      if (plays < sorted.plays) {
+      if (parseInt(plays) < parseInt(sorted.plays)) {
         await Crowns.update({
           userID: sorted.userID,
           artistPlays: sorted.plays,
