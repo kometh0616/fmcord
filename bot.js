@@ -66,7 +66,7 @@ fs.readdir(`./src/models/`, (err, files) => {
   if (err) throw err;
   files.forEach(file => {
     const props = sequelize.import(`./src/models/${file}`);
-    props.sync();
+    props.sync({ alter: true });
   });
 });
 

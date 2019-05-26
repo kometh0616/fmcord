@@ -174,9 +174,10 @@ exports.run = async (client, message, args) => {
       `Please try again later.
 Error code: ${e.info.code}
 Error message: ${e.info.message}`);
+    } else if (e.name !== `SequelizeUniqueConstraintError`) {
+      console.error(e);
+      await message.channel.send(client.snippets.error);
     }
-    console.error(e);
-    await message.channel.send(client.snippets.error);
   }
 };
 
