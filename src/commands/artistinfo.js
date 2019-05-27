@@ -1,0 +1,49 @@
+const request = require(`../utils/Request`);
+const { fetchuser } = require(`../utils/fetchuser`);
+const { RichEmbed } = require(`discord.js`);
+
+exports.run = async (client, message, args) => {
+  try {
+    const fetchUser = new fetchuser(client, message);
+    const username = await fetchUser.username();
+    if (args.length === 0) return message.reply(`you must provide an artist!`);
+    const artistName = args.join(` `);
+    const params = {
+      method: `artist.getinfo`,
+      artist: artistName,
+    };
+    if (username) params.username = username;
+    const data = await request(params);
+    const { name, url } = data.artist;
+    const { listeners, playcount, userplaycount } = data.artist.stats;
+    const { summary } = data.artist.bio;
+    const tags = data.artist.tags.tag;
+    const color = message.member ? message.member.displayColor : 16777215;
+    const tagField = tags.map(t => `[${t.name}](${t.url})`).join(` - `);
+    const href = `<a href="${url}">Read more on Last.fm</a>`;
+    const desc = summary.slice(0, summary.length - href.length - 1);
+    const embed = new RichEmbed()
+      .setTitle(`Information about ${name}`)
+      .setColor(color)
+      .addField(`Listeners:`, listeners, true)
+      .addField(`Scrobbles:`, playcount, true)
+      .addField(`Tags:`, tagField, true);
+    if (userplaycount)
+      embed.addField(`User play count: `, userplaycount);
+    embed
+      .addField(`Summary:`, desc, true)
+      .setFooter(`Command executed by ${message.author.tag}`, message.author.avatarURL)
+      .setURL(url)
+      .setTimestamp();
+    await message.channel.send({ embed });
+  } catch (e) {
+    console.error(e);
+    await message.channel.send(client.snippets.error);
+  }
+};
+
+exports.help = {
+  name: `artistinfo`,
+  description: `Returns information about a provided artist.`,
+  usage: `artistinfo <artist name>`,
+};
