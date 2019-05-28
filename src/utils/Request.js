@@ -7,6 +7,5 @@ module.exports = async params => {
   params.format = `json`;
   const query = stringify(params);
   const data = await fetch(endpoint + query).then(r => r.json());
-  if (data.error) throw new Error(data.error.message);
   return data;
 };

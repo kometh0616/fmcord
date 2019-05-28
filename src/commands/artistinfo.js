@@ -14,6 +14,8 @@ exports.run = async (client, message, args) => {
     };
     if (username) params.username = username;
     const data = await request(params);
+    if (data.error === 6) return message.reply(`artist \`${artistName}\` ` +
+    `could not be found in Last.fm.`);
     const { name, url } = data.artist;
     const { listeners, playcount, userplaycount } = data.artist.stats;
     const { summary } = data.artist.bio;
@@ -31,8 +33,9 @@ exports.run = async (client, message, args) => {
       embed.addField(`Tags:`, tagField, true);
     if (userplaycount)
       embed.addField(`User play count: `, userplaycount, true);
+    if (summary)
+      embed.addField(`Summary:`, desc, true);
     embed
-      .addField(`Summary:`, desc, true)
       .setFooter(`Command executed by ${message.author.tag}`, message.author.avatarURL)
       .setURL(url)
       .setTimestamp();
