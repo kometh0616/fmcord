@@ -33,7 +33,7 @@ exports.run = async (client, message, args) => {
       embed.addField(`Tags:`, tagField, true);
     if (userplaycount)
       embed.addField(`User play count: `, userplaycount, true);
-    if (summary)
+    if (desc.length > 0)
       embed.addField(`Summary:`, desc, true);
     embed
       .setFooter(`Command executed by ${message.author.tag}`, message.author.avatarURL)
