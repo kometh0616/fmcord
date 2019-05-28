@@ -1,6 +1,5 @@
 const { inspect } = require(`util`);
 exports.run = async (client, message, args) => {
-  if (message.author.id !== client.config.botOwnerID) return;
   try {
     const code = args.join(` `);
     let evaled = eval(code);
