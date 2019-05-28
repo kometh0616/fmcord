@@ -26,10 +26,11 @@ exports.run = async (client, message, args) => {
       .setTitle(`Information about ${name}`)
       .setColor(color)
       .addField(`Listeners:`, listeners, true)
-      .addField(`Scrobbles:`, playcount, true)
-      .addField(`Tags:`, tagField, true);
+      .addField(`Scrobbles:`, playcount, true);
+    if (tags.length > 0)
+      embed.addField(`Tags:`, tagField, true);
     if (userplaycount)
-      embed.addField(`User play count: `, userplaycount);
+      embed.addField(`User play count: `, userplaycount, true);
     embed
       .addField(`Summary:`, desc, true)
       .setFooter(`Command executed by ${message.author.tag}`, message.author.avatarURL)
