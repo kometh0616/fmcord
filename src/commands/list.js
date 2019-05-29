@@ -94,5 +94,5 @@ exports.help = {
   notes: `In \`list type\`, you can have \`artists\` or \`songs\`. ` +
   `In \`time period\`, you can have \`weekly\`, \`monthly\` or ` +
   `\`alltime\`. List must not be longer than 25 elements. \`Time period\` ` +
-  `and \`list length can be omitted\`, then it defaults to weekly top 10.`
+  `and \`list length\` can be omitted, then it defaults to weekly top 10.`
 };

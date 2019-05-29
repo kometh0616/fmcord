@@ -2,57 +2,43 @@ const { RichEmbed } = require(`discord.js`);
 const ReactionInterface = require(`../utils/ReactionInterface`);
 exports.run = async (client, message, args) => {
   const { prefix } = client.config;
+  const commandsWithHelp = client.commands.filter(x => x.help);
   try {
     if (args[0] === `--manual`) {
-      if (!message.guild.me.hasPermission(`ADD_REACTIONS`))
-        return message.reply(`I do not have a permission to add reactions ` +
-        `in this server.`);
-      const haveHelp = client.commands.filter(x => x.help);
-      const amount = haveHelp.size;
-      const sorted = [...haveHelp.sort((x, y) => x.help.name - y.help.name)];
       const color = message.member ? message.member.displayColor : 16777215;
-      const updateEmbed = it => {
-        const embed = new RichEmbed()
-          .setColor(color)
-          .setTitle(`Command ${sorted[it][1].help.name}`)
-          .addField(`Description:`, sorted[it][1].help.description)
-          .addField(`Usage:`, `${prefix}${sorted[it][1].help.usage}`)
-          .setTimestamp()
-          .setFooter(`Command invoked by ${message.author.tag} | ` +
-          `${it + 1}/${amount} pages`);
-        if (sorted[it][1].help.notes)
-          embed.addField(`Note:`, sorted[it][1].help.notes);
-        return embed;
-      };
-      let currentPage = 0;
-      const embed = new RichEmbed()
-        .setColor(color)
-        .setTitle(`Command ${sorted[currentPage][1].help.name}`)
-        .addField(`Description:`, sorted[currentPage][1].help.description)
-        .addField(`Usage:`, `${prefix}${sorted[currentPage][1].help.usage}`)
-        .setTimestamp()
-        .setFooter(`Command invoked by ${message.author.tag} | ` +
-        `${currentPage + 1}/${amount} pages`);
-      if (sorted[currentPage][1].help.notes)
-        embed.addField(`Note:`, sorted[currentPage][1].help.notes);
+      let pages = 0;
+      const embeds = commandsWithHelp
+        .map(x => {
+          const embed = new RichEmbed()
+            .setColor(color)
+            .setTitle(`Command ${x.help.name}`)
+            .addField(`Description:`, x.help.description)
+            .addField(`Usage:`, `${prefix}${x.help.usage}`)
+            .setFooter(`Page ${++pages}/${commandsWithHelp.size} | ` +
+            `Command executed by ${message.author.tag}`, message.author.avatarURL)
+            .setTimestamp();
+          if (x.help.notes) embed.addField(`Notes:`, x.help.notes);
+          return embed;
+        });
+      let index = 0;
+      const embed = embeds[index];
       const msg = await message.channel.send({ embed });
       const rl = new ReactionInterface(msg, message.author);
       await rl.setKey(client.snippets.arrowLeft, async () => {
-        if (currentPage !== 0) {
-          const embed = updateEmbed(--currentPage);
+        if (index !== 0) {
+          const embed = embeds[--index];
           await msg.edit({ embed });
         }
       });
       await rl.setKey(client.snippets.arrowRight, async () => {
-        if (currentPage !== amount) {
-          const embed = updateEmbed(++currentPage);
+        if (index !== commandsWithHelp.size - 1) {
+          const embed = embeds[++index];
           await msg.edit({ embed });
         }
       });
       await rl.setKey(client.snippets.exit, rl.destroy);
     } else {
-      const helpMessage = client.commands
-        .filter(x => x.help)
+      const helpMessage = commandsWithHelp
         .map(x => `**${prefix}${x.help.name}** - ${x.help.description}`)
         .join(`\n`);
       await message.channel.send(helpMessage);
