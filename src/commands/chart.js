@@ -139,6 +139,6 @@ exports.help = {
   name: `chart`,
   description: `Builds a grid out of your most listened albums with ` +
   `names to the side.`,
-  usage: `albumchart <time period> <grid size>`,
+  usage: `chart <time period> <grid size>`,
   notes: `In time period, you can have "weekly", "monthly" or "overall".`
 };
