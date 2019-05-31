@@ -15,6 +15,7 @@ exports.run = async (client, message, args) => {
       `to anything.`);
       artistName = currTrack.artist[`#text`];
     }
+    artistName = args.join(` `);
     const params = {
       method: `artist.getinfo`,
       artist: artistName,
