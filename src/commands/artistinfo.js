@@ -1,13 +1,20 @@
 const request = require(`../utils/Request`);
 const { fetchuser } = require(`../utils/fetchuser`);
+const { fetchtrack } = require(`../utils/fetchtrack`);
 const { RichEmbed } = require(`discord.js`);
 
 exports.run = async (client, message, args) => {
   try {
     const fetchUser = new fetchuser(client, message);
     const username = await fetchUser.username();
-    if (args.length === 0) return message.reply(`you must provide an artist!`);
-    const artistName = args.join(` `);
+    let artistName;
+    if (args.length === 0) {
+      const fetchTrack = new fetchtrack(client, message);
+      const currTrack = await fetchTrack.getcurrenttrack();
+      if (!currTrack) return message.reply(`currently, you are not listening ` +
+      `to anything.`);
+      artistName = currTrack.artist[`#text`];
+    }
     const params = {
       method: `artist.getinfo`,
       artist: artistName,
