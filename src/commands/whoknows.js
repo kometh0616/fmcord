@@ -13,10 +13,6 @@ exports.run = async (client, message, args) => {
   if (isCooled)
     return message.reply(`this command is on a cooldown due to overusage. ` +
     `Please wait 8 seconds before you can use it again.`);
-  client.cooldowns.push({
-    name: this.help.name,
-    userID: message.author.id,
-  });
   const fetchUser = new fetchuser(client, message);
   try {
     const Users = client.sequelize.import(`../models/Users.js`);
@@ -162,7 +158,10 @@ exports.run = async (client, message, args) => {
       .setFooter(`Command invoked by ${message.author.tag}`)
       .setTimestamp();
     await message.channel.send({embed});
-
+    client.cooldowns.push({
+      name: this.help.name,
+      userID: message.author.id,
+    });
     setTimeout(() => {
       client.cooldowns = client.cooldowns.filter(
         x => x.name !== this.help.name && x.userID === message.author.id
