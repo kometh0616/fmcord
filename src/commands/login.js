@@ -1,25 +1,15 @@
-const querystring = require(`querystring`);
-const fetch = require(`node-fetch`);
+const Library = require(`../lib/index.js`);
 const { fetchuser } = require(`../utils/fetchuser`);
 
 exports.run = async (client, message, args) => {
+  const lib = new Library(client.config.lastFM.apikey);
   const fetchUser = new fetchuser(client, message);
   const Users = client.sequelize.import(`../models/Users.js`);
   const username = args.join(` `);
   if (!args[0]) return message.reply(`you must define a Last.fm username!`);
 
-  const query = querystring.stringify({
-    method: `user.getinfo`,
-    user: username,
-    api_key: client.config.lastFM.apikey,
-    format: `json`,
-  });
-
   try {
-    const data = await fetch(client.config.lastFM.endpoint + query)
-      .then(r => r.json());
-    if (data.error === 6) return message.reply(`no Last.fm user found with ` +
-    `given nickname!`);
+    const data = await lib.user.getInfo(username);
     const alreadyExists = await fetchUser.get();
     if (alreadyExists) return message.reply(`you already have logged in via ` +
     `this bot! Please do \`${client.config.prefix}logout\` if you want to ` +

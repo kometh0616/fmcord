@@ -1,40 +1,21 @@
-const fetch = require(`node-fetch`);
-const { stringify } = require(`querystring`);
+const Library = require(`../lib/index.js`);
+const { fetchuser } = require(`../utils/fetchuser`);
 
 module.exports = async (client, ctx) => {
-  const { apikey, endpoint } = client.config.lastFM;
-  const Users = client.sequelize.import(`../models/Users.js`);
+  const lib = new Library(client.config.lastFM.apikey);
+  const fetchUser = new fetchuser(client);
   try {
     if (ctx.prevOwner !== ctx.newOwner) {
       const prevUser = {
         discord: client.users.get(ctx.prevOwner),
-        local: await Users.findOne({
-          where: {
-            discordUserID: ctx.prevOwner
-          }
-        })
+        local: await fetchUser.usernameFromId(ctx.prevOwner)
       };
       const newUser = {
         discord: client.users.get(ctx.newOwner),
-        local: await Users.findOne({
-          where: {
-            discordUserID: ctx.newOwner
-          }
-        })
+        local: await fetchUser.usernameFromID(ctx.newOwner)
       };
-      const prevParams = {
-        method: `artist.getinfo`,
-        artist: ctx.artist,
-        username: prevUser.local.get(`lastFMUsername`),
-        api_key: apikey,
-        format: `json`
-      };
-      const prevQuery = stringify(prevParams);
-      const newParams = Object.assign({}, prevParams);
-      newParams.username = newUser.local.get(`lastFMUsername`);
-      const newQuery = stringify(newParams);
-      const prevFetch = await fetch(endpoint + prevQuery).then(r => r.json());
-      const newFetch = await fetch(endpoint + newQuery).then(r => r.json());
+      const prevFetch = await lib.artist.getInfo(ctx.artist, prevUser.local);
+      const newFetch = await lib.artist.getInfo(ctx.artist, newUser.local);
       const prevPlays = prevFetch.artist.stats.userplaycount;
       const newPlays = newFetch.artist.stats.userplaycount;
       const dmChannel = await prevUser.discord.createDM();

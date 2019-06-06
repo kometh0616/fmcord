@@ -1,5 +1,4 @@
-const { stringify } = require(`querystring`);
-const fetch = require(`node-fetch`);
+const Library = require(`../lib/index.js`);
 const moment = require(`moment`);
 const { RichEmbed } = require(`discord.js`);
 const { fetchuser } = require(`../utils/fetchuser`);
@@ -7,7 +6,7 @@ const { fetchuser } = require(`../utils/fetchuser`);
 exports.run = async (client, message) => {
   try {
     const fetchUser = new fetchuser(client, message);
-    const { apikey, endpoint } = client.config.lastFM;
+    const lib = new Library(client.config.lastFM.apikey);
     const Users = client.sequelize.import(`../models/Users.js`);
     const user = await fetchUser.get();
 
@@ -32,15 +31,8 @@ exports.run = async (client, message) => {
       }
 
       const lUsername = user.get(`lastFMUsername`);
-      const params = {
-        method: `user.getrecenttracks`,
-        user: lUsername,
-        from: timestamp.utc().unix(),
-        api_key: apikey,
-        format: `json`
-      };
-      const query = stringify(params);
-      const data = await fetch(endpoint + query).then(r => r.json());
+      const unixTimestamp = timestamp.utc().unix();
+      const data = await lib.user.getRecentTracks(lUsername, unixTimestamp);
 
       // Add new timestamp and play count to database
       await Users.update({

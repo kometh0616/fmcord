@@ -1,12 +1,12 @@
-const { stringify } = require(`querystring`);
 const { fetchuser } = require(`../utils/fetchuser`);
-const fetch = require(`node-fetch`);
+const Library = require(`../lib/index.js`);
 const canvas = require(`canvas`);
 canvas.registerFont(`${process.env.PWD}/NotoSansCJK-Regular.ttc`, {
   family: `noto-sans`
 });
 
 exports.run = async (client, message, args) => {
+  const lib = new Library(client.config.lastFM.apikey);
   const fetchUser = new fetchuser(client, message);
   const usageWarning = `Incorrect usage of a command! Correct usage ` +
   `would be: \`&chart <time period> <grid size>\``;
@@ -51,22 +51,11 @@ exports.run = async (client, message, args) => {
   }
 
   try {
-    const user = await fetchUser.get();
+    const user = await fetchUser.username();
     if (!user) return message.reply(client.snippets.noLogin);
     await message.channel.send(`Please wait until your grid is done...`);
-    const query = stringify({
-      method: `user.gettopalbums`,
-      user: user.get(`lastFMUsername`),
-      period: period,
-      limit: `${x*y}`,
-      api_key: client.config.lastFM.apikey,
-      format: `json`,
-    });
-    const data = await fetch(client.config.lastFM.endpoint + query)
-      .then(r => r.json());
 
-    if (data.error) return message.reply(`there was an issue trying to ` +
-    `fetch your albums. Please try again later.`);
+    const data = await lib.user.getTopAlbums(user, period);
 
     const { album } = data.topalbums;
 

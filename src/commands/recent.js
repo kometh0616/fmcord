@@ -1,28 +1,15 @@
-const { stringify } = require(`querystring`);
-const fetch = require(`node-fetch`);
+const Library = require(`../lib/index.js`);
 const { RichEmbed } = require(`discord.js`);
 const { fetchuser } = require(`../utils/fetchuser`);
 
 exports.run = async (client, message) => {
+  const lib = new Library(client.config.lastFM.apikey);
   const fetchUser = new fetchuser(client, message);
   try {
-    const { apikey, endpoint } = client.config.lastFM;
-    const user = await fetchUser.get();
+    const user = await fetchUser.username();
     if (!user) return message.reply(client.snippets.noLogin);
-    const lUsername = user.get(`lastFMUsername`);
-    const profileLink = `https://last.fm/user/${lUsername}`;
-    const params = {
-      method: `user.getrecenttracks`,
-      user: lUsername,
-      api_key: apikey,
-      format: `json`
-    };
-    const query = stringify(params);
-    const data = await fetch(endpoint + query).then(r => r.json());
-    const userParams = Object.assign({}, params);
-    userParams.method = `user.getinfo`;
-    const userQuery = stringify(userParams);
-    const userData = await fetch(endpoint + userQuery).then(r => r.json());
+    const data = await lib.user.getRecentTracks(user);
+    const userData = await lib.user.getInfo(user);
     const nowPlaying = data.recenttracks.track[0];
     const sliceArgs = nowPlaying[`@attr`] && nowPlaying[`@attr`].nowplaying ?
       [1, 6] : [0, 5];
@@ -39,8 +26,8 @@ exports.run = async (client, message) => {
     embed
       .addField(`Previous:`, prevTracks)
       .setColor(message.member.displayColor)
-      .setTitle(`Last tracks from ${lUsername}`)
-      .setURL(profileLink)
+      .setTitle(`Last tracks from ${user}`)
+      .setURL(userData.user.url)
       .setThumbnail(data.recenttracks.track[0].image[2][`#text`])
       .setFooter(`Command invoked by ${message.author.tag} with a total ` +
       `of ${userData.user.playcount} scrobbles.`)

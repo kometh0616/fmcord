@@ -1,5 +1,4 @@
-const { stringify } = require(`querystring`);
-const fetch = require(`node-fetch`);
+const Library = require(`../lib/index.js`);
 const { fetchuser } = require(`../utils/fetchuser`);
 
 /**
@@ -9,6 +8,7 @@ class Fetchtrack {
   constructor(client, message) {
     this.client = client;
     this.message = message;
+    this.lib = new Library(client.config.lastFM.apikey);
   }
 
   /**
@@ -16,15 +16,8 @@ class Fetchtrack {
    */
   async getrecenttracks() {
     const user = new fetchuser(this.client, this.message);
-    const { apikey, endpoint } = this.client.config.lastFM;
-
-    const query = stringify({
-      method: `user.getrecenttracks`,
-      user: await user.username(),
-      api_key: apikey,
-      format: `json`
-    });
-    const data = await fetch(endpoint + query).then(r => r.json());
+    const username = await user.username();
+    const data = await this.lib.user.getRecentTracks(username);
 
     return data.recenttracks;
   }

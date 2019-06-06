@@ -1,12 +1,10 @@
 const { RichEmbed } = require(`discord.js`);
-const { stringify } = require(`querystring`);
-const fetch = require(`node-fetch`);
+const Library = require(`../lib/index.js`);
 const { fetchuser } = require(`../utils/fetchuser`);
 
 const matchErr = `you can't compare your taste with your taste, ` +
 `that's illogical.`;
 
-const toJson = r => r.json();
 const difference = (a, b) => {
   if (a > b) return a - b;
   else return b - a;
@@ -14,12 +12,12 @@ const difference = (a, b) => {
 
 exports.run = async (client, message, args) => {
   const fetchUser = new fetchuser(client, message);
+  const lib = new Library(client.config.lastFM.apikey);
   try {
-    const Users = client.sequelize.import(`../models/Users.js`);
     if (!args[0]) return message.reply(`specify a user you want to compare ` +
     `tastes with!`);
 
-    const author = await fetchUser.get();
+    const author = await fetchUser.username();
     if (!author) return message.reply(client.snippets.noLogin);
     let userID;
     const mention = message.mentions.users.first();
@@ -38,25 +36,11 @@ exports.run = async (client, message, args) => {
     }
     if (!userID) return message.channel.send(`Couldn't find the user ` +
     `in Discord. Make sure you provided a valid user correctly and try again!`);
-    const user = await Users.findOne({ where: { discordUserID: userID } });
+    const user = await fetchUser.usernameFromId(userID);
     if (!user) return message.channel.send(`This user hasn't logged ` +
     `on to my system.`);
-    const authorParams = {
-      method: `user.gettopartists`,
-      user: author.get(`lastFMUsername`),
-      period: `overall`,
-      limit: `100`,
-      api_key: client.config.lastFM.apikey,
-      format: `json`,
-    };
-    const userParams = Object.assign({}, authorParams);
-    userParams.user = user.get(`lastFMUsername`);
-    const authorQuery = stringify(authorParams);
-    const userQuery = stringify(userParams);
-    const authorData = await fetch(client.config.lastFM.endpoint + authorQuery)
-      .then(toJson);
-    const userData = await fetch(client.config.lastFM.endpoint + userQuery)
-      .then(toJson);
+    const authorData = await lib.user.getTopArtists(author);
+    const userData = await lib.user.getTopArtists(user);
     const matches = [];
     for (const a of userData.topartists.artist) {
       const match = authorData.topartists.artist.find(x => x.name === a.name);
@@ -74,12 +58,11 @@ exports.run = async (client, message, args) => {
       }
     }
     if (matches.length === 0) return message.reply(`you and `
-    + `${user.get(`lastFMUsername`)} share no common artists.`);
+    + `${user} share no common artists.`);
     matches.sort((a, b) => a.difference - b.difference);
     const embed = new RichEmbed()
       .setColor(message.member.displayColor)
-      .setTitle(`${author.get(`lastFMUsername`)} and ` +
-      `${user.get(`lastFMUsername`)} taste comparison`)
+      .setTitle(`${author} and ${user} taste comparison`)
       .setThumbnail(message.author.avatarURL)
       .setTimestamp()
       .setFooter(`Command invoked by ${message.author.tag}`);

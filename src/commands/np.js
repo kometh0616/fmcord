@@ -1,5 +1,4 @@
-const { stringify } = require(`querystring`);
-const fetch = require(`node-fetch`);
+const Library = require(`../lib/index.js`);
 const { RichEmbed } = require(`discord.js`);
 const { fetchuser } = require(`../utils/fetchuser`);
 const { fetchtrack } = require(`../utils/fetchtrack`);
@@ -7,7 +6,7 @@ const { fetchtrack } = require(`../utils/fetchtrack`);
 
 exports.run = async (client, message) => {
   try {
-    const { apikey, endpoint } = client.config.lastFM;
+    const lib = new Library(client.config.lastFM.apikey);
     const user = new fetchuser(client, message);
 
     if (await user.get()) {
@@ -16,14 +15,8 @@ exports.run = async (client, message) => {
 
       if (track) {
         const prevTrack = await ft.getlasttrack(client, message);
-        const query = stringify({
-          method: `user.getinfo`,
-          user: await user.username(),
-          api_key: apikey,
-          format: `json`
-        });
-
-        const userData = await fetch(endpoint + query).then(r => r.json());
+        const username = await user.username();
+        const userData = await lib.user.getInfo(username);
         const embed = new RichEmbed()
           .addField(`Current:`, `**${track.name}** - ${track.artist[`#text`]} ` +
             `| ${track.album[`#text`] ? track.album[`#text`] : `no album`}`)
@@ -31,7 +24,7 @@ exports.run = async (client, message) => {
             `**${prevTrack.name}** - ${prevTrack.artist[`#text`]} | ` +
             `${prevTrack.album[`#text`] ? prevTrack.album[`#text`] : `no album`}`)
           .setColor(message.member.displayColor)
-          .setTitle(`Last tracks from ${await user.username()}`)
+          .setTitle(`Last tracks from ${username}`)
           .setURL(userData.user.url)
           .setThumbnail(track.image[2][`#text`])
           .setFooter(`Command invoked by ${message.author.tag} with a total ` +

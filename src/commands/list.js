@@ -1,84 +1,76 @@
-const request = require(`../utils/Request`);
+const Library = require(`../lib/index.js`);
 const { fetchuser } = require(`../utils/fetchuser`);
 const { RichEmbed } = require(`discord.js`);
 
 exports.run = async (client, message, args) => {
   try {
+    const lib = new Library(client.config.lastFM.apikey);
     const fetchUser = new fetchuser(client, message);
-    let method,
-      period,
+    const user = await fetchUser.username();
+    if (!user) {
+      return message.reply(client.snippets.noLogin);
+    }
+    const lfmInfo = await lib.user.getInfo(user);
+    let data,
+      mapFunc,
+      timePeriod = `7day`,
+      num = 0,
       rootProp,
       subProp,
-      mappingFunc,
-      num = 0,
-      amount;
-    const per = new Map()
-      .set(`7day`, `weekly`)
-      .set(`1month`, `monthly`)
-      .set(`overall`, `alltime`);
-    switch (args[0]) {
-    case `artists`:
-      [method, rootProp, subProp, mappingFunc] = [
-        `user.gettopartists`,
-        `topartists`,
-        `artist`,
-        x => `${++num}. **${x.name}** - ${x.playcount} plays`
-      ];
-      break;
-    case `songs`:
-      [method, rootProp, subProp, mappingFunc] = [
-        `user.gettoptracks`,
-        `toptracks`,
-        `track`,
-        x => `${++num}. **${x.name}** by **${x.artist.name}** - ${x.playcount} plays`
-      ];
-      break;
-    default:
-      return message.reply(`you haven't defined a proper list type! Correct usage ` +
-    `would be \`${client.config.prefix}list <list type> <time period> <list length>\``);
+      period,
+      listLength;
+    if (!user) {
+      return message.reply(client.snippets.noLogin);
     }
     switch (args[1]) {
     case `weekly`:
-      period = `7day`;
+      timePeriod = `7day`;
+      period = `weekly`;
       break;
     case `monthly`:
-      period = `1month`;
+      timePeriod = `1month`;
+      period = `monthly`;
       break;
     case `alltime`:
-      period = `overall`;
+      timePeriod = `overall`;
+      period = `alltime`;
       break;
     default:
-      period = `7day`;
-      if (!isNaN(parseInt(args[1])))
-        amount = parseInt(args[1]);
+      timePeriod = `7day`;
+      period = `weekly`;
+      if (!isNaN(parseInt(args[1]))) {
+        listLength = parseInt(args[1]);
+      }
       break;
     }
-    if (!amount)
-      amount = parseInt(args[2]);
-    if (isNaN(amount))
-      amount = 10;
-    else if (amount > 25) return message.reply(`your list mustn't be bigger than 25 ` +
-    `elements.`);
-    const user = await fetchUser.get();
-    if (!user) return message.reply(client.snippets.noLogin);
-    const data = await request({
-      method: method,
-      user: user.get(`lastFMUsername`),
-      period: period,
-      limit: amount,
-    });
-    const arr = data[rootProp][subProp];
+    if (args[0] === `artists`) {
+      data = await lib.user.getTopArtists(user, timePeriod);
+      mapFunc = x => `${++num}. **${x.name}** - ${x.playcount} plays`;
+      [rootProp, subProp] = [`topartists`, `artist`];
+    } else if (args[0] === `songs`) {
+      data = await lib.user.getTopTracks(user, timePeriod);
+      mapFunc = x => `${++num}. **${x.name}** by **${x.artist.name}** - ${x.playcount} plays`;
+      [rootProp, subProp] = [`toptracks`, `track`];
+    } else {
+      return message.reply(`you haven't defined a proper list type! Correct usage ` +
+      `would be \`${client.config.prefix}list <list type> <time period> <list length>\``);
+    }
+    if (!listLength) {
+      listLength = parseInt(args[2]);
+      if (isNaN(listLength)) {
+        listLength = 10;
+      }
+    }
+    const arr = data[rootProp][subProp].slice(0, listLength);
     const embed = new RichEmbed()
-      .setColor(message.member.displayColor)
-      .setURL(`https://last.fm/user/${user.get(`lastFMUsername`)}`)
-      .setThumbnail(message.author.avatarURL)
       .setDescription(arr
-        .slice(0, amount)
-        .map(mappingFunc)
+        .map(mapFunc)
         .join(`\n`))
-      .setFooter(`Command executed by ${message.author.tag}`)
-      .setTitle(`${user.get(`lastFMUsername`)}'s ${per.get(period)} top ` +
-       `${arr.length} ${subProp}s`)
+      .setColor(message.member.displayColor)
+      .setThumbnail(message.author.avatarURL)
+      .setURL(lfmInfo.user.url)
+      .setTitle(`${user}'s ${period} top ${arr.length} ${subProp}s`)
+      .setFooter(`Command executed by ${message.author.tag}`, message.author.avatarURL)
       .setTimestamp();
     await message.channel.send({ embed });
   } catch (e) {

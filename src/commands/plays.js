@@ -1,41 +1,25 @@
-const { stringify } = require(`querystring`);
-const fetch = require(`node-fetch`);
+const Library = require(`../lib/index.js`);
 const { fetchuser } = require(`../utils/fetchuser`);
+const { fetchtrack } = require(`../utils/fetchtrack`);
 
 exports.run = async (client, message, args) => {
+  const lib = new Library(client.config.lastFM.apikey);
   const fetchUser = new fetchuser(client, message);
-  let artistName = args.join(` `);
-  const user = await fetchUser.get();
-  if (!artistName) {
-    if (!user) return message.reply(`you haven't registered your Last.fm ` +
-    `account, therefore, I can't check what you're listening to. To set ` +
-    `your Last.fm nickname, do \`&login <lastfm username\`.`);
-    const username = user.lastFMUsername;
-    const params = {
-      method: `user.getrecenttracks`,
-      user: username,
-      api_key: client.config.lastFM.apikey,
-      format: `json`
-    };
-    const query = stringify(params);
-    const data = await fetch(client.config.lastFM.endpoint + query)
-      .then(r => r.json());
-    const track = data.recenttracks.track[0];
-    if (!track[`@attr`])
-      return message.reply(`currently, you are not listening to anything.`);
-    else artistName = track.artist[`#text`];
-  }
+  const fetchTrack = new fetchtrack(client, message);
   try {
+    let artistName = args.join(` `);
+    const user = await fetchUser.username();
+    if (!artistName) {
+      if (!user) return message.reply(`you haven't registered your Last.fm ` +
+      `account, therefore, I can't check what you're listening to. To set ` +
+      `your Last.fm nickname, do \`&login <lastfm username\`.`);
+      const track = await fetchTrack.getcurrenttrack();
+      if (!track[`@attr`])
+        return message.reply(`currently, you are not listening to anything.`);
+      else artistName = track.artist[`#text`];
+    }
     if (!user) return message.reply(client.snippets.noLogin);
-    const query = stringify({
-      method: `artist.getinfo`,
-      username: user.get(`lastFMUsername`),
-      artist: artistName,
-      api_key: client.config.lastFM.apikey,
-      format: `json`
-    });
-    const data = await fetch(client.config.lastFM.endpoint + query)
-      .then(r => r.json());
+    const data = await lib.artist.getInfo(artistName, user);
 
     const { name, stats } = data.artist;
     if (!stats.userplaycount) await message.reply(`you haven't ` +

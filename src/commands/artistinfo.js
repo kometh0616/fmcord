@@ -1,9 +1,10 @@
-const request = require(`../utils/Request`);
+const Library = require(`../lib/index.js`);
 const { fetchuser } = require(`../utils/fetchuser`);
 const { fetchtrack } = require(`../utils/fetchtrack`);
 const { RichEmbed } = require(`discord.js`);
 
 exports.run = async (client, message, args) => {
+  const lib = new Library(client.config.lastFM.apikey);
   try {
     const fetchUser = new fetchuser(client, message);
     const username = await fetchUser.username();
@@ -14,16 +15,12 @@ exports.run = async (client, message, args) => {
       if (!currTrack) return message.reply(`currently, you are not listening ` +
       `to anything.`);
       artistName = currTrack.artist[`#text`];
+    } else if (args[0]) {
+      artistName = args.join(``);
+    } else {
+      return message.reply(`you must provide a name of your artist!`);
     }
-    artistName = args.join(` `);
-    const params = {
-      method: `artist.getinfo`,
-      artist: artistName,
-    };
-    if (username) params.username = username;
-    const data = await request(params);
-    if (data.error === 6) return message.reply(`artist \`${artistName}\` ` +
-    `could not be found in Last.fm.`);
+    const data = await lib.artist.getInfo(artistName, username);
     const { name, url } = data.artist;
     const { listeners, playcount, userplaycount } = data.artist.stats;
     const { summary } = data.artist.bio;

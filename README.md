@@ -20,7 +20,6 @@ FMCord is written in a Javascript language. The libraries for development used a
 - [googleapis](https://developers.google.com/api-client-library/) - For using YouTube search API
 - [moment.js](https://momentjs.com) - For DateTime manipulation
 - [node-canvas](https://www.npmjs.com/package/canvas) - for image manipulation
-- [node-fetch](https://www.npmjs.com/package/node-fetch) - for interaction with Last.fm API
 
 Want to report an issue/bug? Head over to "Issues" tab and submit one, or join an [official FMCord Discord Server](https://discord.gg/BrJ6zEk) and ask your questions there.
 
