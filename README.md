@@ -17,7 +17,6 @@ FMCord also has small moderation support which allows admins/mods to disable cer
 
 FMCord is written in a Javascript language. The libraries for development used are:
 - [Discord.js](https://discord.js.org/) - for interaction with Discord API
-- [googleapis](https://developers.google.com/api-client-library/) - For using YouTube search API
 - [moment.js](https://momentjs.com) - For DateTime manipulation
 - [node-canvas](https://www.npmjs.com/package/canvas) - for image manipulation
 

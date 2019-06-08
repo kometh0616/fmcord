@@ -1,36 +1,32 @@
-const { google } = require(`googleapis`);
-
+const YouTubeRequest = require(`../utils/YouTubeRequest`);
+const { fetchtrack } = require(`../utils/fetchtrack`);
+const { fetchuser } = require(`../utils/fetchuser`);
 exports.run = async (client, message, args) => {
-  if (args.length === 0) {
-    return message.reply(`you need to input something to search.`);
-  }
-
+  const youtube = new YouTubeRequest(client.config.youtube.apikey);
+  const fetchUser = new fetchuser(client, message);
+  const fetchTrack = new fetchtrack(client, message);
   try {
-    const yt = google.youtube({
-      version: `v3`,
-      auth: client.config.youtube.apikey
-    });
-    yt.search.list({
-      part: `snippet`,
-      q: args.join(` `)
-    }, (err, result) => {
-      if (err) {
-        console.error(`Error: ${err}`);
+    let query;
+    if (args.length === 0) {
+      const user = await fetchUser.username();
+      if (!user) {
+        return message.reply(client.snippets.noLogin);
       }
-
-      if (result && result.data.items.length > 0) {
-        for (const item of result.data.items) {
-          if (item.id.kind === `youtube#video`) {
-            const url = `https://youtu.be/${item.id.videoId}`;
-            message.reply(`Result for \`${args.join(` `)}\`: ${url}`);
-
-            break;
-          }
-        }
-      } else {
-        message.reply(`no results for \`${args.join(` `)}\` found.`);
+      const data = await fetchTrack.getcurrenttrack();
+      if (!data) {
+        return message.reply(client.snippets.notPlaying);
       }
-    });
+      query = `${data.artist[`#text`]} ${data.name}`;
+    } else {
+      query = args.join(` `);
+    }
+    const result = await youtube.search(query);
+    const item = result.items[0];
+    if (!item) {
+      return message.reply(`no results found on \`${query}\``);
+    }
+    const URL = `https://youtu.be/${item.id.videoId}`;
+    await message.reply(`result for \`${query}\`: ${URL}`);
   } catch (e) {
     console.error(e);
     await message.channel.send(client.snippets.error);
