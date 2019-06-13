@@ -30,7 +30,9 @@ exports.run = async (client, message) => {
           .setFooter(`Command invoked by ${message.author.tag} with a total ` +
             `of ${userData.user.playcount} scrobbles.`)
           .setTimestamp();
-        await message.channel.send({ embed });
+        const msg = await message.channel.send({ embed });
+        await msg.react(`✅`);
+        await msg.react(`❌`);
       } else {
         await message.reply(client.snippets.notPlaying);
       }
