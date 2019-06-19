@@ -119,6 +119,7 @@ exports.run = async (client, message, args) => {
     const embed = new RichEmbed()
       .setColor(message.member.displayColor)
       .setTitle(`Who knows ${data.artist.name} in ${message.member.guild.name}?`)
+      .setURL(data.artist.url)
       .setDescription(description)
       .setFooter(`Command invoked by ${message.author.tag}`)
       .setTimestamp();
