@@ -1,5 +1,5 @@
 config.json
-database.sqlite
+.data
 node_modules
 shrinkwrap.yaml
 .glitch-assets
