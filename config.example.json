@@ -1,13 +1,16 @@
 {
-    "prefix": "",
-    "discordToken": "",
-    "lastFM": {
-        "apikey": "",
-        "secret": "",
-        "endpoint": "https://ws.audioscrobbler.com/2.0/?"
-    },
-    "youtube": {
-      "apikey": ""
-    },
-    "botOwnerID": ""
+  "prefix": "",
+  "discordToken": "",
+  "lastFM": {
+    "apikey": "",
+    "secret": "",
+    "endpoint": "https://ws.audioscrobbler.com/2.0/?"
+  },
+  "youtube": {
+    "apikey": ""
+  },
+  "botOwnerID": "",
+  "dbl": {
+    "apikey": ""
+  }
 }

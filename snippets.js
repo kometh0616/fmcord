@@ -12,4 +12,5 @@ module.exports = {
   arrowLeft: `⬅`,
   arrowRight: `➡`,
   exit: `❌`,
+  dBotsLink: `https://discordbots.org/bot/521041865999515650`
 };
