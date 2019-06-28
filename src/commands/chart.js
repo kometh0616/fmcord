@@ -19,12 +19,15 @@ exports.run = async (client, message, args) => {
   } else {
     switch (args[0]) {
     case `weekly`:
+    case `w`:
       period = `7day`;
       break;
     case `monthly`:
+    case `m`:
       period = `1month`;
       break;
     case `alltime`:
+    case `a`:
       period = `overall`;
       break;
     default:
