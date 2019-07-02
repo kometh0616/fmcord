@@ -3,7 +3,7 @@ const { fetchuser } = require(`../utils/fetchuser`);
 
 module.exports = async (client, ctx) => {
   const lib = new Library(client.config.lastFM.apikey);
-  const fetchUser = new fetchuser(client);
+  const fetchUser = new fetchuser(client, null);
   try {
     if (ctx.prevOwner !== ctx.newOwner) {
       const prevUser = {

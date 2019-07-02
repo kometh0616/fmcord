@@ -1,30 +1,43 @@
 const { RichEmbed } = require(`discord.js`);
+const Command = require(`../classes/Command`);
 
-exports.run = async (client, message) => {
-  try {
-    const dev = client.users.get(client.config.botOwnerID);
-    const shared = client.guilds.filter(x => x.members.has(message.author.id));
-    const color = message.member ? message.member.displayColor : 16777215;
-    const embed = new RichEmbed()
-      .setTitle(`FMcord information`)
-      .setThumbnail(client.user.avatarURL)
-      .addField(`Total servers:`, client.guilds.size, true)
-      .addField(`Total users:`, client.users.size, true)
-      .addField(`Used library:`, `discord.js`, true)
-      .addField(`Developed by:`, `${dev.tag} and contributors`, true)
-      .addField(`Amount of servers shared with the command invoker:`, shared.size, true)
-      .setFooter(`Command executed by ${message.author.tag}`, message.author.avatarURL)
-      .setTimestamp()
-      .setColor(color);
-    await message.channel.send({ embed });
-  } catch (e) {
-    console.error(e);
-    await message.channel.send(client.snippets.error);
+class BotinfoCommand extends Command {
+
+  constructor() {
+    super({
+      name: `botinfo`,
+      description: `Shows general information about FMcord.`,
+      usage: `botinfo`,
+      aliases: [`bi`],
+      dmAvailable: true
+    });
   }
-};
 
-exports.help = {
-  name: `botinfo`,
-  description: `Shows general information about FMcord.`,
-  usage: `botinfo`
-};
+  async run(message) {
+    this.setContext(message);
+    try {
+      const dev = message.client.users.get(message.client.config.botOwnerID);
+      const shared = message.client.guilds.filter(x => x.members.has(message.author.id));
+      const color = message.member ? message.member.displayColor : 16777215;
+      const embed = new RichEmbed()
+        .setTitle(`FMcord information`)
+        .setThumbnail(message.client.user.avatarURL)
+        .addField(`Total servers:`, message.client.guilds.size, true)
+        .addField(`Total users:`, message.client.users.size, true)
+        .addField(`Used library:`, `discord.js`, true)
+        .addField(`Developed by:`, `${dev.tag} and contributors`, true)
+        .addField(`Amount of servers shared with the command invoker:`, shared.size, true)
+        .setFooter(`Command executed by ${message.author.tag}`, message.author.avatarURL)
+        .setTimestamp()
+        .setColor(color);
+      await message.channel.send({ embed });
+      return this.context;
+    } catch (e) {
+      this.context.stack = e.stack;
+      throw this.context;
+    }
+  }
+
+}
+
+module.exports = BotinfoCommand;

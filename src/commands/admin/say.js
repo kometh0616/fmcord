@@ -1,6 +1,5 @@
 exports.run = async (client, message, args) => {
   try {
-    console.log(args);
     if (args.length === 0) return message.reply(`please specify a channel ID!`);
     else if (!args[1]) return message.reply(`no message content provided!`);
     const channelID = args[0];

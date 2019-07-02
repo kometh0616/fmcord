@@ -1,48 +1,66 @@
+const Command = require(`../classes/Command`);
 const Library = require(`../lib/index.js`);
 const { RichEmbed } = require(`discord.js`);
 const { fetchuser } = require(`../utils/fetchuser`);
 
-exports.run = async (client, message) => {
-  const lib = new Library(client.config.lastFM.apikey);
-  const fetchUser = new fetchuser(client, message);
-  try {
-    const user = await fetchUser.username();
-    if (!user) return message.reply(client.snippets.noLogin);
-    const data = await lib.user.getRecentTracks(user);
-    const userData = await lib.user.getInfo(user);
-    const nowPlaying = data.recenttracks.track[0];
-    const sliceArgs = nowPlaying[`@attr`] && nowPlaying[`@attr`].nowplaying ?
-      [1, 6] : [0, 5];
-    const prevTracks = data.recenttracks.track
-      .slice(...sliceArgs)
-      .map(x => `**${x.name}** - ${x.artist[`#text`]} ` +
-        `| ${x.album[`#text`] ? x.album[`#text`] : `no album`}`)
-      .join(`\n`);
-    const embed = new RichEmbed();
-    if (nowPlaying[`@attr`] && nowPlaying[`@attr`].nowplaying)
-      embed.addField(`Current:`,
-        `**${nowPlaying.name}** - ${nowPlaying.artist[`#text`]} ` +
-        `| ${nowPlaying.album[`#text`] ? nowPlaying.album[`#text`] : `no album`}`);
-    embed
-      .addField(`Previous:`, prevTracks)
-      .setColor(message.member.displayColor)
-      .setTitle(`Last tracks from ${user}`)
-      .setURL(userData.user.url)
-      .setThumbnail(data.recenttracks.track[0].image[2][`#text`])
-      .setFooter(`Command invoked by ${message.author.tag} with a total ` +
-      `of ${userData.user.playcount} scrobbles.`)
-      .setTimestamp();
-    await message.channel.send({ embed });
-  } catch (e) {
-    console.error(e);
-    await message.channel.send(client.snippets.error);
-  }
-};
+class RecentCommand extends Command {
 
-exports.help = {
-  name: `recent`,
-  description: `Shows you recent tracks you have listened to.`,
-  usage: `recent`,
-  notes: `If you are listening to a song when invoking this command, it will ` +
-  `show your currently listened song as well.`
-};
+  constructor() {
+    super({
+      name: `recent`,
+      description: `Shows you recent tracks you have listened to.`,
+      usage: `recent`,
+      notes: `If you are listening to a song while invoking this command, it will ` +
+      `show your currently listened song as well.`,
+      aliases: [`r`, `latest`],
+      dmAvailable: true,
+    });
+  }
+
+  async run(message) {
+    this.setContext(message);
+    try {
+      const color = message.member ? message.member.displayColor : 16777215;
+      const lib = new Library(message.client.config.lastFM.apikey);
+      const fetchUser = new fetchuser(message.client, message);
+      const user = await fetchUser.username();
+      if (!user) {
+        await message.reply(message.client.snippets.noLogin);
+        this.context.reason = message.client.snippets.commonReasons.noLogin;
+        throw this.context;
+      }
+      const data = await lib.user.getRecentTracks(user);
+      const userData = await lib.user.getInfo(user);
+      const nowPlaying = data.recenttracks.track[0];
+      const sliceArgs = nowPlaying[`@attr`] && nowPlaying[`@attr`].nowplaying ?
+        [1, 6] : [0, 5];
+      const prevTracks = data.recenttracks.track
+        .slice(...sliceArgs)
+        .map(x => `**${x.name}** - ${x.artist[`#text`]} ` +
+          `| ${x.album[`#text`] ? x.album[`#text`] : `no album`}`)
+        .join(`\n`);
+      const embed = new RichEmbed();
+      if (nowPlaying[`@attr`] && nowPlaying[`@attr`].nowplaying)
+        embed.addField(`Current:`,
+          `**${nowPlaying.name}** - ${nowPlaying.artist[`#text`]} ` +
+          `| ${nowPlaying.album[`#text`] ? nowPlaying.album[`#text`] : `no album`}`);
+      embed
+        .addField(`Previous:`, prevTracks)
+        .setColor(color)
+        .setTitle(`Last tracks from ${user}`)
+        .setURL(userData.user.url)
+        .setThumbnail(data.recenttracks.track[0].image[2][`#text`])
+        .setFooter(`Command invoked by ${message.author.tag} with a total ` +
+        `of ${userData.user.playcount} scrobbles.`)
+        .setTimestamp();
+      await message.channel.send({ embed });
+      return this.context;
+    } catch (e) {
+      this.context.stack = e.stack;
+      throw this.context;
+    }
+  }
+
+}
+
+module.exports = RecentCommand;
