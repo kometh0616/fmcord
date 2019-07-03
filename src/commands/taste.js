@@ -78,8 +78,8 @@ class TasteCommand extends Command {
         this.context.reason = `Target user is not registered in the database.`;
         throw this.context;
       }
-      const authorData = await lib.user.getTopArtists(author);
-      const userData = await lib.user.getTopArtists(user);
+      const authorData = await lib.user.getTopArtists(author, `overall`, `150`);
+      const userData = await lib.user.getTopArtists(user, `overall`, `150`);
       const matches = [];
       for (const a of userData.topartists.artist) {
         const match = authorData.topartists.artist.find(x => x.name === a.name);
