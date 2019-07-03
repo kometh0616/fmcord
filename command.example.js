@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 const Command = require(`../classes/Command`);
 
 class ExampleCommand extends Command {
