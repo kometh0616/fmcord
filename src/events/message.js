@@ -20,7 +20,6 @@ module.exports = async (client, message) => {
           cmdName: command.name
         }
       });
-      console.log(isDisabled);
       if (!command.dmAvailable && !message.guild) {
         return message.reply(`I cannot run command \`${command.name}\` inside ` +
         `a DM channel.`);
