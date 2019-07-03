@@ -81,7 +81,7 @@ class HelpCommand extends Command {
             .setThumbnail(message.client.user.avatarURL)
             .setColor(color)
             .setDescription(`Do \`${message.client.config.prefix}help ` +
-            `<command name> to get more information on a command!`)
+            `<command name>\` to get more information on a command!`)
             .addField(`Available commands`, commands)
             .setFooter(`Command executed by ${message.author.tag}`, message.author.avatarURL)
             .setTimestamp();
