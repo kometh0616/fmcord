@@ -20,6 +20,7 @@ module.exports = async (client, message) => {
           cmdName: command.name
         }
       });
+      console.log(isDisabled);
       if (!command.dmAvailable && !message.guild) {
         return message.reply(`I cannot run command \`${command.name}\` inside ` +
         `a DM channel.`);
@@ -45,7 +46,8 @@ module.exports = async (client, message) => {
           `Please wait ${Math.floor((isCooled.uncooledAt - Date.now()) / 1000)} ` +
           `seconds before you can use the command.`);
         }
-      } else if (isDisabled) {
+      }
+      if (isDisabled) {
         if (isDisabled.guildDisabled) {
           return message.reply(`command \`${command.name}\` is disabled in ` +
           `${message.guild.name}.`);
