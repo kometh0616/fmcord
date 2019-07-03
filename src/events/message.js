@@ -3,6 +3,7 @@ module.exports = async (client, message) => {
     return;
   else {
     try {
+      const Disables = client.sequelize.import(`../models/Disables.js`);
       const args = message.content.slice(client.config.prefix.length).split(/ +/);
       const commandName = args.shift().toLowerCase();
       const Command = client.commands.find(Com => {
@@ -13,6 +14,12 @@ module.exports = async (client, message) => {
         return;
       }
       const command = new Command();
+      const isDisabled = await Disables.findOne({
+        where: {
+          guildID: message.guild.id,
+          cmdName: command.name
+        }
+      });
       if (!command.dmAvailable && !message.guild) {
         return message.reply(`I cannot run command \`${command.name}\` inside ` +
         `a DM channel.`);
@@ -37,6 +44,14 @@ module.exports = async (client, message) => {
           return message.reply(`command \`${command.name}\` is on a cooldown. ` +
           `Please wait ${Math.floor((isCooled.uncooledAt - Date.now()) / 1000)} ` +
           `seconds before you can use the command.`);
+        }
+      } else if (isDisabled) {
+        if (isDisabled.guildDisabled) {
+          return message.reply(`command \`${command.name}\` is disabled in ` +
+          `${message.guild.name}.`);
+        } else if (isDisabled.channelID === message.channel.id) {
+          return message.reply(`command \`${command.name}\` is disabled in ` +
+          `this channel.`);
         }
       }
       const ctx = await command.run(message, args);
