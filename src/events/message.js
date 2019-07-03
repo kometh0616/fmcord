@@ -14,12 +14,12 @@ module.exports = async (client, message) => {
         return;
       }
       const command = new Command();
-      const isDisabled = await Disables.findOne({
+      const isDisabled = message.guild ? await Disables.findOne({
         where: {
           guildID: message.guild.id,
           cmdName: command.name
         }
-      });
+      }) : null;
       if (!command.dmAvailable && !message.guild) {
         return message.reply(`I cannot run command \`${command.name}\` inside ` +
         `a DM channel.`);
