@@ -33,7 +33,7 @@ class ArtistinfoCommand extends Command {
         }
         artistName = currTrack.artist[`#text`];
       } else if (args[0]) {
-        artistName = args.join(``);
+        artistName = args.join(` `);
       } else {
         message.reply(`you must provide a name of your artist!`);
         this.context.reason = message.client.snippets.commonReasons.noArtist;
