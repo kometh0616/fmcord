@@ -31,6 +31,7 @@ client.commands = new Collection();
 client.cooldowns = [];
 client.sequelize = sequelize;
 client.snippets = require(`./snippets.js`);
+client.executing = new Set();
 
 if (process.argv[2] !== `--no-dbl`) {
   const dbl = new DBL(config.dbl.apikey, client);

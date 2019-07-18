@@ -45,6 +45,10 @@ module.exports = async (client, message) => {
           `Please wait ${Math.floor((isCooled.uncooledAt - Date.now()) / 1000)} ` +
           `seconds before you can use the command.`);
         }
+      } 
+      if (client.executing.has(message.author.id)) {
+        return message.reply(`you are already executing a command! Please wait until ` + 
+        `your command is executed.`);
       }
       if (isDisabled) {
         if (isDisabled.guildDisabled) {
@@ -55,7 +59,9 @@ module.exports = async (client, message) => {
           `this channel.`);
         }
       }
+      client.executing.add(message.author.id);
       const ctx = await command.run(message, args);
+      client.executing.delete(message.author.id);
       let log = `Command ${ctx.name} executed!\n` +
       `Message content: ${ctx.message.content} (${ctx.message.id})\n` +
       `Executor: ${ctx.author.tag} (${ctx.author.id})\n`;
@@ -82,6 +88,7 @@ module.exports = async (client, message) => {
         }, command.cooldown);
       }
     } catch (e) {
+      client.executing.delete(message.author.id);
       if (e.isContext) {
         let log = `Command ${e.name} failed to execute!\n` +
         `Message content: ${e.message.content} (${e.message.id})\n` +
