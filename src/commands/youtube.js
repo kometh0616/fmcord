@@ -19,7 +19,15 @@ class YouTubeCommand extends Command {
   async run(message, args) {
     this.setContext(message);
     try {
-      const youtube = new YouTubeRequest(message.client.config.youtube.apikey);
+      const { youtube } = message.client.config;
+      if (!youtube || !youtube.apikey) {
+        await message.reply(`this bot is not supplied with a YouTube API key, ` +
+        `therefore, this command cannot be executed. Please contact the developer ` +
+        `of this bot.`);
+        this.context.reason = `No YouTube API key found.`;
+        throw this.context;
+      }
+      const yt = new YouTubeRequest(youtube.apikey);
       const fetchUser = new fetchuser(message.client, message);
       const fetchTrack = new fetchtrack(message.client, message);
       let query;
@@ -40,7 +48,7 @@ class YouTubeCommand extends Command {
       } else {
         query = args.join(` `);
       }
-      const result = await youtube.search(query);
+      const result = await yt.search(query);
       const item = result.items[0];
       if (!item) {
         message.reply(`no results found on \`${query}\``);

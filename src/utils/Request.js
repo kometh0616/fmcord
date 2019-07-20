@@ -1,6 +1,7 @@
 const { stringify } = require(`querystring`);
-const { apikey, endpoint } = require(`../../config.json`).lastFM;
+const { apikey } = require(`../../config.json`).lastFM;
 const { get } = require(`https`);
+const endpoint = `https://ws.audioscrobbler.com/2.0/?`;
 
 module.exports = params => {
   params.api_key = apikey;

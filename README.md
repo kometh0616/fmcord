@@ -23,3 +23,22 @@ FMCord is written in a Javascript language. The libraries for development used a
 Want to report an issue/bug? Head over to "Issues" tab and submit one, or join an [official FMCord Discord Server](https://discord.gg/BrJ6zEk) and ask your questions there.
 
 You can invite the bot to your Discord server with this [link.](https://discordbots.org/bot/521041865999515650)
+
+### Self-hosting
+
+To run your own copy of FMcord, do this in your terminal:
+```
+git clone https://github.com/kometh0616/fmcord.git
+cd fmcord
+```
+Now, you need to store your credentials in a `config.json` file. There are 2 ways to add them:
+1. Filling in `config.example.json` file
+2. Using a prompt in `bot.js` file
+
+First way tutorial:
+1. Open `config.example.json` file.
+2. Fill in all the values inside quote marks at the right.
+
+Second way tutorial:
+1. Do `node bot.js` in your terminal.
+2. Follow the instructions on screen.

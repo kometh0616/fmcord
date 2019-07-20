@@ -2,15 +2,10 @@
   "prefix": "",
   "discordToken": "",
   "lastFM": {
-    "apikey": "",
-    "secret": "",
-    "endpoint": "https://ws.audioscrobbler.com/2.0/?"
+    "apikey": ""
   },
   "youtube": {
     "apikey": ""
   },
-  "botOwnerID": "",
-  "dbl": {
-    "apikey": ""
-  }
+  "botOwnerID": ""
 }
