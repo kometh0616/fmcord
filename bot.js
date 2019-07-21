@@ -26,50 +26,33 @@ if (!fs.existsSync(`./config.json`)) {
     output: process.stdout
   });
   const file = fs.createWriteStream(`./config.json`);
-  ri.question(`What is your bot's prefix? `, prefix => {
+  const question = text => new Promise(res => ri.question(text, res));
+  (async () => {
+    const prefix = await question(`What is your bot's prefix? `);
     file.write(`{"prefix":"${prefix}",`);
-    ri.question(`What is your bot's token? `, token => {
-      file.write(`"discordToken":"${token}",`);
-      ri.question(`Specify a Last.fm API key you'd like to use. `, apikey => {
-        file.write(`"lastFM":{"apikey":"${apikey}"},`);
-        ri.question(`Command "youtube" requires a YouTube API key. Would you like ` +
-        `to specify one? [y/N] `, answer => {
-          if (/^y/gi.test(answer)) {
-            ri.question(`Specify a YouTube API key you'd like to use. `, apikey => {
-              file.write(`"youtube":{"apikey":"${apikey}"},`);
-              ri.question(`Command "admin" requires your ID in order to not let ` +
-              `other users use those commands. Specify your user ID. `, id => {
-                file.write(`"botOwnerID":"${id}"}`);
-                try {
-                  config = require(`./config.json`);
-                  console.log(`You have succesfully set up a "config.json" file!`);
-                  console.log(`Continuing the work...`);
-                  setup();
-                } catch (e) {
-                  console.error(`Oh no! Something went wrong!`);
-                  console.error(e);
-                }
-              });
-            });
-          } else {
-            ri.question(`Command "admin" requires your ID in order to not let ` +
-              `other users use those commands. Specify your user ID. `, id => {
-              file.write(`"botOwnerID":"${id}"}`);
-              try {
-                config = require(`./config.json`);
-                console.log(`You have succesfully set up a "config.json" file!`);
-                console.log(`Continuing the work...`);
-                setup();
-              } catch (e) {
-                console.error(`Oh no! Something went wrong!`);
-                console.error(e);
-              }
-            });
-          }
-        });
-      });
-    });
-  });
+    const token = await question(`What is your bot's token? `);
+    file.write(`"discordToken":"${token}",`);
+    const lfmApiKey = await question(`Specify a Last.fm API key you'd like to use. `);
+    file.write(`"lastFM":{"apikey":"${lfmApiKey}"},`);
+    const useYT = await question(`Command "youtube" requires a YouTube API key. Would you like ` +
+    `to specify one? [y/N] `);
+    if (/^y/gi.test(useYT)) {
+      const ytApiKey = await question(`Specify a YouTube API key you'd like to use. `);
+      file.write(`"youtube":{"apikey":"${ytApiKey}"},`);
+    }
+    const userID = await question(`Command "admin" requires your ID in order to not let ` +
+    `other users use those commands. Specify your user ID. `);
+    file.write(`"botOwnerID":"${userID}"}`);
+    try {
+      config = require(`./config.json`);
+      console.log(`You have succesfully set up a "config.json" file!`);
+      console.log(`Continuing the work...`);
+      setup();
+    } catch (e) {
+      console.error(`Oh no! Something went wrong!`);
+      console.error(e);
+    }
+  })();
 } else {
   config = require(`./config.json`);
   setup();
