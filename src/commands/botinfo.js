@@ -1,5 +1,6 @@
 const { RichEmbed } = require(`discord.js`);
 const Command = require(`../classes/Command`);
+const agePrint = require(`../utils/AgePrint`);
 
 class BotinfoCommand extends Command {
 
@@ -19,9 +20,11 @@ class BotinfoCommand extends Command {
       const dev = message.client.users.get(message.client.config.botOwnerID);
       const shared = message.client.guilds.filter(x => x.members.has(message.author.id));
       const color = message.member ? message.member.displayColor : 16777215;
+      const { avatarURL, createdAt } = message.client.user;
       const embed = new RichEmbed()
         .setTitle(`FMcord information`)
-        .setThumbnail(message.client.user.avatarURL)
+        .setThumbnail(avatarURL)
+        .addField(`Created at: `, `${createdAt.toUTCString()} (${agePrint(createdAt)} ago)`)
         .addField(`Total servers:`, message.client.guilds.size, true)
         .addField(`Total users:`, message.client.users.size, true)
         .addField(`Used library:`, `discord.js`, true)
