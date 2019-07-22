@@ -3,8 +3,8 @@ module.exports = date => {
   const diff = new Date(new Date() - date);
   const [year, month, day] = [
     diff.getFullYear() - 1970,
-    diff.getMonth() + 1,
-    diff.getDate()
+    diff.getMonth(),
+    diff.getDate() - 1
   ];
   if (year > 0) {
     res += `${year} year${year > 1 ? `s ` : ` `}`;
