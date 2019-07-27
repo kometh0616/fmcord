@@ -2,9 +2,9 @@
   "name": "fmcord",
   "version": "1.5.2",
   "description": "A Discord bot with Last.fm utilities.",
-  "main": "bot.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node bot",
+    "start": "node index",
     "lint": "eslint src *.js",
     "lint-fix": "eslint src *.js --fix",
     "test": "npm run lint"
