@@ -16,19 +16,19 @@ class NowPlayingCommand extends Command {
     });
   }
 
-  async run(message) {
+  async run(client, message) {
     this.setContext(message);
     try {
       const color = message.member ? message.member.displayColor : 16777215;
-      const lib = new Library(message.client.config.lastFM.apikey);
-      const user = new fetchuser(message.client, message);
+      const lib = new Library(client.config.lastFM.apikey);
+      const user = new fetchuser(client, message);
 
       if (await user.get()) {
-        const ft = new fetchtrack(message.client, message);
-        const track = await ft.getcurrenttrack(message.client, message);
+        const ft = new fetchtrack(client, message);
+        const track = await ft.getcurrenttrack(client, message);
 
         if (track) {
-          const prevTrack = await ft.getlasttrack(message.client, message);
+          const prevTrack = await ft.getlasttrack(client, message);
           const username = await user.username();
           const userData = await lib.user.getInfo(username);
           const embed = new RichEmbed()
@@ -47,13 +47,13 @@ class NowPlayingCommand extends Command {
           await message.channel.send({ embed });
           return this.context;
         } else {
-          await message.reply(message.client.snippets.notPlaying);
-          this.context.reason = message.client.snippets.commonReasons.notPlaying;
+          await message.reply(client.snippets.notPlaying);
+          this.context.reason = client.snippets.commonReasons.notPlaying;
           throw this.context;
         }
       } else {
-        await message.reply(message.client.snippets.noLogin);
-        this.context.reason = message.client.snippets.commonReasons.noLogin;
+        await message.reply(client.snippets.noLogin);
+        this.context.reason = client.snippets.commonReasons.noLogin;
         throw this.context;
       }
     } catch (e) {

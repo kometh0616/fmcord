@@ -14,22 +14,29 @@ class BotinfoCommand extends Command {
     });
   }
 
-  async run(message) {
+  async run(client, message) {
     this.setContext(message);
     try {
-      const dev = message.client.users.get(message.client.config.botOwnerID);
-      const shared = message.client.guilds.filter(x => x.members.has(message.author.id));
+      const users = await client.shard.fetchClientValues(`users.size`);
+      const userSize = users.reduce((prev, user) => prev + user, 0);
+      const guilds = await client.shard.fetchClientValues(`guilds.size`);
+      const guildSize = guilds.reduce((prev, guild) => prev + guild, 0);
+      const dev = await client.fetchUser(client.config.botOwnerID);
+      const shared = await client.shard.broadcastEval(`
+        this.guilds.filter(x => x.members.has('${message.author.id}')).size
+      `);
+      const sharedSize = shared.reduce((prev, shared) => prev + shared, 0);
       const color = message.member ? message.member.displayColor : 16777215;
-      const { avatarURL, createdAt } = message.client.user;
+      const { avatarURL, createdAt } = client.user;
       const embed = new RichEmbed()
         .setTitle(`FMcord information`)
         .setThumbnail(avatarURL)
         .addField(`Created at: `, `${createdAt.toUTCString()} (${agePrint(createdAt)} ago)`)
-        .addField(`Total servers:`, message.client.guilds.size, true)
-        .addField(`Total users:`, message.client.users.size, true)
+        .addField(`Total servers:`, guildSize, true)
+        .addField(`Total users:`, userSize, true)
         .addField(`Used library:`, `discord.js`, true)
         .addField(`Developed by:`, `${dev.tag} and contributors`, true)
-        .addField(`Amount of servers shared with the command invoker:`, shared.size, true)
+        .addField(`Amount of servers shared with the command invoker:`, sharedSize, true)
         .setFooter(`Command executed by ${message.author.tag}`, message.author.avatarURL)
         .setTimestamp()
         .setColor(color);

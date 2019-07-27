@@ -17,16 +17,16 @@ class RecentCommand extends Command {
     });
   }
 
-  async run(message) {
+  async run(client, message) {
     this.setContext(message);
     try {
       const color = message.member ? message.member.displayColor : 16777215;
-      const lib = new Library(message.client.config.lastFM.apikey);
-      const fetchUser = new fetchuser(message.client, message);
+      const lib = new Library(client.config.lastFM.apikey);
+      const fetchUser = new fetchuser(client, message);
       const user = await fetchUser.username();
       if (!user) {
-        await message.reply(message.client.snippets.noLogin);
-        this.context.reason = message.client.snippets.commonReasons.noLogin;
+        await message.reply(client.snippets.noLogin);
+        this.context.reason = client.snippets.commonReasons.noLogin;
         throw this.context;
       }
       const data = await lib.user.getRecentTracks(user);

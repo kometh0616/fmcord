@@ -4,11 +4,22 @@ exports.run = async (client, message, args) => {
     else if (!args[1]) return message.reply(`no message content provided!`);
     const channelID = args[0];
     const content = args.slice(1).join(` `);
-    const channel = client.channels.get(channelID);
-    if (!channel) return message.reply(`no channel with ID \`${channelID}\` ` +
-    `found.`);
-    await channel.send(content);
-    await message.channel.send(`:white_check_mark:`);
+    const sent = await client.shard.broadcastEval(`
+      (async () => {
+        const channel = this.channels.get('${channelID}');
+        if (channel) {
+          await channel.send('${content}');
+          return true;
+        } else {
+          return false;
+        }
+      })()
+    `);
+    if (sent) {
+      await message.channel.send(`:white_check_mark:`);
+    } else {
+      await message.channel.send(`:x:`);
+    }
   } catch (e) {
     console.error(e);
     await message.channel.send(client.snippets.error);

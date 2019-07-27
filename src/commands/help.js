@@ -21,11 +21,11 @@ class HelpCommand extends Command {
     });
   }
 
-  async run(message, args) {
+  async run(client, message, args) {
     this.setContext(message);
     try {
       const color = message.guild ? message.member.displayColor : 16777215;
-      const helpCommands = message.client.commands
+      const helpCommands = client.commands
         .map(Cmd => new Cmd())
         .filter(x => !x.helpExempt);
       if (args[0] === `--manual`) {
@@ -40,7 +40,7 @@ class HelpCommand extends Command {
           const embed = new RichEmbed()
             .setColor(color)
             .setTitle(`Command ${x.name}`)
-            .addField(`Usage:`, `${message.client.config.prefix}${x.usage}`)
+            .addField(`Usage:`, `${client.config.prefix}${x.usage}`)
             .addField(`Description:`, x.description)
             .setFooter(`Page ${++pages}/${helpCommands.length} | Command ` +
             `executed by ${message.author.tag}`, message.author.avatarURL)
@@ -57,19 +57,19 @@ class HelpCommand extends Command {
         const embed = embeds[index];
         const msg = await message.channel.send({ embed });
         const rI = new ReactionInterface(msg, message.author);
-        await rI.setKey(message.client.snippets.arrowLeft, async () => {
+        await rI.setKey(client.snippets.arrowLeft, async () => {
           if (index !== 0) {
             const embed = embeds[--index];
             await msg.edit({ embed });
           }
         });
-        await rI.setKey(message.client.snippets.arrowRight, async () => {
+        await rI.setKey(client.snippets.arrowRight, async () => {
           if (index !== helpCommands.size - 1) {
             const embed = embeds[++index];
             await msg.edit({ embed });
           }
         });
-        await rI.setKey(message.client.snippets.exit, rI.destroy);
+        await rI.setKey(client.snippets.exit, rI.destroy);
       } else {
         const commandName = args[0];
         if (!commandName) {
@@ -78,9 +78,9 @@ class HelpCommand extends Command {
             .join(`, `);
           const embed = new RichEmbed()
             .setTitle(`FMcord's commands`)
-            .setThumbnail(message.client.user.avatarURL)
+            .setThumbnail(client.user.avatarURL)
             .setColor(color)
-            .setDescription(`Do \`${message.client.config.prefix}help ` +
+            .setDescription(`Do \`${client.config.prefix}help ` +
             `<command name>\` to get more information on a command!`)
             .addField(`Available commands`, commands)
             .setFooter(`Command executed by ${message.author.tag}`, message.author.avatarURL)

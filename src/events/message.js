@@ -60,7 +60,7 @@ module.exports = async (client, message) => {
         }
       }
       client.executing.add(message.author.id);
-      const ctx = await command.run(message, args);
+      const ctx = await command.run(client, message, args);
       client.executing.delete(message.author.id);
       let log = `Command ${ctx.name} executed!\n` +
       `Message content: ${ctx.message.content} (${ctx.message.id})\n` +

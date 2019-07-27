@@ -13,10 +13,10 @@ class LFMCommand extends Command {
     });
   }
 
-  async run(message, args) {
+  async run(client, message, args) {
     this.setContext(message);
     try {
-      const fuser = new fetchuser(message.client, message);
+      const fuser = new fetchuser(client, message);
       const discordUser = args[0] ? message.mentions.users.first() : message.author;
 
       if (discordUser) {

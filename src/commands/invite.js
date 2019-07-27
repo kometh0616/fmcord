@@ -13,11 +13,11 @@ class InviteCommand extends Command {
     });
   }
 
-  async run(message) {
+  async run(client, message) {
     this.setContext(message);
     try {
       await message.reply(`you can invite me to your server using this link: ` +
-      `${message.client.snippets.dBotsLink}`);
+      `${client.snippets.dBotsLink}`);
       return this.context;
     } catch (e) {
       this.context.stack = e.stack;

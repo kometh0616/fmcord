@@ -33,12 +33,12 @@ cd fmcord
 ```
 Now, you need to store your credentials in a `config.json` file. There are 2 ways to add them:
 1. Filling in `config.example.json` file
-2. Using a prompt in `bot.js` file
+2. Using a prompt in `index.js` file
 
 First way tutorial:
 1. Open `config.example.json` file.
 2. Fill in all the values inside quote marks at the right.
 
 Second way tutorial:
-1. Do `node bot.js` in your terminal.
+1. Do `node index.js` in your terminal.
 2. Follow the instructions on screen.

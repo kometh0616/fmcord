@@ -7,12 +7,12 @@ module.exports = async (client, ctx) => {
   try {
     if (ctx.prevOwner !== ctx.newOwner) {
       const prevUser = {
-        discord: client.users.get(ctx.prevOwner),
+        discord: await client.fetchUser(ctx.prevOwner),
         local: await fetchUser.usernameFromId(ctx.prevOwner)
       };
       const newUser = {
-        discord: client.users.get(ctx.newOwner),
-        local: await fetchUser.usernameFromID(ctx.newOwner)
+        discord: await client.fetchUser(ctx.newOwner),
+        local: await fetchUser.usernameFromId(ctx.newOwner)
       };
       const prevFetch = await lib.artist.getInfo(ctx.artist, prevUser.local);
       const newFetch = await lib.artist.getInfo(ctx.artist, newUser.local);
@@ -26,7 +26,7 @@ module.exports = async (client, ctx) => {
     }
   } catch (e) {
     console.error(e);
-    const owner = client.users.get(client.config.botOwnerID);
+    const owner = await client.fetchUser(client.config.botOwnerID);
     const dmChannel = await owner.createDM();
     await dmChannel.send(`Error at the event.`);
   }

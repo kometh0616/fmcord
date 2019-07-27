@@ -17,7 +17,7 @@ class DisableCommand extends Command {
     });
   }
 
-  async run(message, args) {
+  async run(client, message, args) {
     this.setContext(message);
     try {
       if (!args[0]) {
@@ -25,9 +25,9 @@ class DisableCommand extends Command {
         this.context.reason = `No command specified.`;
         throw this.context;
       }
-      const Disables = message.client.sequelize.import(`../models/Disables.js`);
+      const Disables = client.sequelize.import(`../models/Disables.js`);
       const disable = async () => {
-        const isValid = message.client.commands.has(args[0].toLowerCase());
+        const isValid = client.commands.has(args[0].toLowerCase());
         if (!isValid) {
           await message.reply(`I don't recognise a command ${args[0]}.`);
           this.context.reason = `No such command found.`;
@@ -58,11 +58,11 @@ class DisableCommand extends Command {
       if (isDisabled) {
         if (isDisabled.guildDisabled) await message.reply(`this command is ` +
         `already disabled in an entire guild! To re-enable it, do ` +
-        `\`${message.client.config.prefix}enable <command>\`.`);
+        `\`${client.config.prefix}enable <command>\`.`);
         else if (isDisabled.channelID !== message.channel.id) disable();
         else await message.reply(`this command is ` +
         `already disabled in this channel! To re-enable it, do ` +
-        `\`${message.client.config.prefix}enable <command>\`.`);
+        `\`${client.config.prefix}enable <command>\`.`);
       } else disable();
       return this.context;
     } catch (e) {

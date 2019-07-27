@@ -24,7 +24,7 @@ class ExampleCommand extends Command {
     });
   }
 
-  async run(message, args) /* "args" argument can be omitted. */ {
+  async run(client, message, args) /* "args" argument can be omitted. */ {
     this.setContext(message);
     try {
       // Code that will be run by the bot during the command execution goes here.

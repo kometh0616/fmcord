@@ -4,9 +4,13 @@ exports.run = async (client, message) => {
   try {
     let num = 0;
     const path = `${process.env.PWD}/res.txt`;
-    const list = client.guilds
-      .sort((a, b) => b.memberCount - a.memberCount)
-      .map(x => `${++num}. ${x.id} - ${x.name} with ${x.memberCount} members`)
+    const guilds = await client.shard.broadcastEval(`
+      this.guilds.sort((a, b) => b.memberCount - a.memberCount)
+        .map(x => x.name + ' with ' + x.memberCount + ' members')
+    `);
+    const list = guilds
+      .flat()
+      .map(x => `${++num}. ${x}`)
       .join(`\r\n`);
     await writeFile(path, list);
     await message.channel.send({ files: [{

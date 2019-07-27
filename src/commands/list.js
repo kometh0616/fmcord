@@ -20,16 +20,16 @@ class ListCommand extends Command {
     });
   }
 
-  async run(message, args) {
+  async run(client, message, args) {
     this.setContext(message);
     try {
       const color = message.member ? message.member.displayColor : 16777215;
-      const lib = new Library(message.client.config.lastFM.apikey);
-      const fetchUser = new fetchuser(message.client, message);
+      const lib = new Library(client.config.lastFM.apikey);
+      const fetchUser = new fetchuser(client, message);
       const user = await fetchUser.username();
       if (!user) {
-        await message.reply(message.client.snippets.noLogin);
-        this.context.reason = message.client.snippets.commonReasons.noLogin;
+        await message.reply(client.snippets.noLogin);
+        this.context.reason = client.snippets.commonReasons.noLogin;
         throw this.context;
       }
       const lfmInfo = await lib.user.getInfo(user);
@@ -80,7 +80,7 @@ class ListCommand extends Command {
         [rootProp, subProp] = [`toptracks`, `track`];
       } else {
         await message.reply(`you haven't defined a proper list type! Correct usage ` +
-        `would be \`${message.client.config.prefix}list <list type> <time period> <list length>\``);
+        `would be \`${client.config.prefix}list <list type> <time period> <list length>\``);
       }
       if (!listLength) {
         listLength = parseInt(args[2]);

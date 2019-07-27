@@ -16,19 +16,19 @@ class ArtistinfoCommand extends Command {
     });
   }
 
-  async run(message, args) {
+  async run(client, message, args) {
     this.setContext(message);
-    const lib = new Library(message.client.config.lastFM.apikey);
+    const lib = new Library(client.config.lastFM.apikey);
     try {
-      const fetchUser = new fetchuser(message.client, message);
+      const fetchUser = new fetchuser(client, message);
       const username = await fetchUser.username();
       let artistName;
       if (args.length === 0) {
-        const fetchTrack = new fetchtrack(message.client, message);
+        const fetchTrack = new fetchtrack(client, message);
         const currTrack = await fetchTrack.getcurrenttrack();
         if (!currTrack) {
           message.reply(`currently, you are not listening to anything.`);
-          this.context.reason = message.client.snippets.commonReasons.notPlaying;
+          this.context.reason = client.snippets.commonReasons.notPlaying;
           throw this.context;
         }
         artistName = currTrack.artist[`#text`];
@@ -36,7 +36,7 @@ class ArtistinfoCommand extends Command {
         artistName = args.join(` `);
       } else {
         message.reply(`you must provide a name of your artist!`);
-        this.context.reason = message.client.snippets.commonReasons.noArtist;
+        this.context.reason = client.snippets.commonReasons.noArtist;
         throw this.context;
       }
       const data = await lib.artist.getInfo(artistName, username);

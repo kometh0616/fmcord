@@ -16,11 +16,11 @@ class EnableCommand extends Command {
     });
   }
 
-  async run(message, args) {
+  async run(client, message, args) {
     this.setContext(message);
     try {
-      const Disables = message.client.sequelize.import(`../models/Disables.js`);
-      const isValid = message.client.commands.has(args[0].toLowerCase());
+      const Disables = client.sequelize.import(`../models/Disables.js`);
+      const isValid = client.commands.has(args[0].toLowerCase());
       if (!isValid) {
         await message.reply(`I don't recognise a command ${args[0]}.`);
         this.context.reason = `No such command found.`;

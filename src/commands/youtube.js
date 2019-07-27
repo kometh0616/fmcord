@@ -16,10 +16,10 @@ class YouTubeCommand extends Command {
     });
   }
 
-  async run(message, args) {
+  async run(client, message, args) {
     this.setContext(message);
     try {
-      const { youtube } = message.client.config;
+      const { youtube } = client.config;
       if (!youtube || !youtube.apikey) {
         await message.reply(`this bot is not supplied with a YouTube API key, ` +
         `therefore, this command cannot be executed. Please contact the developer ` +
@@ -28,20 +28,20 @@ class YouTubeCommand extends Command {
         throw this.context;
       }
       const yt = new YouTubeRequest(youtube.apikey);
-      const fetchUser = new fetchuser(message.client, message);
-      const fetchTrack = new fetchtrack(message.client, message);
+      const fetchUser = new fetchuser(client, message);
+      const fetchTrack = new fetchtrack(client, message);
       let query;
       if (args.length === 0) {
         const user = await fetchUser.username();
         if (!user) {
-          await message.reply(message.client.snippets.noLogin);
-          this.context.reason = message.client.snippets.commonReasons.noLogin;
+          await message.reply(client.snippets.noLogin);
+          this.context.reason = client.snippets.commonReasons.noLogin;
           throw this.context;
         }
         const data = await fetchTrack.getcurrenttrack();
         if (!data) {
-          await message.reply(message.client.snippets.notPlaying);
-          this.context.reason = message.client.snippets.commonReasons.notPlaying;
+          await message.reply(client.snippets.notPlaying);
+          this.context.reason = client.snippets.commonReasons.notPlaying;
           throw this.context;
         }
         query = `${data.artist[`#text`]} ${data.name}`;

@@ -21,11 +21,11 @@ class ChartCommand extends Command {
     });
   }
 
-  async run(message, args) {
+  async run(client, message, args) {
     this.setContext(message);
     try {
-      const lib = new Library(message.client.config.lastFM.apikey);
-      const fetchUser = new fetchuser(message.client, message);
+      const lib = new Library(client.config.lastFM.apikey);
+      const fetchUser = new fetchuser(client, message);
       const usageWarning = `Incorrect usage of a command! Correct usage ` +
       `would be: \`&chart <time period> <grid size>\``;
       let period, vals, x, y;
@@ -91,8 +91,8 @@ class ChartCommand extends Command {
 
       const user = await fetchUser.username();
       if (!user) {
-        await message.reply(message.client.snippets.noLogin);
-        this.context.reason = message.client.snippets.commonReasons.noLogin;
+        await message.reply(client.snippets.noLogin);
+        this.context.reason = client.snippets.commonReasons.noLogin;
         throw this.context;
       }
       await message.channel.send(`Please wait until your grid is done...`);

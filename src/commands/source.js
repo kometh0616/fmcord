@@ -14,21 +14,21 @@ class SourceCommand extends Command {
     });
   }
 
-  async run(message, args) {
+  async run(client, message, args) {
     this.setContext(message);
     try {
       if (!args[0]) {
         await message.channel.send(`Here is a FMcord GitHub repository: ` +
-        message.client.snippets.github);
+        client.snippets.github);
       } else {
         const cmd = args[0].toLowerCase();
-        if (!message.client.commands.has(cmd)) {
+        if (!client.commands.has(cmd)) {
           await message.reply(`I can't find a command called \`${cmd}\`.`);
           this.context.reason = `Couldn't find the command.`;
           throw this.context;
         }
         await message.channel.send(`Here is source to a command \`${cmd}\`: ` +
-        message.client.snippets.getSource(cmd));
+        client.snippets.getSource(cmd));
       }
       return this.context;
     } catch (e) {

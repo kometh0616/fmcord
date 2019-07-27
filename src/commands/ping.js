@@ -11,7 +11,7 @@ class PingCommand extends Command {
     });
   }
 
-  async run(message) {
+  async run(client, message) {
     this.setContext(message);
     try {
       const oldDate = Date.now();

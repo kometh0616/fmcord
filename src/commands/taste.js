@@ -26,11 +26,11 @@ class TasteCommand extends Command {
     });
   }
 
-  async run(message, args) {
+  async run(client, message, args) {
     this.setContext(message);
     try {
-      const fetchUser = new fetchuser(message.client, message);
-      const lib = new Library(message.client.config.lastFM.apikey);
+      const fetchUser = new fetchuser(client, message);
+      const lib = new Library(client.config.lastFM.apikey);
       if (!args[0]) {
         await message.reply(`specify a user you want to compare tastes with!`);
         this.context.reason = `No user specified.`;
@@ -38,8 +38,8 @@ class TasteCommand extends Command {
       }
       const author = await fetchUser.username();
       if (!author) {
-        await message.reply(message.client.snippets.noLogin);
-        this.context.reason = message.client.snippets.commonReasons.noLogin;
+        await message.reply(client.snippets.noLogin);
+        this.context.reason = client.snippets.commonReasons.noLogin;
         throw this.context;
       }
       let userID;

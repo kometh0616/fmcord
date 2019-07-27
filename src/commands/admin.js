@@ -13,10 +13,10 @@ class AdminCommand extends Command {
     });
   }
 
-  async run(message, args) {
+  async run(client, message, args) {
     this.setContext(message);
     try {
-      if (message.author.id !== message.client.config.botOwnerID) return;
+      if (message.author.id !== client.config.botOwnerID) return;
       if (args.length === 0) {
         message.reply(`please specify an admin command you want to use!`);
         this.context.reason = `No sub-command provided.`;
@@ -33,7 +33,7 @@ class AdminCommand extends Command {
       }
       const cmd = require(`./admin/${command}`);
       const cmdArgs = args.slice(1);
-      cmd.run(message.client, message, cmdArgs);
+      cmd.run(client, message, cmdArgs);
       return this.context;
     } catch (e) {
       this.context.stack = e.stack;

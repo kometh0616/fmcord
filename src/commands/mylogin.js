@@ -14,13 +14,13 @@ class MyLoginCommand extends Command {
     });
   }
 
-  async run(message) {
+  async run(client, message) {
     this.setContext(message);
     try {
-      const fetchUser = new fetchuser(message.client, message);
+      const fetchUser = new fetchuser(client, message);
       const user = await fetchUser.get();
       if (!user) await message.reply(`you haven't logged into my system. You ` +
-      `can do so by doing \`${message.client.config.prefix}login ` +
+      `can do so by doing \`${client.config.prefix}login ` +
       `<your last.fm username>\`.`);
       else {
         const name = user.get(`lastFMUsername`);

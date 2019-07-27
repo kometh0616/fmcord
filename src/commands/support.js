@@ -14,7 +14,7 @@ class SupportCommand extends Command {
     });
   }
 
-  async run(message) {
+  async run(client, message) {
     this.setContext(message);
     try {
       await message.channel.send(`Here is a server where you can ask questions, ` +

@@ -17,35 +17,35 @@ class PlaysCommand extends Command {
     });
   }
 
-  async run(message, args) {
+  async run(client, message, args) {
     this.setContext(message);
     try {
-      const lib = new Library(message.client.config.lastFM.apikey);
-      const fetchUser = new fetchuser(message.client, message);
-      const fetchTrack = new fetchtrack(message.client, message);
+      const lib = new Library(client.config.lastFM.apikey);
+      const fetchUser = new fetchuser(client, message);
+      const fetchTrack = new fetchtrack(client, message);
       let artistName = args.join(` `);
       const user = await fetchUser.username();
       if (!artistName) {
         if (!user) {
           await message.reply(`you haven't registered your Last.fm ` +
           `account, therefore, I can't check what you're listening to. To set ` +
-          `your Last.fm nickname, do \`${message.client.config.prefix}login ` +
+          `your Last.fm nickname, do \`${client.config.prefix}login ` +
           `<lastfm username>\`.`);
-          this.context.reason = message.client.snippets.commonReasons.noLogin;
+          this.context.reason = client.snippets.commonReasons.noLogin;
           throw this.context;
         }
         const track = await fetchTrack.getcurrenttrack();
         if (!track[`@attr`]) {
-          await message.reply(message.client.snippets.notPlaying);
-          this.context.reason = message.client.snippets.commonReasons.notPlaying;
+          await message.reply(client.snippets.notPlaying);
+          this.context.reason = client.snippets.commonReasons.notPlaying;
           throw this.context;
         } else {
           artistName = track.artist[`#text`];
         }
       }
       if (!user) {
-        await message.reply(message.client.snippets.noLogin);
-        this.context.reason = message.client.snippets.commonReasons.noLogin;
+        await message.reply(client.snippets.noLogin);
+        this.context.reason = client.snippets.commonReasons.noLogin;
         throw this.context;
       }
       const data = await lib.artist.getInfo(artistName, user);

@@ -23,27 +23,27 @@ class WhoKnowsCommand extends Command {
     });
   }
 
-  async run(message, args) {
+  async run(client, message, args) {
     this.setContext(message);
     try {
-      const fetchUser = new fetchuser(message.client, message);
-      const fetchTrack = new fetchtrack(message.client, message);
-      const lib = new Library(message.client.config.lastFM.apikey);
-      const Users = message.client.sequelize.import(`../models/Users.js`);
-      const Crowns = message.client.sequelize.import(`../models/Crowns.js`);
-      const Notifs = message.client.sequelize.import(`../models/Notifs.js`);
+      const fetchUser = new fetchuser(client, message);
+      const fetchTrack = new fetchtrack(client, message);
+      const lib = new Library(client.config.lastFM.apikey);
+      const Users = client.sequelize.import(`../models/Users.js`);
+      const Crowns = client.sequelize.import(`../models/Crowns.js`);
+      const Notifs = client.sequelize.import(`../models/Notifs.js`);
       let artistName = args.join(` `);
       const user = await fetchUser.username();
       if (!artistName) {
         if (!user) {
-          await message.reply(message.client.snippets.npNoLogin);
-          this.context.reason = message.client.snippets.commonReasons.noLogin;
+          await message.reply(client.snippets.npNoLogin);
+          this.context.reason = client.snippets.commonReasons.noLogin;
           throw this.context;
         }
         const track = await fetchTrack.getcurrenttrack();
         if (!track[`@attr`]) {
-          await message.reply(message.client.snippets.notPlaying);
-          this.context.reason = message.client.snippets.commonReasons.notPlaying;
+          await message.reply(client.snippets.notPlaying);
+          this.context.reason = client.snippets.commonReasons.notPlaying;
           throw this.context;
         } else {
           artistName = track.artist[`#text`];
@@ -119,7 +119,7 @@ class WhoKnowsCommand extends Command {
               userID: userID
             }
           });
-          if (notifiable && isUser) message.client.emit(`crownTaken`, {
+          if (notifiable && isUser) client.emit(`crownTaken`, {
             prevOwner: userID,
             newOwner: sorted.userID,
             guild: message.guild.name,

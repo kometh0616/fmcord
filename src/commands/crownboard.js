@@ -12,11 +12,11 @@ class CrownboardCommand extends Command {
     });
   }
 
-  async run(message) {
+  async run(client, message) {
     this.setContext(message);
     try {
       let num = 0;
-      const Crowns = message.client.sequelize.import(`../models/Crowns.js`);
+      const Crowns = client.sequelize.import(`../models/Crowns.js`);
       const users = await Crowns.findAll({
         where: {
           guildID: message.guild.id
@@ -37,7 +37,7 @@ class CrownboardCommand extends Command {
       const authorPos = amounts.findIndex(x => x[0] === message.author.id);
       let desc = amounts
         .slice(0, 10)
-        .map(x => `${++num}. **${message.client.users.get(x[0]).username}** with ${x[1]} crowns`)
+        .map(x => `${++num}. **${message.guild.members.get(x[0]).user.username}** with ${x[1]} crowns`)
         .join(`\n`);
       if (authorPos !== -1) desc += `\n\nYour position is: ${authorPos + 1}`;
       const embed = new RichEmbed()

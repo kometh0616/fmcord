@@ -17,11 +17,11 @@ class CrownsCommand extends Command {
     });
   }
 
-  async run(message, args) {
+  async run(client, message, args) {
     this.setContext(message);
     try {
       if (args[0] === `--notify`) {
-        const Notifs = message.client.sequelize.import(`../models/Notifs.js`);
+        const Notifs = client.sequelize.import(`../models/Notifs.js`);
         const notif = await Notifs.findOne({
           where: {
             userID: message.author.id
@@ -34,7 +34,7 @@ class CrownsCommand extends Command {
           `DM's (you can do so by going to Settings -> Privacy and Security ` +
           `-> Allow direct messages from server members.) so that I could ` +
           `notify you.\nYou can always disable this feature by doing ` +
-          `\`${message.client.config.prefix}crowns --notify\` again.`);
+          `\`${client.config.prefix}crowns --notify\` again.`);
         } else {
           await Notifs.destroy({
             where: {
@@ -43,7 +43,7 @@ class CrownsCommand extends Command {
           });
           await message.reply(`you will no longer be notified when someone ` +
           `takes your crown.\nTo re-enable this feature, do ` +
-          `\`${message.client.config.prefix}crowns --notify\` again.`);
+          `\`${client.config.prefix}crowns --notify\` again.`);
         }
       } else {
         let member;
@@ -57,18 +57,18 @@ class CrownsCommand extends Command {
           if (ourMember) member = ourMember;
           else {
             message.reply(`no user with username ${args.join(` `)} found.`);
-            this.context.reason = message.client.snippets.commonReasons.noUsername;
+            this.context.reason = client.snippets.commonReasons.noUsername;
             throw this.context;
           }
         } else {
           member = message.member;
         }
-        const fetchUser = new fetchuser(message.client, message);
-        const Crowns = message.client.sequelize.import(`../models/Crowns.js`);
+        const fetchUser = new fetchuser(client, message);
+        const Crowns = client.sequelize.import(`../models/Crowns.js`);
         const user = await fetchUser.getById(member.id);
         if (!user) {
-          await message.reply(message.client.snippets.noLogin);
-          this.context.reason = message.client.snippets.commonReasons.noLogin;
+          await message.reply(client.snippets.noLogin);
+          this.context.reason = client.snippets.commonReasons.noLogin;
           throw this.context;
         }
         const URL = `https://last.fm/user/${user.get(`lastFMUsername`)}`;
@@ -150,9 +150,9 @@ class CrownsCommand extends Command {
               func(offset);
             }
           };
-          await rl.setKey(message.client.snippets.arrowLeft, toBack);
-          await rl.setKey(message.client.snippets.arrowRight, toFront);
-          await rl.setKey(message.client.snippets.exit, rl.destroy);
+          await rl.setKey(client.snippets.arrowLeft, toBack);
+          await rl.setKey(client.snippets.arrowRight, toFront);
+          await rl.setKey(client.snippets.exit, rl.destroy);
         }
       }
       return this.context;

@@ -13,12 +13,12 @@ class LogoutCommand extends Command {
     });
   }
 
-  async run(message) {
+  async run(client, message) {
     this.setContext(message);
     try {
-      const fetchUser = new fetchuser(message.client, message);
-      const Users = message.client.sequelize.import(`../models/Users.js`);
-      const Crowns = message.client.sequelize.import(`../models/Crowns.js`);
+      const fetchUser = new fetchuser(client, message);
+      const Users = client.sequelize.import(`../models/Users.js`);
+      const Crowns = client.sequelize.import(`../models/Crowns.js`);
       const user = await fetchUser.get();
       if (!user) {
         await message.reply(`your instance hasn't been found.`);
