@@ -9,10 +9,11 @@ class RecentCommand extends Command {
   constructor() {
     super({
       name: `recent`,
-      description: `Shows you recent tracks you have listened to.`,
-      usage: `recent`,
+      description: `Shows you recent tracks you, or a user you defined, have listened to.`,
+      usage: `recent [target user]`,
       notes: `If you are listening to a song while invoking this command, it will ` +
-      `show your currently listened song as well.`,
+      `show your currently listened song as well. The target user must be in the ` +
+      `same guild that you are invoking this command into.`,
       aliases: [`r`, `latest`],
       dmAvailable: true,
     });
