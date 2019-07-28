@@ -2,6 +2,7 @@ const Command = require(`../classes/Command`);
 const { RichEmbed } = require(`discord.js`);
 const Library = require(`../lib/index.js`);
 const { fetchuser } = require(`../utils/fetchuser`);
+const getDiscordUser = require(`../utils/DiscordUserGetter`);
 
 const matchErr = `you can't compare your taste with your taste, ` +
 `that's illogical.`;
@@ -42,41 +43,28 @@ class TasteCommand extends Command {
         this.context.reason = client.snippets.commonReasons.noLogin;
         throw this.context;
       }
-      let userID;
-      const mention = message.mentions.users.first();
-      if (mention && mention.id === message.author.id) {
+      const discordUser = getDiscordUser(message, args.join(` `));
+      if (!discordUser) {
+        await message.reply(client.snippets.userNotFound);
+        this.context.reason = client.snippets.commonReasons.userNotFound;
+        throw this.context;
+      } else if (discordUser.id === message.author.id) {
         await message.reply(matchErr);
         this.context.reason = matchReason;
         throw this.context;
       }
-      if (mention) {
-        userID = mention.id;
-      } else {
-        const typed = mention ? mention.id : message.guild.members.find(x => {
-          const user = args.join(` `).toLowerCase();
-          return user === x.user.username.toLowerCase();
-        });
-        if (typed) {
-          if (typed.id === message.author.id) {
-            await message.reply(matchErr);
-            this.context.reason = matchReason;
-            throw this.context;
-          } else {
-            userID = typed.id;
-          }
-        }
-      }
-      if (!userID) {
-        await message.channel.send(`Couldn't find the user in Discord. Make ` +
-        `sure you provided a valid user correctly and try again!`);
-        this.context.reason = `Target user wasn't found.`;
-        throw this.context;
-      }
+      const userID = discordUser.id;
       const user = await fetchUser.usernameFromId(userID);
       if (!user) {
-        await message.channel.send(`This user hasn't logged on to my system.`);
-        this.context.reason = `Target user is not registered in the database.`;
-        throw this.context;
+        if (userID === message.author.id) {
+          await message.reply(client.snippets.noLogin);
+          this.context.reason = client.snippets.commonReasons.noLogin;
+          throw this.context;
+        } else {
+          await message.reply(client.snippets.userNoLogin);
+          this.context.reason = client.snippets.commonReasons.userNoLogin;
+          throw this.context;
+        }
       }
       const authorData = await lib.user.getTopArtists(author, `overall`, `150`);
       const userData = await lib.user.getTopArtists(user, `overall`, `150`);

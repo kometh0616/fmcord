@@ -1,5 +1,6 @@
 const Command = require(`../classes/Command`);
 const { fetchuser } = require(`../utils/fetchuser`);
+const getDiscordUser = require(`../utils/DiscordUserGetter`);
 
 class LFMCommand extends Command {
 
@@ -17,7 +18,7 @@ class LFMCommand extends Command {
     this.setContext(message);
     try {
       const fuser = new fetchuser(client, message);
-      const discordUser = args[0] ? message.mentions.users.first() : message.author;
+      const discordUser = getDiscordUser(message, args.join(` `));
 
       if (discordUser) {
         const user = await fuser.getById(discordUser.id);

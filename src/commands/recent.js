@@ -2,6 +2,7 @@ const Command = require(`../classes/Command`);
 const Library = require(`../lib/index.js`);
 const { RichEmbed } = require(`discord.js`);
 const { fetchuser } = require(`../utils/fetchuser`);
+const getDiscordUser = require(`../utils/DiscordUserGetter`);
 
 class RecentCommand extends Command {
 
@@ -17,17 +18,33 @@ class RecentCommand extends Command {
     });
   }
 
-  async run(client, message) {
+  async run(client, message, args) {
     this.setContext(message);
     try {
       const color = message.member ? message.member.displayColor : 16777215;
       const lib = new Library(client.config.lastFM.apikey);
       const fetchUser = new fetchuser(client, message);
-      const user = await fetchUser.username();
-      if (!user) {
-        await message.reply(client.snippets.noLogin);
-        this.context.reason = client.snippets.commonReasons.noLogin;
-        throw this.context;
+      let user;
+      if (args[0]) {
+        const member = getDiscordUser(message, args.join(` `));
+        if (!member) {
+          await message.reply(client.snippets.userNotFound);
+          this.context.reason = client.snippets.commonReasons.userNotFound;
+          throw this.context;
+        }
+        user = await fetchUser.usernameFromId(member.id);
+        if (!user) {
+          await message.reply(client.snippets.userNoLogin);
+          this.context.reason = client.snippets.commonReasons.userNoLogin;
+          throw this.context;
+        }
+      } else {
+        user = await fetchUser.username();
+        if (!user) {
+          await message.reply(client.snippets.noLogin);
+          this.context.reason = client.snippets.commonReasons.noLogin;
+          throw this.context;
+        }
       }
       const data = await lib.user.getRecentTracks(user);
       const userData = await lib.user.getInfo(user);
@@ -50,8 +67,8 @@ class RecentCommand extends Command {
         .setTitle(`Last tracks from ${user}`)
         .setURL(userData.user.url)
         .setThumbnail(data.recenttracks.track[0].image[2][`#text`])
-        .setFooter(`Command invoked by ${message.author.tag} with a total ` +
-        `of ${userData.user.playcount} scrobbles.`)
+        .setFooter(`Command invoked by ${message.author.tag}. ` +
+        `Target user's scrobbles: ${userData.user.playcount}.`)
         .setTimestamp();
       await message.channel.send({ embed });
       return this.context;

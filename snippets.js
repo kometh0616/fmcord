@@ -14,6 +14,8 @@ module.exports = {
   npNoLogin: `you haven't registered your Last.fm ` +
   `account, therefore, I can't check what you're listening to. To set ` +
   `your Last.fm nickname, do \`${config.prefix}login <lastfm username>\`.`,
+  userNotFound: `Couldn't find the user in Discord. Make sure you provided a valid user correctly and try again!`,
+  userNoLogin: `Couldn't find the user in my database. Make sure you provided a valid user correctly and try again!`,
   arrowLeft: `⬅`,
   arrowRight: `➡`,
   exit: `❌`,
@@ -22,6 +24,7 @@ module.exports = {
     noLogin: `Message author wasn't logged in.`,
     notPlaying: `No currently playing track found.`,
     noArtist: `No artist provided by the message author.`,
-    noUsername: `No username provided by the message author`,
+    noUsername: `No username provided by the message author.`,
+    userNotFound: `Target user wasn't found.`
   }
 };

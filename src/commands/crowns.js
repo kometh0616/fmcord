@@ -2,6 +2,7 @@ const Command = require(`../classes/Command`);
 const { RichEmbed } = require(`discord.js`);
 const { fetchuser } = require(`../utils/fetchuser`);
 const ReactionInterface = require(`../utils/ReactionInterface`);
+const getDiscordMember = require(`../utils/DiscordUserGetter`);
 
 class CrownsCommand extends Command {
 
@@ -46,30 +47,25 @@ class CrownsCommand extends Command {
           `\`${client.config.prefix}crowns --notify\` again.`);
         }
       } else {
-        let member;
-        const mention = message.mentions.members.first();
-        if (mention) {
-          member = mention;
-        } else if (args.length > 0) {
-          const username = args.join(` `).toLowerCase();
-          const ourMember = message.guild.members
-            .find(x => x.user.username.toLowerCase() === username);
-          if (ourMember) member = ourMember;
-          else {
-            message.reply(`no user with username ${args.join(` `)} found.`);
-            this.context.reason = client.snippets.commonReasons.noUsername;
-            throw this.context;
-          }
-        } else {
-          member = message.member;
+        const member = getDiscordMember(message, args.join(` `));
+        if (!member) {
+          await message.reply(client.snippets.userNotFound);
+          this.context.reason = client.snippets.commonReasons.userNotFound;
+          throw this.context;
         }
         const fetchUser = new fetchuser(client, message);
         const Crowns = client.sequelize.import(`../models/Crowns.js`);
         const user = await fetchUser.getById(member.id);
         if (!user) {
-          await message.reply(client.snippets.noLogin);
-          this.context.reason = client.snippets.commonReasons.noLogin;
-          throw this.context;
+          if (member.id === message.author.id) {
+            await message.reply(client.snippets.noLogin);
+            this.context.reason = client.snippets.commonReasons.noLogin;
+            throw this.context;
+          } else {
+            await message.reply(client.snippets.userNoLogin);
+            this.context.reason = client.snippets.commonReasons.userNoLogin;
+            throw this.context;
+          }
         }
         const URL = `https://last.fm/user/${user.get(`lastFMUsername`)}`;
         const userCrowns = await Crowns.findAll({
