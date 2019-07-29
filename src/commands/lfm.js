@@ -10,7 +10,6 @@ class LFMCommand extends Command {
       description: `Gets the LastFM URL of you or a given user.`,
       usage: `lfm [Discord User]`,
       notes: `The looked up user must be logged in to LastFM with the bot.`,
-      dmAvailable: true,
     });
   }
 
@@ -18,13 +17,27 @@ class LFMCommand extends Command {
     this.setContext(message);
     try {
       const fuser = new fetchuser(client, message);
-      const discordUser = getDiscordUser(message, args.join(` `));
+      let discordUser;
+      
+      if (args[0]) {
+        discordUser = getDiscordUser(message, args.join(` `));
+        if (!discordUser) {
+          await message.reply(`\`${args.join(` `)}\` is not a valid user.`);
+          this.context.reason = `No valid user found.`;
+          throw this.context;
+        }
+      } else {
+        discordUser = message.author;
+      }
 
       if (discordUser) {
         const user = await fuser.getById(discordUser.id);
 
         if (user) {
-          await message.channel.send(`\`${discordUser.username}'s\` LastFM URL is: https://last.fm/user/${user.get(`lastFMUsername`)}`);
+          await message.channel.send(
+            `\`${discordUser.user ? discordUser.user.username : discordUser.username}'s\` ` +
+            `LastFM URL is: https://last.fm/user/${user.get(`lastFMUsername`)}`
+          );
           return this.context;
         } else {
           await message.reply(`\`${discordUser.username}\` is not logged into LastFM.`);

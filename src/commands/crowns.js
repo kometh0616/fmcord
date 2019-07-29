@@ -47,11 +47,16 @@ class CrownsCommand extends Command {
           `\`${client.config.prefix}crowns --notify\` again.`);
         }
       } else {
-        const member = getDiscordMember(message, args.join(` `));
-        if (!member) {
-          await message.reply(client.snippets.userNotFound);
-          this.context.reason = client.snippets.commonReasons.userNotFound;
-          throw this.context;
+        let member;
+        if (args[0]) {
+          member = getDiscordMember(message, args.join(` `));
+          if (!member) {
+            await message.reply(client.snippets.userNotFound);
+            this.context.reason = client.snippets.commonReasons.userNotFound;
+            throw this.context;
+          }
+        } else {
+          member = message.member;
         }
         const fetchUser = new fetchuser(client, message);
         const Crowns = client.sequelize.import(`../models/Crowns.js`);

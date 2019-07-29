@@ -1,6 +1,6 @@
 module.exports = (message, user) => {
-  if (message.mentions.users.first()) {
-    return message.mentions.users.first();
+  if (message.mentions.members.first()) {
+    return message.mentions.members.first();
   }
   const matchingFunctions = [
     member => member.user.tag.toLowerCase() === user.toLowerCase(),
@@ -9,7 +9,6 @@ module.exports = (message, user) => {
     member => member.nickname && member.nickname.toLowerCase() === user.toLowerCase()
   ];
   for (const fn of matchingFunctions) {
-    console.log(message.guild.members.some(fn));
     if (message.guild.members.some(fn)) {
       return message.guild.members.find(fn);
     }
