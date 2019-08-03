@@ -27,10 +27,7 @@ class PlaysCommand extends Command {
       const user = await fetchUser.username();
       if (!artistName) {
         if (!user) {
-          await message.reply(`you haven't registered your Last.fm ` +
-          `account, therefore, I can't check what you're listening to. To set ` +
-          `your Last.fm nickname, do \`${client.config.prefix}login ` +
-          `<lastfm username>\`.`);
+          await message.reply(client.snippets.npNoLogin);
           this.context.reason = client.snippets.commonReasons.noLogin;
           throw this.context;
         }
@@ -51,10 +48,26 @@ class PlaysCommand extends Command {
       const data = await lib.artist.getInfo(artistName, user);
 
       const { name, stats } = data.artist;
-      if (!stats.userplaycount || stats.userplaycont === `0`)
+      if (!stats.userplaycount || stats.userplaycount === `0`) {
         await message.reply(`you haven't scrobbled \`${name}\`.`);
-      else await message.reply(`you have scrobbled \`${name}\` ` +
-      `**${stats.userplaycount}** times.`);
+      } else {
+        await message.reply(`you have scrobbled \`${name}\` ` +
+        `**${stats.userplaycount}** times.`);
+        const Crowns = client.sequelize.import(`../models/Crowns.js`);
+        const where = {
+          where: {
+            guildID: message.guild.id,
+            userID: message.author.id,
+            artistName: name,
+          }
+        };
+        const hasCrown = await Crowns.count({ ...where });
+        if (hasCrown) {
+          await Crowns.update({
+            artistPlays: stats.userplaycount
+          }, { ...where });
+        } 
+      }
       return this.context;
     } catch (e) {
       this.context.stack = e.stack;

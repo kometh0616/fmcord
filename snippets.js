@@ -26,5 +26,7 @@ module.exports = {
     noArtist: `No artist provided by the message author.`,
     noUsername: `No username provided by the message author.`,
     userNotFound: `Target user wasn't found.`
-  }
+  },
+  languages: [`en`, `de`, `es`, `fr`, `it`, `ja`, `pl`, `ru`, `sv`, `tr`, `zh`],
+  hrefRegex: /<a href=.+/gi
 };

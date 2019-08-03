@@ -4,6 +4,7 @@ const { fetchuser } = require(`../utils/fetchuser`);
 const { fetchtrack } = require(`../utils/fetchtrack`);
 const { Op } = require(`sequelize`);
 const Library = require(`../lib/index.js`);
+const ReactionInterface = require(`../utils/ReactionInterface`);
 
 const sortingFunc = (a, b) => parseInt(b.plays) - parseInt(a.plays);
 
@@ -49,7 +50,7 @@ class WhoKnowsCommand extends Command {
           artistName = track.artist[`#text`];
         }
       }
-      const know = [];
+      let know = [];
       const data = await lib.artist.getInfo(artistName);
 
       if (!data.artist) {
@@ -133,22 +134,55 @@ class WhoKnowsCommand extends Command {
         this.context.reason = `No listeners of the artist found.`;
         throw this.context;
       }
-      know.sort(sortingFunc);
+      know = know
+        .sort(sortingFunc)
+        .filter(k => k.plays !== `0`);
       let x = 0;
       const description = know
         .sort(sortingFunc)
         .slice(0, 10)
-        .filter(k => k.plays !== `0`)
         .map(k => `${++x}. ${k.name} - **${k.plays}** plays`)
         .join(`\n`);
       const embed = new RichEmbed()
         .setColor(message.member.displayColor)
-        .setTitle(`Who knows ${data.artist.name} in ${message.member.guild.name}?`)
+        .setTitle(`Who knows ${data.artist.name} in ${message.guild.name}?`)
         .setURL(data.artist.url)
         .setDescription(description)
         .setFooter(`Command invoked by ${message.author.tag}`)
         .setTimestamp();
-      await message.channel.send({embed});
+      const msg = await message.channel.send({ embed });
+      if (know.length > 10) {
+        let offset = 0, page = 1;
+        const totalPages = Math.ceil(know.length / 10);
+        const func = async off => {
+          let num = off;
+          const embed = new RichEmbed()
+            .setColor(message.member.displayColor)
+            .setTitle(`Who knows ${data.artist.name} in ${message.guild.name}?`)
+            .setURL(data.artist.url)
+            .setDescription(know
+              .slice(off, off + 10)
+              .map(x => `${++num}. ${x.name} - **${x.plays}** plays`)
+              .join(`\n`))
+            .setFooter(`Command invoked by ${message.author.tag}`)
+            .setTimestamp();
+          await msg.edit({ embed });
+        };
+        const ri = new ReactionInterface(msg, message.author);
+        await ri.setKey(client.snippets.arrowLeft, async () => {
+          if (page !== 1) {
+            offset -= 10, page--;
+            await func(offset);
+          }
+        });
+        await ri.setKey(client.snippets.arrowRight, async () => {
+          if (page !== totalPages) {
+            offset += 10, page++;
+            await func(offset);
+          }
+        });
+        await ri.setKey(client.snippets.exit, ri.destroy);
+      }
       return this.context;
     } catch (e) {
       if (e.name !== `SequelizeUniqueConstraintError`) {
