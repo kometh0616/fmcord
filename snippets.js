@@ -28,5 +28,9 @@ module.exports = {
     userNotFound: `Target user wasn't found.`
   },
   languages: [`en`, `de`, `es`, `fr`, `it`, `ja`, `pl`, `ru`, `sv`, `tr`, `zh`],
-  hrefRegex: /<a href=.+/gi
+  hrefRegex: /<a href=.+/gi,
+  truncate: text => {
+    const txt = text.replace(this.hrefRegex, ``);
+    return txt.length > 768 ? `${txt.slice(0, 768)}...` : txt;
+  }
 };

@@ -19,7 +19,7 @@ module.exports = params => {
         try {
           const data = JSON.parse(rawData);
           if (data.error) {
-            reject(new Error(`${data.error.message}`));
+            reject(new Error(`${data.message}`));
           }
           resolve(data);
         } catch (e) {

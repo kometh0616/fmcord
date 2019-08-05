@@ -1,7 +1,6 @@
 const Command = require(`../classes/Command`);
 const request = require(`../utils/Request`);
 const { RichEmbed } = require(`discord.js`);
-const truncate = text => text.length > 768 ? `${text.slice(0, 768)}...` : text;
 
 class GenreInfoCommand extends Command {
   
@@ -62,10 +61,14 @@ class GenreInfoCommand extends Command {
       const embed = new RichEmbed()
         .setColor(color)
         .setTitle(`Information about ${data.tag.name}`)
-        .addField(`Total uses of the genre:`, data.tag.total)
-        .addField(`Genre listeners: `, data.tag.reach);
+        .addField(`Total uses of the genre:`, data.tag.total, true)
+        .addField(`Genre listeners: `, data.tag.reach, true);
       if (/ +/gi.test(content)) {
-        embed.addField(`Information: `, truncate(content));
+        embed.addField(
+          `Information: `,
+          client.snippets.truncate(content),
+          true
+        );
       }
       embed
         .setFooter(`Command executed by ${tag}`, avatarURL)

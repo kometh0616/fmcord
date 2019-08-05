@@ -8,7 +8,7 @@ exports.run = async (client, message, args) => {
       (async () => {
         const channel = this.channels.get('${channelID}');
         if (channel) {
-          await channel.send('${content}');
+          await channel.send('${content.replace(`'`, `\\'`)}');
           return true;
         } else {
           return false;
