@@ -37,7 +37,9 @@ const sequelize = new Sequelize(`database`, `user`, `password`, {
   storage: `.data/database.sqlite`
 });
 
-const client = new Client();
+const client = new Client({
+  disableEveryone: true
+});
 client.config = config;
 client.commands = new Collection();
 client.cooldowns = [];
