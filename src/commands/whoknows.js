@@ -185,7 +185,11 @@ class WhoKnowsCommand extends Command {
       }
       return this.context;
     } catch (e) {
-      if (e.name !== `SequelizeUniqueConstraintError`) {
+      if (e.message === `The artist you supplied could not be found`) {
+        await message.reply(client.snippets.artistNotFound(args.join(` `)));
+        this.context.reason = client.snippets.commonReasons.artistNotFound;
+        throw this.context;
+      } else if (e.name !== `SequelizeUniqueConstraintError`) {
         this.context.stack = e.stack;
         throw this.context;
       }

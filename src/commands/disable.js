@@ -1,4 +1,5 @@
 const Command = require(`../classes/Command`);
+const { Op } = require(`sequelize`);
 
 class DisableCommand extends Command {
 
@@ -26,6 +27,7 @@ class DisableCommand extends Command {
         throw this.context;
       }
       const Disables = client.sequelize.import(`../models/Disables.js`);
+      const guildFlag = args[1] === `--guild`;
       const disable = async () => {
         const isValid = client.commands.has(args[0].toLowerCase());
         if (!isValid) {
@@ -33,37 +35,40 @@ class DisableCommand extends Command {
           this.context.reason = `No such command found.`;
           throw this.context;
         }
-        const guildFlag = args[1] === `--guild`;
-        let dbParams = {
-          guildID: message.guild.id,
-          channelID: message.channel.id,
+        const dbParams = {
+          discordID: message.channel.id,
           cmdName: args[0].toLowerCase(),
         };
         const reply = `command \`${args[0].toLowerCase()}\` was succesfully ` +
         `disabled in ${guildFlag ? message.guild.name : `this channel`}!`;
-        if (guildFlag) dbParams = {
-          guildID: message.guild.id,
-          cmdName: args[0].toLowerCase(),
-          guildDisabled: true,
-        };
+        if (guildFlag) {
+          dbParams.discordID = message.guild.id;
+        }
         await Disables.create(dbParams);
         await message.reply(reply);
       };
       const isDisabled = await Disables.findOne({
         where: {
-          guildID: message.guild.id,
+          discordID: {
+            [Op.or]: [message.guild.id, message.channel.id]
+          },
           cmdName: args[0].toLowerCase()
         }
       });
       if (isDisabled) {
-        if (isDisabled.guildDisabled) await message.reply(`this command is ` +
-        `already disabled in an entire guild! To re-enable it, do ` +
-        `\`${client.config.prefix}enable <command>\`.`);
-        else if (isDisabled.channelID !== message.channel.id) disable();
-        else await message.reply(`this command is ` +
-        `already disabled in this channel! To re-enable it, do ` +
-        `\`${client.config.prefix}enable <command>\`.`);
-      } else disable();
+        const reply = `command \`${args[0]}\` is already disabled in `;
+        if (isDisabled.discordID === message.channel.id) {
+          if (guildFlag) {
+            await disable();
+          } else {
+            await message.reply(`${reply}this channel.`);
+          }
+        } else {
+          await message.reply(`${reply}${message.guild.id}`);
+        }
+      } else {
+        await disable();
+      }
       return this.context;
     } catch (e) {
       this.context.stack = e.stack;

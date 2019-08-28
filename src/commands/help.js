@@ -98,13 +98,13 @@ class HelpCommand extends Command {
           const embed = new RichEmbed()
             .setColor(color)
             .setTitle(`Command ${command.name}`)
-            .addField(`Usage:`, command.usage)
+            .addField(`Usage:`, `${client.config.prefix}${command.usage}`)
             .setFooter(`Command executed by ${message.author.tag}`, message.author.avatarURL)
             .setTimestamp();
           if (command.notes) {
             embed.addField(`Notes:`, command.notes);
           }
-          if (command.aliases) {
+          if (command.aliases.length > 0) {
             embed.addField(`Shortcuts:`, command.aliases.join(`, `));
           }
           await message.channel.send({ embed });

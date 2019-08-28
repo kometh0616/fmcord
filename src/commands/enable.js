@@ -1,4 +1,5 @@
 const Command = require(`../classes/Command`);
+const { Op } = require(`sequelize`);
 
 class EnableCommand extends Command {
 
@@ -28,7 +29,9 @@ class EnableCommand extends Command {
       }
       const dbParams = {
         where: {
-          guildID: message.guild.id,
+          discordID: {
+            [Op.or]: [message.guild.id, message.channel.id]
+          },
           cmdName: args[0].toLowerCase()
         }
       };
@@ -36,24 +39,29 @@ class EnableCommand extends Command {
       if (!disabled) {
         await message.reply(`command \`${args[0].toLowerCase()}\` wasn't ` +
         `disabled previously.`);
+        this.context.reason = `Command wasn't disabled previously.`;
+        throw this.context;
       }
-      if (disabled.guildDisabled) await Disables.destroy({
-        where: {
-          guildID: message.guild.id,
-          cmdName: args[0].toLowerCase(),
-          guildDisabled: true
-        }
-      });
-      else await Disables.destroy({
-        where: {
-          guildID: message.guild.id,
-          channelID: message.channel.id,
-          cmdName: args[0].toLowerCase(),
-        }
-      });
+      if (disabled.discordID === message.channel.id) {
+        await Disables.destroy({
+          where: {
+            discordID: message.channel.id,
+            cmdName: args[0].toLowerCase()
+          }
+        });
+      } else {
+        const IDs = message.guild.channels.filter(x => x.type === `text`)
+          .map(x => x.id);
+        await Disables.destroy({
+          where: {
+            discordID: [...IDs, message.guild.id],
+            cmdName: args[0].toLowerCase()
+          }
+        });
+      }
+      const disabledIn = disabled.discordID === message.channel.id ? `this channel` : message.guild.name;
       await message.reply(`command \`${args[0].toLowerCase()}\` enabled ` +
-      `in ${disabled.guildDisabled ? message.guild.name : `this channel`} ` +
-      `succesfully!`);
+      `in ${disabledIn} succesfully!`);
       return this.context;
     } catch (e) {
       this.context.stack = e.stack;

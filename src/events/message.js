@@ -1,3 +1,4 @@
+const { Op } = require(`sequelize`);
 module.exports = async (client, message) => {
   if (message.author.bot || !message.content.startsWith(client.config.prefix))
     return;
@@ -16,7 +17,9 @@ module.exports = async (client, message) => {
       const command = new Command();
       const isDisabled = message.guild ? await Disables.findOne({
         where: {
-          guildID: message.guild.id,
+          discordID: {
+            [Op.or]: [message.guild.id, message.channel.id]
+          },
           cmdName: command.name
         }
       }) : null;
@@ -51,10 +54,10 @@ module.exports = async (client, message) => {
         `your command is executed.`);
       }
       if (isDisabled) {
-        if (isDisabled.guildDisabled) {
+        if (isDisabled.discordID === message.guild.id) {
           return message.reply(`command \`${command.name}\` is disabled in ` +
           `${message.guild.name}.`);
-        } else if (isDisabled.channelID === message.channel.id) {
+        } else {
           return message.reply(`command \`${command.name}\` is disabled in ` +
           `this channel.`);
         }

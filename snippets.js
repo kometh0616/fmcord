@@ -16,6 +16,7 @@ module.exports = {
   `your Last.fm nickname, do \`${config.prefix}login <lastfm username>\`.`,
   userNotFound: `Couldn't find the user in Discord. Make sure you provided a valid user correctly and try again!`,
   userNoLogin: `Couldn't find the user in my database. Make sure you provided a valid user correctly and try again!`,
+  artistNotFound: artist => `couldn't find an artist named \`${artist}\`. Please check your artist's name for typos or try a different artist.`,
   arrowLeft: `⬅`,
   arrowRight: `➡`,
   exit: `❌`,
@@ -25,7 +26,8 @@ module.exports = {
     notPlaying: `No currently playing track found.`,
     noArtist: `No artist provided by the message author.`,
     noUsername: `No username provided by the message author.`,
-    userNotFound: `Target user wasn't found.`
+    userNotFound: `Target user wasn't found.`,
+    artistNotFound: `No artist found.`
   },
   languages: [`en`, `de`, `es`, `fr`, `it`, `ja`, `pl`, `ru`, `sv`, `tr`, `zh`],
   hrefRegex: /<a href=.+/gi,

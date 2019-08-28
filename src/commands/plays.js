@@ -70,8 +70,14 @@ class PlaysCommand extends Command {
       }
       return this.context;
     } catch (e) {
-      this.context.stack = e.stack;
-      throw this.context;
+      if (e.message === `The artist you supplied could not be found`) {
+        await message.reply(client.snippets.artistNotFound(args.join(` `)));
+        this.context.reason = client.snippets.commonReasons.artistNotFound;
+        throw this.context;
+      } else {
+        this.context.stack = e.stack;
+        throw this.context;
+      }
     }
   }
 

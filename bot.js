@@ -4,8 +4,21 @@ const fs = require(`fs`);
 const DBL = require(`dblapi.js`);
 const { Client, Collection } = require(`discord.js`);
 const config = require(`./config.json`);
+const canvas = require(`canvas`);
 
 const app = express();
+
+if (process.platform === `win32`) {
+  process.env.PWD = process.cwd();
+  // NOTE: Inconsolata font is not as good at covering non-Latin symbols as Noto Sans is. 
+  canvas.registerFont(`${process.env.PWD}/fonts/Inconsolata.otf`, {
+    family: `inconsolata`
+  });  
+} else {
+  canvas.registerFont(`${process.env.PWD}/fonts/NotoSansCJK-Regular.ttc`, {
+    family: `noto-sans`
+  });
+}
 
 app.get(`/`, (request, response) => {
   response.sendStatus(200);

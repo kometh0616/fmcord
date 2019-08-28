@@ -2,9 +2,6 @@ const Command = require(`../classes/Command`);
 const { fetchuser } = require(`../utils/fetchuser`);
 const Library = require(`../lib/index.js`);
 const canvas = require(`canvas`);
-canvas.registerFont(`${process.env.PWD}/NotoSansCJK-Regular.ttc`, {
-  family: `noto-sans`
-});
 
 class ChartCommand extends Command {
 
@@ -146,7 +143,7 @@ class ChartCommand extends Command {
       fctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
       fctx.drawImage(canv, 0, 0);
       fctx.fillStyle = `white`;
-      fctx.font = `12px noto-sans`;
+      fctx.font = `12px ${process.platform === `win32` ? `inconsolata` : `noto-sans`}`;
       let i = 0;
       for (let byChart = 0; byChart < 100 * y; byChart += 100) {
         for (let inChart = 15; inChart <= 15 * x; inChart += 15) {
