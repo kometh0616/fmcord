@@ -26,11 +26,18 @@ You can invite the bot to your Discord server with this [link.](https://discordb
 
 ### Self-hosting
 
-To run your own copy of FMcord, do this in your terminal:
+To clone this repository, do this in your terminal:
 ```
 git clone https://github.com/kometh0616/fmcord.git
 cd fmcord
 ```
+
+You'll need to create a folder where `database.sqlite` will be stored as well:
+```
+mkdir .data
+```
+Make sure the folder is called .data.
+
 Now, you need to store your credentials in a `config.json` file. There are 2 ways to add them:
 1. Filling in `config.example.json` file
 2. Using a prompt in `index.js` file
