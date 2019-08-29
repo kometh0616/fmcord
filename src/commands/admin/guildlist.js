@@ -9,8 +9,7 @@ exports.run = async (client, message) => {
         .map(x => x.name + ' with ' + x.memberCount + ' members')
     `);
     const list = guilds
-      .flat()
-      .map(x => `${++num}. ${x}`)
+      .flatMap(x => [`${++num}. ${x}`])
       .join(`\r\n`);
     await writeFile(path, list);
     await message.channel.send({ files: [{

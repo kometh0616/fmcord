@@ -26,6 +26,10 @@ class EnableCommand extends Command {
         await message.reply(`I don't recognise a command ${args[0]}.`);
         this.context.reason = `No such command found.`;
         throw this.context;
+      } else if (args[0].toLowerCase() === this.name || args[0].toLowerCase() === `enable`) {
+        await message.reply(`I cannot enable command \`${args[0]}\`.`);
+        this.context.reason = `Immune command.`;
+        throw this.context;
       }
       const dbParams = {
         where: {

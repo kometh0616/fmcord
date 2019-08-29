@@ -1,7 +1,13 @@
 module.exports = (sequelize, DataTypes) => {
   const Disables = sequelize.define(`disables`, {
-    discordID: DataTypes.STRING,
-    cmdName: DataTypes.STRING
+    discordID: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    cmdName: {
+      type: DataTypes.STRING,
+      allowNull: false
+    }
   }, {
     indexes: [{
       unique: true,

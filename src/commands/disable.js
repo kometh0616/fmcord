@@ -34,16 +34,17 @@ class DisableCommand extends Command {
           await message.reply(`I don't recognise a command ${args[0]}.`);
           this.context.reason = `No such command found.`;
           throw this.context;
+        } else if (args[0].toLowerCase() === this.name || args[0].toLowerCase() === `disable`) {
+          await message.reply(`I cannot disable command \`${args[0]}\`.`);
+          this.context.reason = `Immune command.`;
+          throw this.context;
         }
         const dbParams = {
-          discordID: message.channel.id,
+          discordID: guildFlag ? message.guild.id : message.channel.id,
           cmdName: args[0].toLowerCase(),
         };
         const reply = `command \`${args[0].toLowerCase()}\` was succesfully ` +
         `disabled in ${guildFlag ? message.guild.name : `this channel`}!`;
-        if (guildFlag) {
-          dbParams.discordID = message.guild.id;
-        }
         await Disables.create(dbParams);
         await message.reply(reply);
       };
@@ -63,8 +64,8 @@ class DisableCommand extends Command {
           } else {
             await message.reply(`${reply}this channel.`);
           }
-        } else {
-          await message.reply(`${reply}${message.guild.id}`);
+        } else if (isDisabled.discordID === message.guild.id) {
+          await message.reply(`${reply}${message.guild.name}`);
         }
       } else {
         await disable();
