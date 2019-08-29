@@ -12,12 +12,8 @@ class Artist extends Client {
       api_key: this.apikey,
       format: `json`
     });
-    try {
-      const data = await this.request(this.rootURL + query);
-      return data;
-    } catch (e) {
-      throw e;
-    }
+    const data = await this.request(this.rootURL + query);
+    return data;
   }
 }
 

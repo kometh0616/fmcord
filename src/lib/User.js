@@ -12,12 +12,8 @@ class User extends Client {
       api_key: this.apikey,
       format: `json`,
     });
-    try {
-      const data = await this.request(this.rootURL + query);
-      return data;
-    } catch (e) {
-      throw e;
-    }
+    const data = await this.request(this.rootURL + query);
+    return data;
   }
 
   async getTopAlbums(user, period = `overall`, limit = `50`, page = `1`) {
@@ -30,12 +26,8 @@ class User extends Client {
       api_key: this.apikey,
       format: `json`
     });
-    try {
-      const data = await this.request(this.rootURL + query);
-      return data;
-    } catch (e) {
-      throw e;
-    }
+    const data = await this.request(this.rootURL + query);
+    return data;
   }
 
   async getRecentTracks(user, from) {
@@ -46,12 +38,8 @@ class User extends Client {
       api_key: this.apikey,
       format: `json`
     });
-    try {
-      const data = await this.request(this.rootURL + query);
-      return data;
-    } catch (e) {
-      throw e;
-    }
+    const data = await this.request(this.rootURL + query);
+    return data;
   }
 
   async getTopTracks(user, period = `overall`, limit = `50`, page = `1`) {
@@ -64,12 +52,8 @@ class User extends Client {
       api_key: this.apikey,
       format: `json`
     });
-    try {
-      const data = await this.request(this.rootURL + query);
-      return data;
-    } catch (e) {
-      throw e;
-    }
+    const data = await this.request(this.rootURL + query);
+    return data;
   }
 
   async getTopArtists(user, period = `overall`, limit = `50`, page = `1`) {
@@ -82,12 +66,8 @@ class User extends Client {
       api_key: this.apikey,
       format: `json`
     });
-    try {
-      const data = await this.request(this.rootURL + query);
-      return data;
-    } catch (e) {
-      throw e;
-    }
+    const data = await this.request(this.rootURL + query);
+    return data;
   }
 
 }
