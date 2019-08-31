@@ -10,7 +10,7 @@ const app = express();
 
 if (process.platform === `win32`) {
   process.env.PWD = process.cwd();
-  // NOTE: Inconsolata font is not as good at covering non-Latin symbols as Noto Sans is. 
+  // NOTE: Inconsolata font is not as good at covering non-ASCII symbols as Noto Sans is. 
   canvas.registerFont(`${process.env.PWD}/fonts/Inconsolata.otf`, {
     family: `inconsolata`
   });  

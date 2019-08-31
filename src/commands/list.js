@@ -80,7 +80,7 @@ class ListCommand extends Command {
         [rootProp, subProp] = [`toptracks`, `track`];
       } else {
         await message.reply(`you haven't defined a proper list type! Correct usage ` +
-        `would be \`${client.config.prefix}list <list type> <time period> <list length>\``);
+        `would be \`${client.prefix}list <list type> <time period> <list length>\``);
       }
       if (!listLength) {
         listLength = parseInt(args[2]);

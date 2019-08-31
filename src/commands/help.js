@@ -40,7 +40,7 @@ class HelpCommand extends Command {
           const embed = new RichEmbed()
             .setColor(color)
             .setTitle(`Command ${x.name}`)
-            .addField(`Usage:`, `${client.config.prefix}${x.usage}`)
+            .addField(`Usage:`, `${client.prefix}${x.usage}`)
             .addField(`Description:`, x.description)
             .setFooter(`Page ${++pages}/${helpCommands.length} | Command ` +
             `executed by ${message.author.tag}`, message.author.avatarURL)
@@ -80,7 +80,7 @@ class HelpCommand extends Command {
             .setTitle(`FMcord's commands`)
             .setThumbnail(client.user.avatarURL)
             .setColor(color)
-            .setDescription(`Do \`${client.config.prefix}help ` +
+            .setDescription(`Do \`${client.prefix}help ` +
             `<command name>\` to get more information on a command!`)
             .addField(`Available commands`, commands)
             .setFooter(`Command executed by ${message.author.tag}`, message.author.avatarURL)
@@ -98,7 +98,7 @@ class HelpCommand extends Command {
           const embed = new RichEmbed()
             .setColor(color)
             .setTitle(`Command ${command.name}`)
-            .addField(`Usage:`, `${client.config.prefix}${command.usage}`)
+            .addField(`Usage:`, `${client.prefix}${command.usage}`)
             .setFooter(`Command executed by ${message.author.tag}`, message.author.avatarURL)
             .setTimestamp();
           if (command.notes) {

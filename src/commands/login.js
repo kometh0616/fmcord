@@ -33,7 +33,7 @@ class LoginCommand extends Command {
       const alreadyExists = await fetchUser.get();
       if (alreadyExists) {
         await message.reply(`you already have logged in via this bot! Please ` +
-        `do \`${client.config.prefix}logout\` if you want to ` +
+        `do \`${client.prefix}logout\` if you want to ` +
         `use a different account.`);
         this.context.reason = `User is already logged in.`;
         throw this.context;

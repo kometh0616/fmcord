@@ -35,7 +35,7 @@ class CrownsCommand extends Command {
           `DM's (you can do so by going to Settings -> Privacy and Security ` +
           `-> Allow direct messages from server members.) so that I could ` +
           `notify you.\nYou can always disable this feature by doing ` +
-          `\`${client.config.prefix}crowns --notify\` again.`);
+          `\`${client.prefix}crowns --notify\` again.`);
         } else {
           await Notifs.destroy({
             where: {
@@ -44,7 +44,7 @@ class CrownsCommand extends Command {
           });
           await message.reply(`you will no longer be notified when someone ` +
           `takes your crown.\nTo re-enable this feature, do ` +
-          `\`${client.config.prefix}crowns --notify\` again.`);
+          `\`${client.prefix}crowns --notify\` again.`);
         }
       } else {
         let member;
