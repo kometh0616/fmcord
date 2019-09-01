@@ -52,6 +52,11 @@ class ListCommand extends Command {
         timePeriod = `1month`;
         period = `monthly`;
         break;
+      case `yearly`:
+      case `y`:
+        timePeriod = `12month`;
+        period = `yearly`;
+        break;
       case `alltime`:
       case `a`:
         timePeriod = `overall`;
@@ -70,17 +75,19 @@ class ListCommand extends Command {
         }
         break;
       }
-      if (args[0] === `artists` || args[0] === `a`) {
+      if ([`artists`, `a`].includes(args[0])) {
         data = await lib.user.getTopArtists(user, timePeriod);
         mapFunc = x => `${++num}. **${x.name}** - ${x.playcount} plays`;
         [rootProp, subProp] = [`topartists`, `artist`];
-      } else if (args[0] === `songs` || args[0] === `s`) {
+      } else if ([`songs`, `s`].includes(args[0])) {
         data = await lib.user.getTopTracks(user, timePeriod);
         mapFunc = x => `${++num}. **${x.name}** by **${x.artist.name}** - ${x.playcount} plays`;
         [rootProp, subProp] = [`toptracks`, `track`];
       } else {
         await message.reply(`you haven't defined a proper list type! Correct usage ` +
         `would be \`${client.prefix}list <list type> <time period> <list length>\``);
+        this.context.reason = `Incorrect command usage.`;
+        throw this.context;
       }
       if (!listLength) {
         listLength = parseInt(args[2]);
