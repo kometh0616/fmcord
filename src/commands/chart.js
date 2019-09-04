@@ -41,6 +41,10 @@ class ChartCommand extends Command {
         case `m`:
           period = `1month`;
           break;
+        case `yearly`:
+        case `y`:
+          period = `12month`;
+          break;
         case `alltime`:
         case `a`:
           period = `overall`;
