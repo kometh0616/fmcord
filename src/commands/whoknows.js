@@ -19,7 +19,7 @@ class WhoKnowsCommand extends Command {
       usage: `whoknows <artist name>`,
       notes: `This feature might be quite slow, because it sends a lot of API ` +
       `requests. Also, it only works in a guild.`,
-      cooldown: 10,
+      cooldown: 30,
       aliases: [`w`]
     });
   }
