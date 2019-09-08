@@ -99,6 +99,7 @@ class HelpCommand extends Command {
             .setColor(color)
             .setTitle(`Command ${command.name}`)
             .addField(`Usage:`, `${client.prefix}${command.usage}`)
+            .addField(`Description:`, command.description)
             .setFooter(`Command executed by ${message.author.tag}`, message.author.avatarURL)
             .setTimestamp();
           if (command.notes) {

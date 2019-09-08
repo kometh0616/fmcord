@@ -44,9 +44,9 @@ class OneThousandCommand extends Command {
         .setDescription(`Note: Field names are server names. Format goes like ` +
       `this: Artist - Album - Song`)
         .setFooter(`Thanks to everyone who participated!`);
-      for (const [server, tracks] of servers.entries()) {
-        embed.addField(server, tracks.join(`\n`));
-      }
+      [...servers.entries()].forEach(([server, songs]) => {
+        embed.addField(server, songs.join(`\n`));
+      });
       await message.channel.send({ embed });
       return this.context;
     } catch (e) {

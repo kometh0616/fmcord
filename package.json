@@ -9,7 +9,9 @@
     "lint-fix": "eslint src *.js --fix",
     "test": "npm run lint"
   },
-  "engines": { "node": "11.x" },
+  "engines": {
+    "node": "11.x"
+  },
   "author": "Kometh",
   "license": "MIT",
   "dependencies": {
