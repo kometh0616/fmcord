@@ -10,7 +10,7 @@
     "test": "npm run lint"
   },
   "engines": {
-    "node": "12.x"
+    "node": "12.9.x"
   },
   "author": "Kometh",
   "license": "MIT",
