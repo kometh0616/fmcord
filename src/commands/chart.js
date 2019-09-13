@@ -21,6 +21,7 @@ class ChartCommand extends Command {
   async run(client, message, args) {
     this.setContext(message);
     try {
+      const failed = await canvas.loadImage(`${process.env.PWD}/images/failed_to_load.png`);
       const lib = new Library(client.config.lastFM.apikey);
       const fetchUser = new fetchuser(client, message);
       const usageWarning = `Incorrect usage of a command! Correct usage ` +
@@ -107,13 +108,14 @@ class ChartCommand extends Command {
 
       const proms = [];
       album.forEach(a => {
-        if (a.image[3][`#text`].length > 0) {
-          proms.push(canvas.loadImage(a.image[3][`#text`]));
+        if (a.image[2][`#text`].length > 0) {
+          proms.push(canvas.loadImage(a.image[2][`#text`]));
         } else {
           proms.push(canvas.loadImage(`${process.env.PWD}/images/no_album.png`));
         }
       });
-      const imgs = await Promise.all(proms);
+      const tryLoad = await Promise.allSettled(proms);
+      const imgs = tryLoad.map(x => x.status === `fulfilled` ? x.value : failed);
 
       let iter = 0;
       for (let yAxis = 0; yAxis < y * 100; yAxis += 100) {

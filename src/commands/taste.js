@@ -8,10 +8,7 @@ const matchErr = `you can't compare your taste with your taste, ` +
 `that's illogical.`;
 const matchReason = `Message author was trying to taste himself.`;
 
-const difference = (a, b) => {
-  if (a > b) return a - b;
-  else return b - a;
-};
+const difference = (a, b) => Math.abs(a - b);
 
 class TasteCommand extends Command {
 

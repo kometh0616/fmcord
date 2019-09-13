@@ -1,6 +1,6 @@
 {
   "name": "fmcord",
-  "version": "1.5.7",
+  "version": "1.5.7.1",
   "description": "A Discord bot with Last.fm utilities.",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,7 @@
     "test": "npm run lint"
   },
   "engines": {
-    "node": "11.x"
+    "node": "12.x"
   },
   "author": "Kometh",
   "license": "MIT",
