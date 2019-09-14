@@ -2,6 +2,7 @@ const Command = require(`../classes/Command`);
 const { fetchuser } = require(`../utils/fetchuser`);
 const Library = require(`../lib/index.js`);
 const canvas = require(`canvas`);
+const allSettled = require(`../utils/polyfills/AllSettled`);
 
 class ChartCommand extends Command {
 
@@ -21,6 +22,7 @@ class ChartCommand extends Command {
   async run(client, message, args) {
     this.setContext(message);
     try {
+      const failed = await canvas.loadImage(`${process.env.PWD}/images/failed_to_load.png`);
       const lib = new Library(client.config.lastFM.apikey);
       const fetchUser = new fetchuser(client, message);
       const usageWarning = `Incorrect usage of a command! Correct usage ` +
@@ -113,7 +115,8 @@ class ChartCommand extends Command {
           proms.push(canvas.loadImage(`${process.env.PWD}/images/no_album.png`));
         }
       });
-      const imgs = await Promise.all(proms);
+      const loaded = await allSettled(proms);
+      const imgs = loaded.map(x => x.status === `fulfilled` ? x.value : failed);
 
       let iter = 0;
       for (let yAxis = 0; yAxis < y * 100; yAxis += 100) {
