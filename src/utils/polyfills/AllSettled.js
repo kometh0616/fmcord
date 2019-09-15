@@ -1,4 +1,4 @@
-module.exports = Promise.allSettled || function(arr) {
+const settler = Promise.allSettled ? Promise.allSettled.bind(Promise) : arr => {
   const promises = arr.map(x => Promise.resolve(x)
     .then(
       value => ({ status: `fulfilled`, value }),
@@ -7,3 +7,5 @@ module.exports = Promise.allSettled || function(arr) {
   );
   return Promise.all(promises);
 };
+
+module.exports = settler;
