@@ -9,7 +9,7 @@ class HelpCommand extends Command {
       name: `help`,
       description: `Shows you this help message. Add a flag \`--manual\` for an ` +
       `interactive manual.`,
-      usage: `help [--manual]`,
+      usage: [`help`, `help <command>`, `help --manual`],
       notes: `Interactive manual will only work if a bot has a permission to add ` +
       `reactions to messages.`,
       aliases: [`h`],
@@ -40,7 +40,7 @@ class HelpCommand extends Command {
           const embed = new RichEmbed()
             .setColor(color)
             .setTitle(`Command ${x.name}`)
-            .addField(`Usage:`, `${client.prefix}${x.usage}`)
+            .addField(`Usage:`, x.usage.map(u => `${client.prefix}${u}`).join(`, `))
             .addField(`Description:`, x.description)
             .setFooter(`Page ${++pages}/${helpCommands.length} | Command ` +
             `executed by ${message.author.tag}`, message.author.avatarURL)
@@ -98,7 +98,7 @@ class HelpCommand extends Command {
           const embed = new RichEmbed()
             .setColor(color)
             .setTitle(`Command ${command.name}`)
-            .addField(`Usage:`, `${client.prefix}${command.usage}`)
+            .addField(`Usage:`, command.usage.map(x => `${client.prefix}${x}`).join(`, `))
             .addField(`Description:`, command.description)
             .setFooter(`Command executed by ${message.author.tag}`, message.author.avatarURL)
             .setTimestamp();

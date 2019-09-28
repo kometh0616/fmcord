@@ -8,7 +8,7 @@ class DisableCommand extends Command {
       name: `disable`,
       description: `Disables a command from usage in either an entire guild or ` +
       `a certain channel.`,
-      usage: `disable <command> [--guild]`,
+      usage: [`disable <command>`, `disable <command> [--guild]`],
       notes: `This command requires Manage Server permission. Can be overriden ` +
       `if you have Administrator permissions, or if you are an owner of the guild.`,
       permissions: {

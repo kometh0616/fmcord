@@ -11,7 +11,7 @@ class PlaysCommand extends Command {
       description: `Shows you how many times you have played an artist. If no ` +
       `artist is defined, the bot will look up an artist you are currently ` +
       `listening to.`,
-      usage: `plays <artist name>`,
+      usage: [`plays`, `plays <artist name>`],
       aliases: [`p`],
       dmAvailable: true,
     });

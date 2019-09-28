@@ -8,7 +8,7 @@ class OneThousandCommand extends Command {
       name: `1000`,
       description: `Shows you a list of songs that were submitted in ` +
       `FMcord's 1000 server milestone event.`,
-      usage: `1000`,
+      usage: [`1000`],
       notes: `Thanks to everyone who participated. You have a gratitude ` +
       `of every person behind FMcord.`,
       dmAvailable: true

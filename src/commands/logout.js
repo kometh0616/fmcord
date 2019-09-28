@@ -7,7 +7,7 @@ class LogoutCommand extends Command {
     super({
       name: `logout`,
       description: `Logs you out of the bot's system.`,
-      usage: `logout`,
+      usage: [`logout`],
       aliases: [`logoff`, `delnick`],
       dmAvailable: true,
     });

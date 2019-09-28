@@ -10,7 +10,7 @@ class ArtistinfoCommand extends Command {
     super({
       name: `artistinfo`,
       description: `Returns information about a provided artist.`,
-      usage: `artistinfo <artist name>`,
+      usage: [`artistinfo`, `artistinfo <artist name>`],
       aliases: [`ai`],
       dmAvailable: true
     });

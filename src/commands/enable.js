@@ -7,7 +7,7 @@ class EnableCommand extends Command {
     super({
       name: `enable`,
       description: `Enables a command if it as previously disabled.`,
-      usage: `enable <command>`,
+      usage: [`enable <command>`],
       notes: `This command requires Manage Server permission. Can be overriden ` +
       `if you have Administrator permissions, or if you are an owner of the guild.`,
       permissions: {

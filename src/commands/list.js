@@ -9,7 +9,11 @@ class ListCommand extends Command {
     super({
       name: `list`,
       description: `Provides you a list of your top songs or artists.`,
-      usage: `list <list type> <time period> <list length>`,
+      usage: [
+        `list <list type>`, 
+        `list <list type> <time period>`, 
+        `list <list type> <time period> <list length>`
+      ],
       notes: `In \`list type\`, you can have \`artists\` or \`songs\`. ` +
       `In \`time period\`, you can have \`weekly\`, \`monthly\` or ` +
       `\`alltime\`. List must not be longer than 25 elements. \`Time period\` ` +

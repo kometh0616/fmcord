@@ -11,7 +11,7 @@ class ChartCommand extends Command {
       name: `chart`,
       description: `Builds a grid out of your most listened albums with ` +
       `names to the side.`,
-      usage: `chart <time period> <grid size>`,
+      usage: [`chart`, `chart <time period>`, `chart <time period> <grid size>`],
       notes: `In time period, you can have "weekly", "monthly" or "alltime".`,
       aliases: [`c`, `grid`],
       dmAvailable: true,

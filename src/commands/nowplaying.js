@@ -10,7 +10,7 @@ class NowPlayingCommand extends Command {
     super({
       name: `nowplaying`,
       description: `Shows you a song you are listening to right now.`,
-      usage: `nowplaying`,
+      usage: [`nowplaying`],
       aliases: [`np`, `current`],
       dmAvailable: true,
     });

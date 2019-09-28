@@ -8,7 +8,7 @@ class GenreInfoCommand extends Command {
     super({
       name: `genreinfo`,
       description: `Returns general information about a defined genre.`,
-      usage: `genreinfo <music genre> lang:<language code>`,
+      usage: [`genreinfo <music genre>`, `genreinfo <music genre> lang:<language code>`],
       notes: `Only languages supported by Last.fm are supported. ` +
       `Information in some languages might be missing. Language codes ` +
       `are: en, de, es, fr, it, ja, pl, ru, sv, tr, zh. If a language ` +

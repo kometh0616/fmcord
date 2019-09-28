@@ -7,7 +7,7 @@ class SourceCommand extends Command {
       name: `source`,
       description: `Sends you a link to FMcord's GitHub repository. If a command ` +
       `name is provided, links you to the source of the provided command.`,
-      usage: `source [<command name>]`,
+      usage: [`source`, `source <command name>`],
       notes: `You must provide a full command name, not a shortcut.`,
       aliases: [`src`],
       dmAvailable: true,

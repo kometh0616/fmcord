@@ -10,7 +10,7 @@ class YouTubeCommand extends Command {
       name: `youtube`,
       description: `Gets a YouTube link of a searched song or video. If no ` +
       `query is specified, it looks at what you're playing right now.`,
-      usage: `youtube <search query>`,
+      usage: [`youtube`, `youtube <search query>`],
       aliases: [`yt`],
       dmAvailable: true,
     });

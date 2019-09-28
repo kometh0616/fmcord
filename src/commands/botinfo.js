@@ -8,7 +8,7 @@ class BotinfoCommand extends Command {
     super({
       name: `botinfo`,
       description: `Shows general information about FMcord.`,
-      usage: `botinfo`,
+      usage: [`botinfo`],
       aliases: [`bi`],
       dmAvailable: true
     });

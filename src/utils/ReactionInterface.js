@@ -5,7 +5,6 @@ class ReactionInterface {
     this.author = author;
     this.events = new Map();
     this.destroy = this.destroy.bind(this);
-    this.timer = setTimeout(this.destroy, 30000);
     this.invoke = (reaction, user) => {
       const func = this.events.get(reaction.emoji.name);
       if (func && !user.bot) {
@@ -34,11 +33,7 @@ class ReactionInterface {
     this.events.set(key, eventFunc);
     await this.message.react(key);
   }
-  /**
-  * Removes all previously added listeners and deletes the message.
-  */
   destroy() {
-    clearTimeout(this.timer);
     this.events.clear();
     this.message.reactions.filter(x => x.me).forEach(x => x.remove());
     this.message.client.off(`messageReactionAdd`, this.invoke);

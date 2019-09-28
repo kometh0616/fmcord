@@ -8,7 +8,7 @@ class MyLoginCommand extends Command {
       name: `mylogin`,
       description: `Shows you a Last.fm username you have registered yourself ` +
       `with, if any.`,
-      usage: `mylogin`,
+      usage: [`mylogin`],
       aliases: [`me`],
       dmAvailable: true,
     });

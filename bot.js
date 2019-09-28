@@ -90,3 +90,4 @@ process.on(`unhandledRejection`, console.error);
 client.login(config.discordToken)
   .then(console.log(`I'm in.`));
 
+module.exports = client;

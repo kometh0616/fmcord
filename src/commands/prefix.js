@@ -6,7 +6,7 @@ class PrefixCommand extends Command {
     super({
       name: `prefix`,
       description: `Configures prefix in the guild.`,
-      usage: `prefix [set|delete] <prefix>`,
+      usage: [`prefix set <prefix>`, `prefix delete`],
       notes: `This command requires Manage Server permission. Can be overriden ` +
       `if you have Administrator permissions, or if you are an owner of the guild.\n` +
       `Prefix must not be longer than 2 symbols and must not contain whitespace. ` +

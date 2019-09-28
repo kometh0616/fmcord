@@ -8,7 +8,7 @@ class LFMCommand extends Command {
     super({
       name: `lfm`,
       description: `Gets the LastFM URL of you or a given user.`,
-      usage: `lfm [Discord User]`,
+      usage: [`lfm, lfm <discord user>`],
       notes: `The looked up user must be logged in to LastFM with the bot.`,
     });
   }

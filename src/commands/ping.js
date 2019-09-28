@@ -6,7 +6,7 @@ class PingCommand extends Command {
     super({
       name: `ping`,
       description: `Tells you your ping.`,
-      usage: `ping`,
+      usage: [`ping`],
       dmAvailable: true,
     });
   }

@@ -6,7 +6,7 @@ class SupportCommand extends Command {
     super({
       name: `support`,
       description: `Provides you a link to FMcord Support server.`,
-      usage: `support`,
+      usage: [`support`],
       notes: `If you are running this command in a guild, make sure the guild's ` +
       `rules allow posting Discord links in its channels, and that no other ` +
       `bot filters Discord invites sent from FMcord.`,
