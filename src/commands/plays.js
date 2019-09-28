@@ -53,20 +53,6 @@ class PlaysCommand extends Command {
       } else {
         await message.reply(`you have scrobbled \`${name}\` ` +
         `**${stats.userplaycount}** times.`);
-        const Crowns = client.sequelize.import(`../models/Crowns.js`);
-        const where = {
-          where: {
-            guildID: message.guild.id,
-            userID: message.author.id,
-            artistName: name,
-          }
-        };
-        const hasCrown = await Crowns.count({ ...where });
-        if (hasCrown) {
-          await Crowns.update({
-            artistPlays: stats.userplaycount
-          }, { ...where });
-        } 
       }
       return this.context;
     } catch (e) {
