@@ -3,6 +3,12 @@ const FMcordEmbed = require(`../utils/FMcordEmbed`);
 const Library = require(`../lib/index`);
 const List = require(`../classes/List`);
 
+const removeParens = str => str
+  .replace(`(`, `%28`)
+  .replace(`)`, `%29`)
+  .replace(`[`, `%5B`)
+  .replace(`]`, `%5D`);
+
 class ImLuckyCommand extends Command {
 
   constructor() {
@@ -44,10 +50,10 @@ class ImLuckyCommand extends Command {
       const { artist, name, url, album, toptags } = trackInfo.track;
       const embed = new FMcordEmbed(message)
         .setTitle(`Random song from ${username.lastFM} (${username.discord})`)
-        .addField(`Artist`, `[${artist.name}](${artist.url})`, true)
-        .addField(`Track`, `[${name}](${url})`, true);
+        .addField(`Artist`, `[${artist.name}](${removeParens(artist.url)})`, true)
+        .addField(`Track`, `[${name}](${removeParens(url)})`, true);
       if (album) {
-        embed.addField(`Album`, `[${album.title}](${album.url})`, true);
+        embed.addField(`Album`, `[${album.title}](${removeParens(artist.url)})`, true);
         if (album.image.length > 0) {
           embed.setThumbnail(album.image[1][`#text`]);
         }
