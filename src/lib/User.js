@@ -8,7 +8,7 @@ class User extends Client {
   async getInfo(user) {
     const query = this.stringify({
       method: `user.getinfo`,
-      user: user,
+      user,
       api_key: this.apikey,
       format: `json`,
     });
@@ -19,10 +19,7 @@ class User extends Client {
   async getTopAlbums(user, period = `overall`, limit = `50`, page = `1`) {
     const query = this.stringify({
       method: `user.gettopalbums`,
-      user: user,
-      period: period,
-      limit: limit,
-      page: page,
+      user, period, limit, page,
       api_key: this.apikey,
       format: `json`
     });
@@ -33,8 +30,7 @@ class User extends Client {
   async getRecentTracks(user, from) {
     const query = this.stringify({
       method: `user.getrecenttracks`,
-      user: user,
-      from: from,
+      user, from, 
       api_key: this.apikey,
       format: `json`
     });
@@ -45,10 +41,7 @@ class User extends Client {
   async getTopTracks(user, period = `overall`, limit = `50`, page = `1`) {
     const query = this.stringify({
       method: `user.gettoptracks`,
-      user: user,
-      period: period,
-      limit: limit,
-      page: page,
+      user, period, limit, page,
       api_key: this.apikey,
       format: `json`
     });
@@ -59,10 +52,7 @@ class User extends Client {
   async getTopArtists(user, period = `overall`, limit = `50`, page = `1`) {
     const query = this.stringify({
       method: `user.gettopartists`,
-      user: user,
-      period: period,
-      limit: limit,
-      page: page,
+      user, period, limit, page,
       api_key: this.apikey,
       format: `json`
     });

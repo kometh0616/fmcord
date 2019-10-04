@@ -1,19 +1,22 @@
-const Client = require(`./Client.js`);
+const Client = require(`./Client`);
 
-class Artist extends Client {
+class Track extends Client {
+  
   constructor(apikey) {
     super(apikey);
   }
-  async getInfo(artist, username) {
+
+  async getInfo({ artist, mbid, track, username }) {
     const query = this.stringify({
-      method: `artist.getinfo`,
-      artist, username,
+      method: `track.getinfo`,
+      artist, mbid, track, username,
       api_key: this.apikey,
       format: `json`
     });
     const data = await this.request(this.rootURL + query);
     return data;
   }
+
 }
 
-module.exports = Artist;
+module.exports = Track;

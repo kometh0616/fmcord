@@ -8,7 +8,7 @@ class InviteCommand extends Command {
       description: `Sends you a bot invitation link, by which you can invite this ` +
       `bot to your server.`,
       usage: [`invite`],
-      aliases: [`i`, `botinvite`],
+      aliases: [`inv`, `botinvite`],
       dmAvailable: true,
     });
   }
