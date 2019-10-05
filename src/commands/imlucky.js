@@ -40,6 +40,8 @@ class ImLuckyCommand extends Command {
         lastFM: x.lastFMUsername
       })));
       const username = names.random;
+      const userURL = `https://last.fm/user/${username.lastFM}`;
+      console.log(userURL);
       const user = await lib.user.getTopTracks(username.lastFM, `overall`, `15`);
       const tracks = new List(...user.toptracks.track);
       const track = tracks.random;
@@ -50,6 +52,7 @@ class ImLuckyCommand extends Command {
       const { artist, name, url, album, toptags } = trackInfo.track;
       const embed = new FMcordEmbed(message)
         .setTitle(`Random song from ${username.lastFM} (${username.discord})`)
+        .setURL(userURL)
         .addField(`Artist`, `[${artist.name}](${removeParens(artist.url)})`, true)
         .addField(`Track`, `[${name}](${removeParens(url)})`, true);
       if (album) {
