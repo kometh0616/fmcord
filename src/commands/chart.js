@@ -14,7 +14,9 @@ class ChartCommand extends Command {
       usage: [
         `chart`, 
         `chart <time period>`, 
-        `chart <time period> <grid size>`
+        `chart <time period> <grid size>`,
+        `chart <time period> [nt/notitles]`,
+        `chart <time period> <grid size> [nt/notitles]`
       ],
       notes: `In time period, you can have "weekly", "monthly" or "alltime".`,
       aliases: [`c`, `grid`],
@@ -31,7 +33,7 @@ class ChartCommand extends Command {
       const fetchUser = new fetchuser(client, message);
       const notitles = [`nt`, `notitles`];
       const usageWarning = `Incorrect usage of a command! Correct usage ` +
-      `would be: \`&chart <time period> <grid size> [n|notitles]\``;
+      `would be: \`&chart <time period> <grid size> [nt/notitles]\``;
       let period, vals, x, y;
 
       if (!args[0]) {
