@@ -1,6 +1,6 @@
 const Command = require(`../classes/Command`);
 const FMcordEmbed = require(`../utils/FMcordEmbed`);
-const Library = require(`../lib/index`);
+const Library = require(`../lib/lastfm/index`);
 const List = require(`../classes/List`);
 
 const removeParens = str => str
@@ -14,7 +14,7 @@ class ImLuckyCommand extends Command {
   constructor() {
     super({
       name: `imlucky`,
-      description: `Gets a random song from a random user's top 50 songs.`,
+      description: `Gets a random song from a random user's top 15 songs.`,
       usage: [`imlucky`],
       aliases: [`i`],
     });
@@ -41,7 +41,6 @@ class ImLuckyCommand extends Command {
       })));
       const username = names.random;
       const userURL = `https://last.fm/user/${username.lastFM}`;
-      console.log(userURL);
       const user = await lib.user.getTopTracks(username.lastFM, `overall`, `15`);
       const tracks = new List(...user.toptracks.track);
       const track = tracks.random;

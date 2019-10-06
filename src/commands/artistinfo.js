@@ -1,4 +1,4 @@
-const Library = require(`../lib/index.js`);
+const Library = require(`../lib/lastfm/index.js`);
 const Command = require(`../classes/Command`);
 const { fetchuser } = require(`../utils/fetchuser`);
 const { fetchtrack } = require(`../utils/fetchtrack`);

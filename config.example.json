@@ -7,5 +7,9 @@
   "youtube": {
     "apikey": ""
   },
+  "spotify": {
+    "id": "",
+    "secret": ""
+  },
   "botOwnerID": ""
 }

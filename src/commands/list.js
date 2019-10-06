@@ -1,5 +1,5 @@
 const Command = require(`../classes/Command`);
-const Library = require(`../lib/index.js`);
+const Library = require(`../lib/lastfm/index.js`);
 const { fetchuser } = require(`../utils/fetchuser`);
 const { RichEmbed } = require(`discord.js`);
 
@@ -97,6 +97,10 @@ class ListCommand extends Command {
         listLength = parseInt(args[2]);
         if (listLength > 25) {
           await message.reply(`list size is too big, it must be lower than or 25!`);
+          this.context.reason = `Requested list size was too big.`;
+          throw this.context;
+        } else if (listLength < 0) {
+          await message.reply(`list size is too small, it must be higher than 0!`);
           this.context.reason = `Requested list size was too big.`;
           throw this.context;
         } else if (isNaN(listLength)) {

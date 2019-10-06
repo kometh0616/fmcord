@@ -1,6 +1,6 @@
 const Command = require(`../classes/Command`);
 const { fetchuser } = require(`../utils/fetchuser`);
-const Library = require(`../lib/index.js`);
+const Library = require(`../lib/lastfm/index.js`);
 const canvas = require(`canvas`);
 const allSettled = require(`../utils/polyfills/AllSettled`);
 
@@ -11,7 +11,11 @@ class ChartCommand extends Command {
       name: `chart`,
       description: `Builds a grid out of your most listened albums with ` +
       `names to the side.`,
-      usage: [`chart`, `chart <time period>`, `chart <time period> <grid size>`],
+      usage: [
+        `chart`, 
+        `chart <time period>`, 
+        `chart <time period> <grid size>`
+      ],
       notes: `In time period, you can have "weekly", "monthly" or "alltime".`,
       aliases: [`c`, `grid`],
       dmAvailable: true,
@@ -25,8 +29,9 @@ class ChartCommand extends Command {
       const failed = await canvas.loadImage(`${process.env.PWD}/images/failed_to_load.png`);
       const lib = new Library(client.config.lastFM.apikey);
       const fetchUser = new fetchuser(client, message);
+      const notitles = [`nt`, `notitles`];
       const usageWarning = `Incorrect usage of a command! Correct usage ` +
-      `would be: \`&chart <time period> <grid size>\``;
+      `would be: \`&chart <time period> <grid size> [n|notitles]\``;
       let period, vals, x, y;
 
       if (!args[0]) {
@@ -57,13 +62,13 @@ class ChartCommand extends Command {
           throw this.context;
         }
 
-        if (!args[1]) {
+        if (!args[1] || notitles.includes(args[1])) {
           vals = [`5`, `5`];
           [x, y] = [parseInt(vals[0]), parseInt(vals[1])];
         } else {
           vals = args[1].split(`x`);
           if (vals === args[1] || vals.length !== 2) {
-            message.channel.send(usageWarning);
+            await message.channel.send(usageWarning);
             this.context.reason = `Incorrectly defined grid size.`;
             throw this.context;
           }
@@ -130,39 +135,44 @@ class ChartCommand extends Command {
         } else break;
       }
 
-      const names = [];
-      album.forEach(a => names.push(`${a.artist.name} - ${a.name}`));
-      let longestNum = -Infinity;
-      let longestName;
-      names.forEach(name => {
-        if (longestNum < name.length) {
-          longestNum = name.length;
-          longestName = name;
-        }
-      });
+      if (notitles.includes(args[2]) || notitles.includes(args[1])) {
+        const buffer = canv.toBuffer();
+        await message.reply(`here is your grid.`, { file: buffer });
+      } else {
+        const names = [];
+        album.forEach(a => names.push(`${a.artist.name} - ${a.name}`));
+        let longestNum = -Infinity;
+        let longestName;
+        names.forEach(name => {
+          if (longestNum < name.length) {
+            longestNum = name.length;
+            longestName = name;
+          }
+        });
 
-      const { width } = ctx.measureText(longestName);
-      const xAxis = x * 100 + 120 + width;
-      const yAxis = y * 100;
-      const finalCanvas = canvas.createCanvas(xAxis, yAxis);
-      const fctx = finalCanvas.getContext(`2d`);
-      fctx.fillStyle = `black`;
-      fctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
-      fctx.drawImage(canv, 0, 0);
-      fctx.fillStyle = `white`;
-      fctx.font = `12px ${process.platform === `win32` ? `inconsolata` : `noto-sans`}`;
-      let i = 0;
-      for (let byChart = 0; byChart < 100 * y; byChart += 100) {
-        for (let inChart = 15; inChart <= 15 * x; inChart += 15) {
-          const yAxis = byChart + inChart;
-          if (names[i])
-            fctx.fillText(names[i], x * 100 + 15, yAxis);
-          i++;
+        const { width } = ctx.measureText(longestName);
+        const xAxis = x * 100 + 120 + width;
+        const yAxis = y * 100;
+        const finalCanvas = canvas.createCanvas(xAxis, yAxis);
+        const fctx = finalCanvas.getContext(`2d`);
+        fctx.fillStyle = `black`;
+        fctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
+        fctx.drawImage(canv, 0, 0);
+        fctx.fillStyle = `white`;
+        fctx.font = `12px ${process.platform === `win32` ? `inconsolata` : `noto-sans`}`;
+        let i = 0;
+        for (let byChart = 0; byChart < 100 * y; byChart += 100) {
+          for (let inChart = 15; inChart <= 15 * x; inChart += 15) {
+            const yAxis = byChart + inChart;
+            if (names[i])
+              fctx.fillText(names[i], x * 100 + 15, yAxis);
+            i++;
+          }
         }
+
+        const buffer = finalCanvas.toBuffer();
+        await message.reply(`here is your grid.`, { file: buffer });
       }
-
-      const buffer = finalCanvas.toBuffer();
-      await message.reply(`here is your grid.`, { file: buffer });
       return this.context;
     } catch (e) {
       this.context.stack = e.stack;

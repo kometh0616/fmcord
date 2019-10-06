@@ -1,5 +1,5 @@
 const Command = require(`../classes/Command`);
-const Library = require(`../lib/index.js`);
+const Library = require(`../lib/lastfm/index.js`);
 const { fetchuser } = require(`../utils/fetchuser`);
 
 class LoginCommand extends Command {

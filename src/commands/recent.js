@@ -1,8 +1,8 @@
 const Command = require(`../classes/Command`);
-const Library = require(`../lib/index.js`);
-const { RichEmbed } = require(`discord.js`);
-const { fetchuser } = require(`../utils/fetchuser`);
 const getDiscordUser = require(`../utils/DiscordUserGetter`);
+const { fetchuser } = require(`../utils/fetchuser`);
+const Library = require(`../lib/lastfm/index`);
+const FMcordEmbed = require(`../utils/FMcordEmbed`);
 
 class RecentCommand extends Command {
 
@@ -10,7 +10,14 @@ class RecentCommand extends Command {
     super({
       name: `recent`,
       description: `Shows you recent tracks you, or a user you defined, have listened to.`,
-      usage: [`recent`, `recent [target user]`],
+      usage: [
+        `recent`, 
+        `recent <target user>`, 
+        `recent s:<song amount>`,
+        `recent songs:<song amount>`,
+        `recent <target user> s:<song amount>`,
+        `recent <target user> songs:<song amount>`
+      ],
       notes: `If you are listening to a song while invoking this command, it will ` +
       `show your currently listened song as well. The target user must be in the ` +
       `same guild that you are invoking this command into.`,
@@ -22,56 +29,80 @@ class RecentCommand extends Command {
   async run(client, message, args) {
     this.setContext(message);
     try {
-      const color = message.member ? message.member.displayColor : 16777215;
-      const lib = new Library(client.config.lastFM.apikey);
-      const fetchUser = new fetchuser(client, message);
-      let user;
-      if (args[0]) {
-        const member = getDiscordUser(message, args.join(` `));
-        if (!member) {
-          await message.reply(client.snippets.userNotFound);
-          this.context.reason = client.snippets.commonReasons.userNotFound;
+      const songArg = args.findIndex(x => x.startsWith(`s:`) || x.startsWith(`songs:`));
+      let user, songLimit;
+      if (songArg !== -1) {
+        if (!songArg && args[1]) {
+          await message.reply(`incorrect usage of a command! Correct usage would be:\n` +
+          this.usage.map(x => `\`${client.prefix}${x}\``).join(`\n`));
+          this.context.reason = `Incorrect usage.`;
           throw this.context;
         }
-        user = await fetchUser.usernameFromId(member.id);
-        if (!user) {
-          await message.reply(client.snippets.userNoLogin);
-          this.context.reason = client.snippets.commonReasons.userNoLogin;
-          throw this.context;
+        if (!isNaN(parseInt(args[songArg].split(`:`)[1]))) {
+          songLimit = parseInt(args[songArg].split(`:`)[1]);
+          if (songLimit > 10 || songLimit < 1) {
+            await message.reply(`you cannot have more than 10 or less than 1 song.`);
+            this.context.reason = `Incorrect song amount.`;
+            throw this.context;
+          }
+        } else {
+          songLimit = 1;
+        }
+        if (args[1]) {
+          user = getDiscordUser(message, args.slice(0, songArg).join(` `));
+          if (!user) {
+            await message.reply(client.snippets.userNotFound);
+            this.context.reason = client.snippets.commonReasons.userNotFound;
+            throw this.context;
+          }
+        } else {
+          user = message.author;
         }
       } else {
-        user = await fetchUser.username();
-        if (!user) {
-          await message.reply(client.snippets.noLogin);
-          this.context.reason = client.snippets.commonReasons.noLogin;
-          throw this.context;
+        songLimit = 1;
+        if (args.length > 0) {
+          user = getDiscordUser(message, args.join(` `));
+          if (!user) {
+            await message.reply(client.snippets.userNotFound);
+            this.context.reason = client.snippets.commonReasons.userNotFound;
+            throw this.context;
+          }
+        } else {
+          user = message.author;
         }
       }
-      const data = await lib.user.getRecentTracks(user);
-      const userData = await lib.user.getInfo(user);
-      const nowPlaying = data.recenttracks.track[0];
-      const sliceArgs = nowPlaying[`@attr`] && nowPlaying[`@attr`].nowplaying ?
-        [1, 6] : [0, 5];
-      const prevTracks = data.recenttracks.track
+      const fetchUser = new fetchuser(client, message);
+      const username = await fetchUser.usernameFromId(user.id);
+      if (!username) {
+        if (user.id === message.author.id) {
+          await message.reply(client.snippets.noLogin);
+          this.context.reason = client.snippets.commonReasons.noLogin;
+        } else {
+          await message.reply(client.snippets.userNoLogin);
+          this.context.reason = client.snippets.commonReasons.userNoLogin;
+        }
+        throw this.context;
+      }
+      const lib = new Library(client.config.lastFM.apikey);
+      const userInfo = await lib.user.getInfo(username);
+      const tracks = await lib.user.getRecentTracks(username);
+      const nowPlaying = tracks.recenttracks.track.find(x => x[`@attr`] && x[`@attr`].nowplaying === `true`);
+      const sliceArgs = !nowPlaying ? [0, songLimit] : [1, songLimit + 1];
+      const previous = tracks.recenttracks.track
         .slice(...sliceArgs)
-        .map(x => `**${x.name}** - ${x.artist[`#text`]} ` +
-          `| ${x.album[`#text`] ? x.album[`#text`] : `no album`}`)
+        .map(x => `**${x.name}** - ${x.artist[`#text`]} | ${x.album[`#text`] ? x.album[`#text`] : `no album`}`)
         .join(`\n`);
-      const embed = new RichEmbed();
-      if (nowPlaying[`@attr`] && nowPlaying[`@attr`].nowplaying)
-        embed.addField(`Current:`,
-          `**${nowPlaying.name}** - ${nowPlaying.artist[`#text`]} ` +
-          `| ${nowPlaying.album[`#text`] ? nowPlaying.album[`#text`] : `no album`}`);
-      embed
-        .addField(`Previous:`, prevTracks)
-        .setColor(color)
-        .setTitle(`Last tracks from ${user}`)
-        .setURL(userData.user.url)
-        .setThumbnail(data.recenttracks.track[0].image[2][`#text`])
-        .setFooter(`Command invoked by ${message.author.tag}. ` +
-        `Target user's scrobbles: ${userData.user.playcount}.`)
-        .setTimestamp();
-      await message.channel.send({ embed });
+      const embed = new FMcordEmbed(message)
+        .setTitle(`Last tracks from ${username}`)
+        .setURL(userInfo.user.url)
+        .setThumbnail(tracks.recenttracks.track[0].image[2][`#text`]);
+      if (nowPlaying) {
+        embed.addField(`Now playing`, `**${nowPlaying.name}** - ${nowPlaying.artist[`#text`]} | ` +
+          nowPlaying.album[`#text`] ? nowPlaying.album[`#text`] : `no album`);
+      }
+      embed.addField(`Previous`, previous)
+        .addField(`${username}'s scrobble amount`, userInfo.user.playcount);
+      await message.channel.send(embed);
       return this.context;
     } catch (e) {
       this.context.stack = e.stack;

@@ -26,6 +26,14 @@ if (!fs.existsSync(`./config.json`)) {
       const ytApiKey = await question(`Specify a YouTube API key you'd like to use. `);
       file.write(`"youtube":{"apikey":"${ytApiKey}"},`);
     }
+    const useSpotify = await question(`Command "spotify" requires to a Spotify Web API ` +
+      `client ID and secret. Would you like to provide them? `);
+    if (/^y/gi.test(useSpotify)) {
+      const spotifyID = await question(`Specify a Spotify client ID. `);
+      file.write(`"spotify":{"id":"${spotifyID}",`);
+      const spotifySecret = await question(`Specify a Spotify client secret. `);
+      file.write(`"secret":"${spotifySecret}"},`);
+    }
     const userID = await question(`Command "admin" requires your ID in order to not let ` +
       `other users use those commands. Specify your user ID. `);
     file.write(`"botOwnerID":"${userID}"}`);

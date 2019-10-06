@@ -10,7 +10,7 @@ module.exports = (message, user) => {
   ];
   for (const fn of matchingFunctions) {
     if (message.guild.members.some(fn)) {
-      return message.guild.members.find(fn);
+      return message.guild.members.find(fn).user;
     }
   }
   return null;
