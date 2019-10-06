@@ -98,7 +98,7 @@ class RecentCommand extends Command {
         .setThumbnail(tracks.recenttracks.track[0].image[2][`#text`]);
       if (nowPlaying) {
         embed.addField(`Now playing`, `**${nowPlaying.name}** - ${nowPlaying.artist[`#text`]} | ` +
-          nowPlaying.album[`#text`] ? nowPlaying.album[`#text`] : `no album`);
+          `${nowPlaying.album[`#text`] ? nowPlaying.album[`#text`] : `no album`}`);
       }
       embed.addField(`Previous`, previous)
         .addField(`${username}'s scrobble amount`, userInfo.user.playcount);

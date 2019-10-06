@@ -35,7 +35,7 @@ class SpotifyCommand extends Command {
         if (!song) {
           song = await fetchTrack.getlasttrack();
         }
-        const track = await lib.findTrack(song.name);
+        const track = await lib.findTrack(`${song.artist[`#text`]} ${song.name}`);
         await message.channel.send(track.tracks.items[0].external_urls.spotify);
       }
       return this.context;
