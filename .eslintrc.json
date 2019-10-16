@@ -33,7 +33,7 @@
         "prefer-const": ["error"],
         "no-var": ["error"],
         "max-len": ["error", {
-            "code": 100,
+            "code": 120,
             "tabWidth": 2,
             "comments": 135,
             "ignoreUrls": true,
@@ -47,6 +47,8 @@
         "@typescript-eslint/prefer-readonly": ["error"],
         "@typescript-eslint/prefer-string-starts-ends-with": ["error"],
         "@typescript-eslint/type-annotation-spacing": ["error"],
-        "@typescript-eslint/no-misused-promises": ["error"]
+        "@typescript-eslint/no-misused-promises": ["error"],
+        "@typescript-eslint/no-non-null-assertion": ["off"],
+        "@typescript-eslint/no-var-requires": ["off"]
     }
 }

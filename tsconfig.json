@@ -5,10 +5,17 @@
     "outDir": "./dist",
     "strict": true,
     "esModuleInterop": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
   },
   "include": [
-    "./src",
-    "./config.json"
+    "src",
+    "src/handler",
+    "src/commands",
+    "src/events",
+    "src/entities",
+    "config.json",
+    ".data/database.sqlite"
   ]
 }

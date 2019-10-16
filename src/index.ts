@@ -1,12 +1,12 @@
-import { Client, Message } from 'discord.js';
-import config from '../config.json';
+import { ShardingManager, Shard } from "discord.js";
+import config from "../config.json";
+import * as path from "path";
 
-const client: Client = new Client();
+const dir = path.join(__dirname, `bot.js`);
 
-client.on(`message`, (message: Message) => {
-    if (message.content.startsWith(`hello`)) {
-        message.reply(`Hello!`);
-    }
+const manager: ShardingManager = new ShardingManager(dir, {
+    token: config.token
 });
 
-client.login(config.token);
+manager.spawn();
+manager.on(`launch`, (shard: Shard) => console.log(`Launched shard ${shard.id}`));

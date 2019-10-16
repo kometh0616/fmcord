@@ -4,7 +4,9 @@
   "description": "A Discord bot with Last.fm utilities.",
   "main": "index.js",
   "scripts": {
-    "start": "node index",
+    "build": "tsc",
+    "launch": "node ./dist/src/index.js",
+    "start": "npm run build && npm run launch",
     "lint": "eslint src *.js",
     "lint-fix": "eslint src *.js --fix",
     "test": "npm run lint"
@@ -19,13 +21,12 @@
     "dblapi.js": "^2.3.0",
     "discord.js": "^11.5.1",
     "express": "^4.17.1",
-    "sequelize": "^6.0.0",
-    "sqlite3": "^4.0.9"
+    "reflect-metadata": "^0.1.13",
+    "sqlite3": "^4.1.0",
+    "typeorm": "^0.2.19"
   },
   "devDependencies": {
-    "@types/bluebird": "^3.5.27",
     "@types/node": "^12.7.12",
-    "@types/validator": "^10.11.3",
     "@typescript-eslint/eslint-plugin": "^2.3.3",
     "@typescript-eslint/parser": "^2.3.3",
     "eslint": "^5.16.0",
