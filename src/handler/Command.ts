@@ -181,7 +181,7 @@ export default abstract class Command implements CommandOptions {
     }
 
     private log(message: Message, stack?: string): void {
-        let log = `Command ${this.name} ${stack ? `executed` : `failed to execute`}!\n` +
+        let log = `Command ${this.name} ${!stack ? `executed` : `failed to execute`}!\n` +
         `Message content: ${message.content} (${message.id})\n` + 
         `Executor: ${message.author.tag} (${message.author.id})\n`;
         if (message.channel.type === `dm`) {
