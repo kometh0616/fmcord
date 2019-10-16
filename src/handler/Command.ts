@@ -34,7 +34,7 @@ export default abstract class Command implements CommandOptions {
         readonly bot?: PermissionString | 0;
     };
 
-    public abstract readonly run: (client: FMcord, message: Message, args: string[]) => Promise<void>;
+    public abstract async run(client: FMcord, message: Message, args?: string[]): Promise<void>;
     
     public constructor(props: CommandOptions) {
         this.name = props.name;

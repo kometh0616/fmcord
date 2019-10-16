@@ -12,12 +12,13 @@ class PingCommand extends Command {
         });
     }
 
-    public run = async (client: FMcord, message: Message, args: string[]): Promise<void> => {
+    public async run(client: FMcord, message: Message): Promise<void> {
         const oldDate: number = Date.now();
         const msg: Message = await message.channel.send(`Pong!`) as Message;
         const newDate: number = Date.now() - oldDate;
         await msg.edit(`Pong! Your ping is ${newDate}ms.`);
     }
+    
 }
 
 module.exports = PingCommand;
