@@ -1,4 +1,4 @@
-export interface LastFMRequestParams extends Record<string, string> {
+export interface LastFMRequestParams extends Record<string, string | undefined> {
     method: string;
     api_key: string;
     format: `json`;
@@ -11,7 +11,7 @@ export interface LastFMTopOptions {
 }
 
 export interface LastFMImage {
-    size: `small` | `medium` | `large` | `extralarge` | `mega`;
+    size: `small` | `medium` | `large` | `extralarge` | `mega` | ``;
     [`#text`]: string;
 }
 
@@ -45,7 +45,7 @@ interface LastFMPagingAttributes {
 }
 
 interface LastFMUnitData {
-    mbid: string;
+    mbid?: string;
     [`#text`]: string;
 }
 
@@ -61,7 +61,7 @@ interface LastFMUserRecentTrack {
     streamable: string;
     date: LastFMUserRecentTrackDate;
     url: string;
-    mbid: string;
+    mbid?: string;
 }
 
 export interface LastFMUserRecentTracks {
@@ -69,10 +69,10 @@ export interface LastFMUserRecentTracks {
     track: LastFMUserRecentTrack[];
 }
 
-interface LastFMTopRankArtist {
+interface LastFMBasicArtistInfo {
     url: string;
     name: string;
-    mbid: string;
+    mbid?: string;
 }
 
 interface LastFMRankAttribute {
@@ -80,12 +80,12 @@ interface LastFMRankAttribute {
 }
 
 interface LastFMUserTopAlbum {
-    artist: LastFMTopRankArtist;
+    artist: LastFMBasicArtistInfo;
     [`@attr`]: LastFMRankAttribute;
     image: LastFMImage[];
     url: string;
     name: string;
-    mbid: string;
+    mbid?: string;
 }
 
 export interface LastFMUserTopAlbums {
@@ -95,7 +95,7 @@ export interface LastFMUserTopAlbums {
 
 interface LastFMUserTopArtist {
     [`@attr`]: LastFMRankAttribute;
-    mbid: string;
+    mbid?: string;
     url: string;
     playcount: string;
     image: LastFMImage[];
@@ -108,7 +108,7 @@ export interface LastFMUserTopArtists {
     artist: LastFMUserTopArtist[];
 }
 
-interface LastFMTopTrackStreamable {
+interface LastFMTrackStreamable {
     fulltrack: string;
     [`#text`]: string;
 }
@@ -117,10 +117,10 @@ interface LastFMTopTrack {
     [`@attr`]: LastFMRankAttribute;
     duration: string;
     playcount: string;
-    artist: LastFMTopRankArtist;
+    artist: LastFMBasicArtistInfo;
     image: LastFMImage[];
-    streamable: LastFMTopTrackStreamable;
-    mbid: string;
+    streamable: LastFMTrackStreamable;
+    mbid?: string;
     name: string;
     url: string;
 }
@@ -128,4 +128,96 @@ interface LastFMTopTrack {
 export interface LastFMUserTopTracks {
     [`@attr`]: LastFMPagingAttributes;
     track: LastFMTopTrack[];
+}
+
+interface LastFMArtistStats {
+    listeners: string;
+    playcount: string;
+}
+
+interface LastFMSimilarArtist {
+    name: string;
+    url: string;
+    image: LastFMImage[];
+}
+
+interface LastFMTag {
+    name: string;
+    url: string;
+}
+
+interface LastFMBiographyLink {
+    link: {
+        [`#text`]: string;
+        rel: string;
+        href: string;
+    };
+}
+
+interface LastFMBiography {
+    links: LastFMBiographyLink;
+    published: string;
+    summary: string;
+    content: string;
+}
+
+export interface LastFMArtistInfoOptions {
+    mbid?: string;
+    lang?: string;
+    autocorrect?: `0` | `1`;
+    username?: string; 
+}
+
+export interface LastFMArtistInfo {
+    name: string;
+    mbid?: string;
+    url: string;
+    image: LastFMImage[];
+    streamable: string;
+    ontour: string;
+    stats: LastFMArtistStats;
+    similar: {
+        artist: LastFMSimilarArtist[];
+    };
+    tags: {
+        tag: LastFMTag[];
+    };
+    bio: LastFMBiography;
+}
+
+interface LastFMPositionAttribute {
+    position: string;
+}
+
+interface LastFMTrackAlbum {
+    artist: string;
+    name: string;
+    mbid?: string;
+    url: string;
+    image: LastFMImage[];
+    [`@attr`]: LastFMPositionAttribute;
+}
+
+export interface LastFMTrackInfoOptions {
+    mbid?: string;
+    username?: string;
+    autocorrect?: `0` | `1`;
+}
+
+export interface LastFMTrackInfo {
+    name: string;
+    mbid?: string;
+    url: string;
+    duration: string;
+    streamable: LastFMTrackStreamable;
+    artist: LastFMBasicArtistInfo;
+    album?: LastFMTrackAlbum;
+    toptags: {
+        tag: LastFMTag[];
+    };
+    wiki?: {
+        published: string;
+        summary: string;
+        content: string;
+    };
 }
