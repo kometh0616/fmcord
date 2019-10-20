@@ -12,6 +12,7 @@ export default class Track extends LastFMClient {
         const params: LastFMRequestParams = {
             method: `track.getinfo`,
             artist, track, ...options,
+            // eslint-disable-next-line @typescript-eslint/camelcase
             api_key: this.apikey,
             format: `json`
         };

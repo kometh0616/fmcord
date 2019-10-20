@@ -12,6 +12,7 @@ export default class Artist extends LastFMClient {
         const params: LastFMRequestParams = {
             method: `artist.getinfo`,
             artist, ...options,
+            // eslint-disable-next-line @typescript-eslint/camelcase
             api_key: this.apikey,
             format: `json`
         };
