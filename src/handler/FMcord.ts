@@ -75,7 +75,7 @@ export default class FMcord extends Client {
     private async loadEntities(dir: string = path.join(__dirname, `../entities/*.js`)): Promise<void> {
         await createConnection({
             type: `sqlite`,
-            database: `database.sqlite`,
+            database: path.join(__dirname, `../database.sqlite`),
             entities: [dir],
             synchronize: true
         });
@@ -105,7 +105,7 @@ export default class FMcord extends Client {
                 }
             }
         });
-        this.login(this.token);
+        this.login(this.token).then(() => console.log(`Logged in.`));
     }
 
 }

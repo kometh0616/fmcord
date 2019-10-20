@@ -1,6 +1,9 @@
 import { PermissionString, Message, Collection, TextChannel } from "discord.js";
 import FMcord, { Cooldown } from "./FMcord";
 import { Disables } from "../entities/Disables";
+import Subcommand from "./Subcommand";
+import * as fs from "fs";
+import * as path from "path";
 
 interface CommandOptions {
     name: string;
@@ -16,6 +19,8 @@ interface CommandOptions {
         user?: PermissionString | 0;
         bot?: PermissionString | 0;
     };
+    subcommandDir?: string;
+    subcommandRequired?: boolean;
 }
 
 export default abstract class Command implements CommandOptions {
@@ -33,6 +38,8 @@ export default abstract class Command implements CommandOptions {
         readonly user?: PermissionString | 0;
         readonly bot?: PermissionString | 0;
     };
+    public readonly subcommands: Subcommand[];
+    public readonly subcommandRequired?: boolean;
 
     public abstract async run(client: FMcord, message: Message, args?: string[]): Promise<void>;
     
@@ -50,6 +57,15 @@ export default abstract class Command implements CommandOptions {
             user: 0,
             bot: 0
         };
+        this.subcommands = [];
+        if (props.subcommandDir) {
+            const files: string[] = fs.readdirSync(props.subcommandDir);
+            files.forEach((file: string) => {
+                const subcommand = require(path.join(props.subcommandDir!, file));
+                this.subcommands.push(new subcommand());
+            });
+        }
+        this.subcommandRequired = props.subcommandRequired;
     }
 
     private verifyChannel(message: Message): boolean {
@@ -158,7 +174,28 @@ export default abstract class Command implements CommandOptions {
         }
     }
 
-    private async verify(message: Message): Promise<boolean> {
+    private verifySubcommands(message: Message, args: string[]): boolean {
+        if (this.subcommandRequired && this.subcommands.length > 0) {
+            const subNames: string[] = this.subcommands.map((x: Subcommand) => x.name);
+            const subAliases: string[] = this.subcommands.map((x: Subcommand) => {
+                if (x.aliases) {
+                    return x.aliases;
+                }
+            }).flat();
+            const subs: string[] = [...subNames, ...subAliases];
+            if (subs.includes(args[0])) {
+                return true;
+            } else {
+                message.reply(`command \`${this.name}\` must be used with a subcommand. ` + 
+                `Here are available subcommands: \`${subs.join(`, `)}\``);
+                return false;
+            }
+        } else {
+            return true;
+        }
+    }
+
+    private async verify(message: Message, args: string[]): Promise<boolean> {
         const notDisabled: boolean = await this.verifyDisabled(message);
         return notDisabled &&
             this.verifyBotPermissions(message) &&
@@ -166,7 +203,8 @@ export default abstract class Command implements CommandOptions {
             this.verifyChannel(message) &&
             this.verifyCooldown(message) &&
             this.verifyExecuting(message) &&
-            this.verifyOwnerOnly(message);
+            this.verifyOwnerOnly(message) && 
+            this.verifySubcommands(message, args);
     }
 
     private putOnCooldown(client: FMcord, message: Message): void {
@@ -194,22 +232,36 @@ export default abstract class Command implements CommandOptions {
         }
         log += `Timestamp: ${new Date().toUTCString()}\n`;
         if (stack) {
-            console.log(log);
-        } else {
+            log += `Stack: ${stack}\n`;
             console.error(log);
+        } else {
+            console.log(log);
         }
     }
 
     public async execute(client: FMcord, message: Message, args: string[]): Promise<void> {
-        const runnable: boolean = await this.verify(message);
+        const runnable: boolean = await this.verify(message, args);
         if (runnable) {
             try {
                 client.executing.add(message.author.id);
-                await this.run(client, message, args);
+                if (this.subcommands.length > 0 && args[0]) {
+                    const subName: string = args[0].toLowerCase();
+                    const subcommand: Subcommand | undefined = this.subcommands.find(
+                        (x: Subcommand) => x.name === subName || x.aliases && x.aliases.includes(subName)
+                    );
+                    if (subcommand) {
+                        await subcommand.run(client, message, args.slice(1));
+                    } else {
+                        await this.run(client, message, args);
+                    }
+                } else {
+                    await this.run(client, message, args);
+                }
                 client.executing.delete(message.author.id);
                 this.putOnCooldown(client, message);
                 this.log(message);
             } catch (e) {
+                client.executing.delete(message.author.id);
                 this.log(message, e.stack);
             }
         }

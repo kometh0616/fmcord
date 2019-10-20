@@ -1,6 +1,9 @@
 {
   "compilerOptions": {
     "target": "es2018",
+    "lib": [
+      "es2019.array"
+    ],
     "module": "commonjs",
     "outDir": "./dist",
     "strict": true,
@@ -13,9 +16,13 @@
     "src",
     "src/handler",
     "src/commands",
+    "src/commands/admin",
+    "src/classes",
     "src/events",
     "src/entities",
-    "config.json",
-    ".data/database.sqlite"
+    "src/lib",
+    "src/lib/lastfm",
+    "src/lib/spotify",
+    "config.json"
   ]
 }

@@ -32,13 +32,6 @@
         "no-console": ["off"],
         "prefer-const": ["error"],
         "no-var": ["error"],
-        "max-len": ["error", {
-            "code": 120,
-            "tabWidth": 2,
-            "comments": 135,
-            "ignoreUrls": true,
-            "ignoreTemplateLiterals": true
-        }],
         "prefer-arrow-callback": ["error"],
         "eqeqeq": ["error"],
         "@typescript-eslint/require-await": ["error"],
