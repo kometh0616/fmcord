@@ -1,8 +1,10 @@
-import { Client, Snowflake, ClientOptions, Collection, Message } from "discord.js";
+import { Client, Snowflake, ClientOptions, Collection, Message, Guild } from "discord.js";
 import * as path from "path";
 import * as fs from "fs";
 import Command from "./Command";
 import { createConnection } from "typeorm";
+import { Prefixes } from "../entities/Prefixes";
+import DBL from "dblapi.js";
 
 export interface FMcordOptions {
     prefix: string;
@@ -14,6 +16,7 @@ export interface FMcordOptions {
             id: string;
             secret: string;
         };
+        dbl?: string;
     };
     ownerID: Snowflake;
 }
@@ -22,15 +25,17 @@ export type Cooldown = Collection<string, number>;
 
 export default class FMcord extends Client {
 
-    public readonly prefix: string;
+    public readonly defaultPrefix: string;
+    public prefix: string;
     public readonly token: string;
-    private readonly apikeys: {
+    public readonly apikeys: {
         readonly lastFM: string;
         readonly youtube?: string;
         readonly spotify?: {
             readonly id: string;
             readonly secret: string;
         };
+        readonly dbl?: string;
     };
     public readonly ownerID: Snowflake;
     public readonly cooldowns: Collection<Snowflake, Cooldown>;
@@ -40,6 +45,7 @@ export default class FMcord extends Client {
     public constructor(botOptions: FMcordOptions, clientOptions?: ClientOptions) {
         super(clientOptions);
         this.prefix = botOptions.prefix;
+        this.defaultPrefix = botOptions.prefix;
         this.token = botOptions.token;
         this.apikeys = botOptions.apikeys;
         this.ownerID = botOptions.ownerID;
@@ -81,29 +87,64 @@ export default class FMcord extends Client {
         });
     }
 
+    private async getPrefix(guild?: Guild): Promise<string | null> {
+        if (guild) {
+            const prefix: Prefixes | undefined = await Prefixes.findOne({
+                guildID: guild.id
+            });
+            if (prefix) {
+                return prefix.prefix;
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
     public async init(): Promise<void> {
         await this.loadEntities();
         this.loadCommands()
             .loadEvents();
+        if (this.apikeys.dbl) {
+            const dbl = new DBL(this.apikeys.dbl, this);
+
+            dbl.on(`posted`, () => {
+                console.log(`Server count posted to discordbots.org!`);
+            });
+            
+            dbl.on(`error`, e => {
+                console.error(`DBL error: ${e}`);
+            });
+        }
         this.on(`message`, (message: Message) => {
-            if (!message.content.startsWith(this.prefix) || message.author.bot) {
-                return;
-            }
-            const args: string[] = message.content
-                .slice(this.prefix.length)
-                .split(/ +/gi);
-            const name: string | undefined = args.shift();
-            if (name) {
-                const commandName: string = name.toLowerCase();
-                const command: Command | undefined = this.commands.find((x: Command) => {
-                    return x.name === commandName || x.aliases && x.aliases.includes(commandName);
-                });
-                if (command) {
-                    command.execute(this, message, args);
-                } else {
+            this.getPrefix(message.guild).then(x => {
+                this.prefix = x || this.defaultPrefix;
+                if (!message.content.startsWith(this.prefix) || message.author.bot) {
                     return;
                 }
-            }
+                const mention = message.mentions.users.firstKey();
+                if (mention && mention === this.user.id) {
+                    message.reply(`my prefix in this server is \`${this.prefix}\`. ` + 
+                    `Do \`${this.prefix}help\` to find out more about my functionality.`);
+                    return;
+                }
+                const args: string[] = message.content
+                    .slice(this.prefix.length)
+                    .split(/ +/gi);
+                const name: string | undefined = args.shift();
+                if (name) {
+                    const commandName: string = name.toLowerCase();
+                    const command: Command | undefined = this.commands.find((x: Command) => {
+                        return x.name === commandName || x.aliases && x.aliases.includes(commandName);
+                    });
+                    if (command) {
+                        command.execute(this, message, args);
+                    } else {
+                        return;
+                    }
+                }
+            });
         });
         this.login(this.token).then(() => console.log(`Logged in.`));
     }

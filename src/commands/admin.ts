@@ -12,6 +12,7 @@ class AdminCommand extends Command {
             usage: [],
             helpExempt: true,
             ownerOnly: true,
+            aliases: [`a`],
             subcommandDir: path.join(__dirname, `admin`),
             subcommandRequired: true
         });

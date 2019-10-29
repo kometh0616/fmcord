@@ -1,5 +1,15 @@
 import https from "https";
 
+class LastFMError extends Error {
+
+    public readonly code: number;
+    public constructor(code: number, message?: string) {
+        super(message);
+        this.code = code;
+    }
+
+}
+
 export default abstract class LastFMClient {
 
     public readonly apikey: string;
@@ -12,8 +22,8 @@ export default abstract class LastFMClient {
     public request(url: string): Promise<Record<string, unknown>> {
         return new Promise<Record<string, unknown>>((resolve, reject) => {
             https.get(url, res => {
-                if (res.statusCode !== 200) {
-                    reject(new Error(`Request failed. Status code: ${res.statusCode}`));
+                if (res.statusCode && res.statusCode !== 200) {
+                    reject(new LastFMError(res.statusCode, `Request failed. Status code: ${res.statusCode}`));
                 }
                 let rawData = ``;
                 res.on(`data`, chunk => rawData += chunk);
@@ -21,7 +31,7 @@ export default abstract class LastFMClient {
                     try {
                         const data: Record<string, unknown> = JSON.parse(rawData);
                         if (data.error) {
-                            reject(new Error(data.message as string));
+                            reject(new LastFMError(data.error as number, data.message as string));
                         } else {
                             resolve(data);
                         }

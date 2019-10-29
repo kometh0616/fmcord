@@ -5,7 +5,7 @@ module.exports = async (client: FMcord): Promise<void> => {
     const total = guilds.reduce((acc: number, val: number) => acc + val, 0);
     await client.user.setPresence({
         game: {
-            name: `with ${total} servers | Do ${client.prefix}help!`
+            name: `with ${total} servers | Do ${client.defaultPrefix}help!`
         }
     });
 };

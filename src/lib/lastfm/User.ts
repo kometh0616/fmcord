@@ -16,7 +16,7 @@ export default class User extends LastFMClient {
 
     public async getInfo(user: string): Promise<LastFMUser> {
         const params: LastFMRequestParams = {
-            method: `user.gettopartists`,
+            method: `user.getinfo`,
             user,
             // eslint-disable-next-line @typescript-eslint/camelcase
             api_key: this.apikey,
@@ -27,7 +27,7 @@ export default class User extends LastFMClient {
         return data.user as LastFMUser;
     }
 
-    public async getRecentTracks(user: string, from: string): Promise<LastFMUserRecentTracks> {
+    public async getRecentTracks(user: string, from?: string): Promise<LastFMUserRecentTracks> {
         const params: LastFMRequestParams = {
             method: `user.getrecenttracks`,
             user, from,

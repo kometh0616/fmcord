@@ -13,16 +13,19 @@
     "experimentalDecorators": true
   },
   "include": [
-    "src",
-    "src/handler",
-    "src/commands",
-    "src/commands/admin",
-    "src/classes",
-    "src/events",
-    "src/entities",
-    "src/lib",
-    "src/lib/lastfm",
-    "src/lib/spotify",
+    "src/*",
+    "src/handler/*",
+    "src/commands/*",
+    "src/commands/admin/*",
+    "src/commands/list/*",
+    "src/classes/*",
+    "src/events/*",
+    "src/entities/*",
+    "src/lib/*",
+    "src/lib/lastfm/*",
+    "src/lib/spotify/*",
+    "src/utils/*",
+    "src/utils/polyfills/*",
     "config.json"
   ]
 }

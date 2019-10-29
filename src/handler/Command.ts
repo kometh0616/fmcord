@@ -4,6 +4,8 @@ import { Disables } from "../entities/Disables";
 import Subcommand from "./Subcommand";
 import * as fs from "fs";
 import * as path from "path";
+import { Users } from "../entities/Users";
+import snippets from "../snippets";
 
 interface CommandOptions {
     name: string;
@@ -21,6 +23,7 @@ interface CommandOptions {
     };
     subcommandDir?: string;
     subcommandRequired?: boolean;
+    requiresNickname?: boolean;
 }
 
 export default abstract class Command implements CommandOptions {
@@ -40,6 +43,7 @@ export default abstract class Command implements CommandOptions {
     };
     public readonly subcommands: Subcommand[];
     public readonly subcommandRequired?: boolean;
+    public readonly requiresNickname?: boolean;
 
     public abstract async run(client: FMcord, message: Message, args?: string[]): Promise<void>;
     
@@ -66,6 +70,7 @@ export default abstract class Command implements CommandOptions {
             });
         }
         this.subcommandRequired = props.subcommandRequired;
+        this.requiresNickname = props.requiresNickname;
     }
 
     private verifyChannel(message: Message): boolean {
@@ -195,9 +200,27 @@ export default abstract class Command implements CommandOptions {
         }
     }
 
-    private async verify(message: Message, args: string[]): Promise<boolean> {
+    private async verifyNickname(client: FMcord, message: Message): Promise<boolean> {
+        if (this.requiresNickname) {
+            const user: Users | undefined = await Users.findOne({
+                discordUserID: message.author.id
+            });
+            if (!user) {
+                await message.reply(`you have not set your Last.fm nickname! You can do so by doing ` +
+                `\`${client.prefix}setnick <nickname>\`.`);
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            return true;
+        }
+    }
+
+    private async verify(client: FMcord, message: Message, args: string[]): Promise<boolean> {
         const notDisabled: boolean = await this.verifyDisabled(message);
-        return notDisabled &&
+        const nickname: boolean = await this.verifyNickname(client, message);
+        return notDisabled && nickname &&
             this.verifyBotPermissions(message) &&
             this.verifyUserPermissions(message) &&
             this.verifyChannel(message) &&
@@ -240,7 +263,7 @@ export default abstract class Command implements CommandOptions {
     }
 
     public async execute(client: FMcord, message: Message, args: string[]): Promise<void> {
-        const runnable: boolean = await this.verify(message, args);
+        const runnable: boolean = await this.verify(client, message, args);
         if (runnable) {
             try {
                 client.executing.add(message.author.id);
@@ -262,6 +285,11 @@ export default abstract class Command implements CommandOptions {
                 this.log(message);
             } catch (e) {
                 client.executing.delete(message.author.id);
+                if (e.code === 500) {
+                    message.reply(`there is an error within Last.fm's API. Please be patient, it should be fixed soon.`);
+                } else {
+                    message.reply(snippets.error);
+                }
                 this.log(message, e.stack);
             }
         }

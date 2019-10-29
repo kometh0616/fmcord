@@ -4,10 +4,12 @@ export interface LastFMRequestParams extends Record<string, string | undefined> 
     format: `json`;
 }
 
+export type LastFMTimePeriod = `overall` | `7day` | `1month` | `3month` | `6month` | `12month`;
+
 export interface LastFMTopOptions {
-    period: `overall` | `7day` | `1month` | `3month` | `6month` | `12month`;
-    limit: string;
-    page: string;
+    period: LastFMTimePeriod;
+    limit?: string;
+    page?: string;
 }
 
 export interface LastFMImage {
@@ -54,11 +56,15 @@ interface LastFMUserRecentTrackDate {
     [`#text`]: string;
 }
 
-interface LastFMUserRecentTrack {
+export interface LastFMUserRecentTrack {
+    [`@attr`]?: {
+        nowplaying: string;
+    };
     artist: LastFMUnitData;
     album: LastFMUnitData;
     image: LastFMImage[];
     streamable: string;
+    name: string;
     date: LastFMUserRecentTrackDate;
     url: string;
     mbid?: string;
@@ -113,7 +119,7 @@ interface LastFMTrackStreamable {
     [`#text`]: string;
 }
 
-interface LastFMTopTrack {
+export interface LastFMTopTrack {
     [`@attr`]: LastFMRankAttribute;
     duration: string;
     playcount: string;
@@ -133,6 +139,7 @@ export interface LastFMUserTopTracks {
 interface LastFMArtistStats {
     listeners: string;
     playcount: string;
+    userplaycount?: string;
 }
 
 interface LastFMSimilarArtist {
@@ -191,7 +198,7 @@ interface LastFMPositionAttribute {
 
 interface LastFMTrackAlbum {
     artist: string;
-    name: string;
+    title: string;
     mbid?: string;
     url: string;
     image: LastFMImage[];
@@ -220,4 +227,16 @@ export interface LastFMTrackInfo {
         summary: string;
         content: string;
     };
+}
+
+interface LastFMTagWiki {
+    summary: string;
+    content: string;
+}
+
+export interface LastFMTagInfo {
+    name: string;
+    total: number;
+    reach: number;
+    wiki: LastFMTagWiki;
 }
