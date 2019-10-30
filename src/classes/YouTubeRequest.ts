@@ -28,11 +28,16 @@ interface SearchResultID {
 }
 
 interface SearchResultSnippet {
-    publishedAt: string;
-    channelId: string;
-    title: string;
-    description: string;
-    thumbnails: SearchResultThumbnails;
+    kind: `youtube#searchResult`;
+    etag: string;
+    id: SearchResultID;
+    snippet: {
+        publishedAt: string;
+        channelId: string;
+        title: string;
+        description: string;
+        thumbnails: SearchResultThumbnails;
+    };
     channelTitle: string;
     liveBroadcastContent: `upcoming` | `live` | `none`;
 }

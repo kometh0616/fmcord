@@ -120,13 +120,13 @@ export default class FMcord extends Client {
         this.on(`message`, (message: Message) => {
             this.getPrefix(message.guild).then(x => {
                 this.prefix = x || this.defaultPrefix;
-                if (!message.content.startsWith(this.prefix) || message.author.bot) {
-                    return;
-                }
                 const mention = message.mentions.users.firstKey();
                 if (mention && mention === this.user.id) {
                     message.reply(`my prefix in this server is \`${this.prefix}\`. ` + 
                     `Do \`${this.prefix}help\` to find out more about my functionality.`);
+                    return;
+                }
+                if (!message.content.startsWith(this.prefix) && !message.content.startsWith(this.defaultPrefix) || message.author.bot) {
                     return;
                 }
                 const args: string[] = message.content

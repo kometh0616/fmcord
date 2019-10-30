@@ -18,6 +18,7 @@
     "src/commands/*",
     "src/commands/admin/*",
     "src/commands/list/*",
+    "src/commands/prefix/*",
     "src/classes/*",
     "src/events/*",
     "src/entities/*",
