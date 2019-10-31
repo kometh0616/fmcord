@@ -1,0 +1,16 @@
+{
+    "prefix": "",
+    "token": "",
+    "lastFM": {
+        "apikey": "",
+        "secret": ""
+    },
+    "youtube": {
+        "apikey": ""
+    },
+    "spotify": {
+        "id": "",
+        "secret": ""
+    },
+    "botOwnerID": ""
+}

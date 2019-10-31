@@ -1,7 +1,6 @@
 import Command from "../handler/Command";
 import FMcord from "../handler/FMcord";
 import { Message } from "discord.js";
-import UserFetcher from "../classes/UserFetcher";
 import TrackFetcher from "../classes/TrackFetcher";
 import snippets from "../snippets";
 import YouTubeRequest from "../classes/YouTubeRequest";
