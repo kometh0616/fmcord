@@ -1,7 +1,6 @@
 import Command from "../handler/Command";
 import FMcord from "../handler/FMcord";
 import { Message } from "discord.js";
-import snippets from "../snippets";
 
 class InviteCommand extends Command {
 
@@ -17,7 +16,13 @@ class InviteCommand extends Command {
     }
 
     public async run(client: FMcord, message: Message): Promise<void> {
-        await message.reply(`you can invite me to your server using this link: ${snippets.dBotsLink}`);
+        const invite = await client.generateInvite([
+            `SEND_MESSAGES`,
+            `EMBED_LINKS`,
+            `ATTACH_FILES`,
+            `ADD_REACTIONS`
+        ]);
+        await message.reply(`you can invite me to your server using this link: ${invite}`);
     }
 
 }
