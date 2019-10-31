@@ -5,6 +5,8 @@ import Command from "./Command";
 import { createConnection } from "typeorm";
 import { Prefixes } from "../entities/Prefixes";
 import DBL from "dblapi.js";
+import express from "express";
+import http from "http";
 
 export interface FMcordOptions {
     prefix: string;
@@ -102,10 +104,26 @@ export default class FMcord extends Client {
         }
     }
 
+    private addExpressListener(): this {
+        const app = express();
+
+        app.get(`/`, (request, response) => {
+            response.sendStatus(200);
+        });
+
+        app.listen(process.env.PORT);
+        setInterval(() => {
+            http.get(`http://${process.env.PROJECT_DOMAIN}.glitch.me/`);
+        }, 280000);
+
+        return this;
+    }
+
     public async init(): Promise<void> {
         await this.loadEntities();
         this.loadCommands()
-            .loadEvents();
+            .loadEvents()
+            .addExpressListener();
         if (this.apikeys.dbl) {
             const dbl = new DBL(this.apikeys.dbl, this);
 
