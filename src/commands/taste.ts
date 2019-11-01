@@ -72,7 +72,7 @@ class TasteCommand extends Command {
                         if (matches.length) {
                             matches.sort((a, b) => b.diff - a.diff);
                             const embed = new FMcordEmbed(message)
-                                .setTitle(`${author} and ${username} taste comparison`)
+                                .setTitle(`${author} and ${username} taste comparison`);
                             matches.forEach(m => {
                                 const comp = `${m.authorPlays} plays - ${m.userPlays}`;
                                 embed.addField(m.name, comp, true);
