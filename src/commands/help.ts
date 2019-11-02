@@ -33,6 +33,7 @@ class HelpCommand extends Command {
                 const embed = new RichEmbed()
                     .setColor(color)
                     .setTitle(`Command ${x.name}`)
+                    .addField(`Description`, x.description)
                     .addField(`Usage`, x.usage.map(u => `${client.prefix}${u}`).join(`, `))
                     .setFooter(`Page ${++pages}/${helpCommands.length} | Command executed by ${message.author.tag}`, message.author.avatarURL)
                     .setTimestamp();
@@ -47,7 +48,7 @@ class HelpCommand extends Command {
             let index = 0;
             const embed: RichEmbed = embeds[index];
             const msg: Message = await message.channel.send(embed) as Message;
-            const ri = new ReactionInterface(msg, message.author);
+            const ri = new ReactionInterface(client, msg, message.author);
             await ri.setKey(snippets.arrowLeft, () => {
                 if (index !== 0) {
                     const embed: RichEmbed = embeds[--index];

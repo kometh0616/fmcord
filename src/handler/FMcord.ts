@@ -7,6 +7,10 @@ import { Prefixes } from "../entities/Prefixes";
 import DBL from "dblapi.js";
 import express from "express";
 import http from "http";
+import { ReactionListener } from "../classes/ReactionInterface";
+
+
+type Keys = Collection<string, ReactionListener>;
 
 export interface FMcordOptions {
     prefix: string;
@@ -43,6 +47,7 @@ export default class FMcord extends Client {
     public readonly cooldowns: Collection<Snowflake, Cooldown>;
     public readonly executing: Set<Snowflake>;
     public readonly commands: Command[];
+    public readonly reactionListeners: Collection<Snowflake, Keys>;
 
     public constructor(botOptions: FMcordOptions, clientOptions?: ClientOptions) {
         super(clientOptions);
@@ -54,6 +59,7 @@ export default class FMcord extends Client {
         this.cooldowns = new Collection<Snowflake, Cooldown>();
         this.executing = new Set<Snowflake>();
         this.commands = [];
+        this.reactionListeners = new Collection<Snowflake, Keys>();
     }
 
     private loadCommands(dir: string = path.join(__dirname, `../commands`)): this {
