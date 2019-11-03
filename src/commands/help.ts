@@ -72,8 +72,8 @@ class HelpCommand extends Command {
             const embed = new RichEmbed()
                 .setColor(color)
                 .setTitle(`Command ${command.name}`)
-                .addField(`Usage:`, command.usage.map(x => `${client.prefix}${x}`).join(`, `))
-                .addField(`Description:`, command.description)
+                .addField(`Usage`, command.usage.map(x => `${client.prefix}${x}`).join(`, `))
+                .addField(`Description`, command.description)
                 .setFooter(`Command executed by ${message.author.tag}`, message.author.avatarURL)
                 .setTimestamp();
             if (command.notes) {

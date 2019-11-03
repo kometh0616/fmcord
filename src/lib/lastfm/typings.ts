@@ -212,6 +212,9 @@ export interface LastFMTrackInfoOptions {
 }
 
 export interface LastFMTrackInfo {
+    listeners: string;
+    playcount: string;
+    userplaycount?: string;
     name: string;
     mbid?: string;
     url: string;
@@ -229,7 +232,8 @@ export interface LastFMTrackInfo {
     };
 }
 
-interface LastFMTagWiki {
+interface LastFMWiki {
+    published: string;
     summary: string;
     content: string;
 }
@@ -238,5 +242,39 @@ export interface LastFMTagInfo {
     name: string;
     total: number;
     reach: number;
-    wiki: LastFMTagWiki;
+    wiki: LastFMWiki;
+}
+
+interface LastFMAlbumTrack {
+    name: string;
+    url: string;
+    duration: string;
+    [`@attr`]: LastFMPositionAttribute;
+    streamable: LastFMTrackStreamable;
+    artist: LastFMBasicArtistInfo;
+}
+
+export interface LastFMAlbumInfo {
+    name: string;
+    mbid: string;
+    artist: string;
+    url: string;
+    image: LastFMImage[];
+    listeners: string;
+    playcount: string;
+    userplaycount?: string;
+    tracks: {
+        track: LastFMAlbumTrack[];
+    };
+    tags: {
+        tag: LastFMTag[];
+    };
+    wiki?: LastFMWiki;
+}
+
+export interface LastFMAlbumInfoOptions {
+    mbid?: string;
+    autocorrect?: `0` | `1`;
+    username?: string;
+    lang?: string;
 }

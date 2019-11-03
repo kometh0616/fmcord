@@ -40,5 +40,22 @@ export default {
             .replace(`)`, `%29`)
             .replace(`[`, `%5B`)
             .replace(`]`, `%5D`);
+    },
+    clickify(name: string, url: string): string {
+        return `[${name}](${this.removeParens(url)})`;
+    },
+    formatSeconds(seconds: string): string {
+        const toInt = parseInt(seconds);
+        if (isNaN(toInt)) {
+            throw new Error(`The parameter must be a string number.`);
+        }
+        const hours = Math.floor(toInt / 3600);
+        const minutes = hours ? Math.floor((toInt - hours * 3600) / 60) : Math.floor(toInt / 60);
+        const secs = hours ? Math.floor((toInt - hours * 3600) - (minutes * 60)) : Math.floor(toInt - minutes * 60);
+        if (hours) {
+            return `${hours}:${minutes < 10 ? `0${minutes}` : minutes}:${secs < 10 ? `0${secs}` : secs}`;
+        } else {
+            return `${minutes}:${secs < 10 ? `0${secs}` : secs}`;
+        }
     }
 }
