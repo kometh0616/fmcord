@@ -6,7 +6,6 @@ export default class FMcordEmbed extends RichEmbed {
         super();
         this.setColor(message.member ? message.member.displayColor : 16777215)
             .setFooter(`Command executed by ${message.author.tag}`, message.author.avatarURL)
-            .setThumbnail(message.author.avatarURL)
             .setTimestamp();
     }
 
