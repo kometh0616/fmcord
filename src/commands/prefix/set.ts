@@ -23,11 +23,9 @@ class PrefixSetSubcommand extends Subcommand {
                 prefix
             });
             if (hasPrefix) {
-                await Prefixes.update({
-                    prefix
-                }, {
-                    guildID: message.guild.id
-                });
+                await message.reply(`you already have a prefix set! Please delete your existing ` +
+                `prefix in order to set a new one.`);
+                return;
             } else {
                 const newPrefix = new Prefixes();
                 newPrefix.guildID = message.guild.id;

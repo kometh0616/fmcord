@@ -32,7 +32,7 @@ class PrefixCommand extends Command {
             `use the default prefix of this bot, which is \`${client.defaultPrefix}\`.`);
         } else {
             await message.reply(`no prefix for this guild is set. To set a prefix, do ` +
-            `\`${client.defaultPrefix}prefix set <prefix>\`.`)
+            `\`${client.defaultPrefix}prefix set <prefix>\`.`);
         }
     }
 
