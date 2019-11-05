@@ -11,7 +11,7 @@ Other minor commands exist as well, and more are being planned
 
 FMCord also has small moderation support which allows admins/mods to disable certain commands on a channel or whole server. It also allows you to customize bot's prefix in your guild. Get started by typing &help --manual!
 
-FMCord is written in a Javascript language. The libraries for development used are:
+FMCord is written in a TypeScript language. The libraries for development used are:
 - [Discord.js](https://discord.js.org/) - for interaction with Discord API
 - [moment.js](https://momentjs.com) - For DateTime manipulation
 - [node-canvas](https://www.npmjs.com/package/canvas) - for image manipulation
