@@ -68,6 +68,7 @@ class ChartCommand extends Command {
                     period = `overall`;
                     break;
                 default:
+                    console.log(`Incorrect time period!`);
                     await message.channel.send(usageWarning);
                     return;
             }
@@ -76,11 +77,14 @@ class ChartCommand extends Command {
             } else {
                 const vals: string[] = args[1].split(`x`);
                 if (vals.length !== 2) {
+                    console.log(`Value length is incorrect!`);
                     await message.channel.send(usageWarning);
                     return;
                 }
-                const numbers: number[] = vals.map(parseInt);
+                const numbers: number[] = [parseInt(vals[0]), parseInt(vals[1])];
+                console.log(`Before: `, vals, `after:`, numbers);
                 if (numbers.some(isNaN)) {
+                    console.log(`Some of the numbers are NaN!`);
                     await message.channel.send(usageWarning);
                     return;
                 } else {
