@@ -107,7 +107,7 @@ class ChartCommand extends Command {
             await message.reply(`you have no ${time} albums.`);
             return;
         }
-        await message.channel.send(`Please wait until your grid is done...`); 
+        const msg = await message.channel.send(`Please wait until your grid is done...`) as Message; 
         const imageLinks: string[] = data.album.map(x => x.image[2][`#text`]);
         const proms: Promise<Image>[] = imageLinks.map(x => {
             if (x.length > 0) {
@@ -136,6 +136,7 @@ class ChartCommand extends Command {
             console.log(`found notitles.`);
             const buffer = canv.toBuffer();
             await message.reply(`here is your grid.`, { files: [buffer] });
+            await msg.delete();
         } else {
             const names: string[] = data.album.map(x => `${x.artist.name} - ${x.name}`);
             const longest: string = [...names].sort((a, b) => b.length - a.length)[0];
@@ -161,6 +162,7 @@ class ChartCommand extends Command {
             }
             const buffer = finalCanvas.toBuffer();
             await message.reply(`here is your grid.`, { files: [buffer] });
+            await msg.delete();
         }
     }
 
