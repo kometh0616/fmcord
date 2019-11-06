@@ -24,7 +24,7 @@ class SpotifyCommand extends Command {
             if (args.length) {
                 const track = await lib.findTrack(args.join(` `));
                 if (track.tracks.items[0]) {
-                    await message.reply(track.tracks.items[0].external_urls.spotify);
+                    await message.channel.send(track.tracks.items[0].external_urls.spotify);
                 } else {
                     await message.reply(`nothing found when looking for \`${args.join(` `)}\``);
                 }
@@ -37,7 +37,7 @@ class SpotifyCommand extends Command {
                 if (song) {
                     const track = await lib.findTrack(`${song.name} ${song.artist[`#text`]}`);
                     if (track.tracks.items[0]) {
-                        await message.reply(track.tracks.items[0].external_urls.spotify);
+                        await message.channel.send(track.tracks.items[0].external_urls.spotify);
                     } else {
                         await message.reply(`your listened track wasn't found on Spotify.`);
                     }

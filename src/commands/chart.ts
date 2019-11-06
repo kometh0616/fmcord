@@ -106,7 +106,8 @@ class ChartCommand extends Command {
         if (!data.album.length) {
             await message.reply(`you have no ${time} albums.`);
             return;
-        } 
+        }
+        await message.channel.send(`Please wait until your grid is done...`); 
         const imageLinks: string[] = data.album.map(x => x.image[2][`#text`]);
         const proms: Promise<Image>[] = imageLinks.map(x => {
             if (x.length > 0) {
