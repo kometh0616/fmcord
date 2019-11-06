@@ -2,7 +2,7 @@ import Subcommand from "../../handler/Subcommand";
 import { Message } from "discord.js";
 import FMcord from "../../handler/FMcord";
 import Library from "../../lib/lastfm";
-import { LastFMTimePeriod, LastFMUserTopArtists, LastFMUser, LastFMUserTopTracks } from "../../lib/lastfm/typings";
+import { LastFMTimePeriod, LastFMUser, LastFMUserTopTracks } from "../../lib/lastfm/typings";
 import UserFetcher from "../../classes/UserFetcher";
 import FMcordEmbed from "../../classes/FMcordEmbed";
 
@@ -70,7 +70,7 @@ class SongListSubcommand extends Subcommand {
         }
         const embed: FMcordEmbed = new FMcordEmbed(message)
             .setDescription(arr.map(x => `${++num}. **${x.name}** - ${x.playcount} plays`).join(`\n`))
-            .setTitle(`${username}'s top ${arr.length} ${embedPeriod} artists`)
+            .setTitle(`${username}'s top ${arr.length} ${embedPeriod} songs`)
             .setURL(userInfo.url);
         await message.channel.send(embed);
     }

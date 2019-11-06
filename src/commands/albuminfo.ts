@@ -83,10 +83,15 @@ class AlbumInfoCommand extends Command {
             const embed = new FMcordEmbed(message)
                 .setTitle(`Information about ${albumInfo.name} by ${albumInfo.artist}`)
                 .setURL(albumInfo.url)
-                .setThumbnail(albumInfo.image[2][`#text`])
-                .addField(`Artist`, snippets.clickify(albumInfo.artist, albumInfo.tracks.track[0].artist.url), true)
-                .addField(`Tracks`, hyperlinks.length <= 1024 ? hyperlinks : plainText)
-                .addField(`Total duration`, snippets.formatSeconds(totalDuration), true)
+                .setThumbnail(albumInfo.image[2][`#text`]);
+            if (albumInfo.tracks.track.length) {
+                embed.addField(`Artist`, snippets.clickify(albumInfo.artist, albumInfo.tracks.track[0].artist.url), true)
+                    .addField(`Tracks`, hyperlinks.length < 1024 ? hyperlinks : plainText);
+            }
+            if (totalDuration !== `0`) {
+                embed.addField(`Total duration`, snippets.formatSeconds(totalDuration), true);
+            }
+            embed
                 .addField(`Listeners`, albumInfo.listeners, true)
                 .addField(`Playcount`, albumInfo.playcount, true);
             if (albumInfo.userplaycount) {
@@ -100,6 +105,8 @@ class AlbumInfoCommand extends Command {
             if (e.message === `Album not found`) {
                 await message.reply(`no album from an artist named ${artistName} with a name ${albumName} found.`);
                 return;
+            } else {
+                throw e;
             }
         }
         

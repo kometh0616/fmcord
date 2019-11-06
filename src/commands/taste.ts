@@ -74,7 +74,7 @@ class TasteCommand extends Command {
                             const embed = new FMcordEmbed(message)
                                 .setTitle(`${author} and ${username} taste comparison`);
                             matches.forEach(m => {
-                                const comp = `${m.authorPlays} plays - ${m.userPlays}`;
+                                const comp = `**${m.authorPlays}** plays - **${m.userPlays}** plays`;
                                 embed.addField(m.name, comp, true);
                             });
                             await message.channel.send(embed);
