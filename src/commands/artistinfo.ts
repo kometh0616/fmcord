@@ -24,7 +24,6 @@ class ArtistInfoCommand extends Command {
         const lib = new Library(client.apikeys.lastFM);
         const track: LastFMUserRecentTrack | null = await trackFetcher.getCurrentTrack();
         let artistName = ``;
-        console.log(track, args.length, !track && !args.length)
         if (!track && !args.length) {
             await message.reply(snippets.notPlaying);
             return;
