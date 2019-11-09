@@ -69,7 +69,7 @@ class SongListSubcommand extends Subcommand {
             return;
         }
         const embed: FMcordEmbed = new FMcordEmbed(message)
-            .setDescription(arr.map(x => `${++num}. **${x.name}** - ${x.playcount} plays`).join(`\n`))
+            .setDescription(arr.map(x => `${++num}. **${x.name}** by **${x.artist.name}** with ${x.playcount} plays`).join(`\n`))
             .setTitle(`${username}'s top ${arr.length} ${embedPeriod} songs`)
             .setURL(userInfo.url);
         await message.channel.send(embed);
