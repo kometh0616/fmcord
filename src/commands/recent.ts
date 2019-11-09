@@ -85,7 +85,7 @@ class RecentCommand extends Command {
                 .setURL(userInfo.url)
                 .setThumbnail(tracks.track[nowPlaying ? 1 : 0].image[2][`#text`]);
             if (nowPlaying) {
-                const album = nowPlaying.album[`#text`] || `no album`
+                const album = nowPlaying.album[`#text`] || `no album`;
                 const value = `**${nowPlaying.name}** - ${nowPlaying.artist[`#text`]} | ${album}`;
                 embed.addField(`Now playing`, value);
             }

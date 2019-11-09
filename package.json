@@ -7,8 +7,8 @@
     "build": "tsc",
     "launch": "node ./dist/src/index.js",
     "start": "npm run build && npm run launch",
-    "lint": "eslint src *.ts",
-    "lint-fix": "eslint src *.ts --fix",
+    "lint": "eslint src/**/**/*.ts",
+    "lint-fix": "eslint src/**/**/*.ts --fix",
     "test": "npm run lint"
   },
   "engines": {
