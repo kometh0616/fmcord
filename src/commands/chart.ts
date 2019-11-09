@@ -68,7 +68,6 @@ class ChartCommand extends Command {
                     period = `overall`;
                     break;
                 default:
-                    console.log(`Incorrect time period!`);
                     await message.channel.send(usageWarning);
                     return;
             }
@@ -133,7 +132,6 @@ class ChartCommand extends Command {
             } else break;
         }
         if (noTitles.includes(args[2]) || noTitles.includes(args[1])) {
-            console.log(`found notitles.`);
             const buffer = canv.toBuffer();
             await message.reply(`here is your grid.`, { files: [buffer] });
             await msg.delete();
