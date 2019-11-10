@@ -1,6 +1,6 @@
 import UserFetcher from "./UserFetcher";
 import FMcord from "../handler/FMcord";
-import { Message } from "discord.js";
+import { Message, Snowflake } from "discord.js";
 import { LastFMUserRecentTracks, LastFMUserRecentTrack } from "../lib/lastfm/typings";
 import Library from "../lib/lastfm";
 
@@ -15,8 +15,10 @@ export default class TrackFetcher extends UserFetcher {
         this.lib = new Library(client.apikeys.lastFM);
     }
 
-    public async getRecentTracks(): Promise<LastFMUserRecentTracks | null> {
-        const username: string | null = await this.username();
+    public async getRecentTracks(username?: string | null): Promise<LastFMUserRecentTracks | null> {
+        if (!username) {
+            username = await this.username();
+        }
         if (username) {
             const data: LastFMUserRecentTracks = await this.lib.user.getRecentTracks(username);
             return data;
@@ -25,8 +27,8 @@ export default class TrackFetcher extends UserFetcher {
         }
     }
 
-    public async getCurrentTrack(): Promise<LastFMUserRecentTrack | null> {
-        const current: LastFMUserRecentTracks | null = await this.getRecentTracks();
+    public async getCurrentTrack(username?: string | null): Promise<LastFMUserRecentTrack | null> {
+        const current: LastFMUserRecentTracks | null = await this.getRecentTracks(username);
         if (current) {
             const track: LastFMUserRecentTrack = current.track[0];
             if (track[`@attr`]) {
@@ -39,8 +41,8 @@ export default class TrackFetcher extends UserFetcher {
         }
     }
 
-    public async getLatestTrack(): Promise<LastFMUserRecentTrack | null> {
-        const recent: LastFMUserRecentTracks | null = await this.getRecentTracks();
+    public async getLatestTrack(username?: string | null): Promise<LastFMUserRecentTrack | null> {
+        const recent: LastFMUserRecentTracks | null = await this.getRecentTracks(username);
         if (recent) {
             if (recent.track[0][`@attr`]) {
                 return recent.track[1];

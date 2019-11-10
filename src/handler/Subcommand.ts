@@ -13,7 +13,7 @@ export default abstract class Subcommand implements SubcommandOptions {
 
     protected constructor(options: SubcommandOptions) {
         this.name = options.name;
-        this.aliases = options.aliases || [];
+        this.aliases = options.aliases ?? [];
     }
 
     public abstract async run(client: FMcord, message: Message, args?: string[]): Promise<void>;

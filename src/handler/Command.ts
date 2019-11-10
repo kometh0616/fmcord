@@ -51,13 +51,13 @@ export default abstract class Command implements CommandOptions {
         this.name = props.name;
         this.description = props.description;
         this.usage = props.usage;
-        this.aliases = props.aliases || [];
+        this.aliases = props.aliases ?? [];
         this.notes = props.notes;
         this.cooldown = props.cooldown;
         this.dmAvailable = props.dmAvailable;
         this.ownerOnly = props.ownerOnly;
         this.helpExempt = props.helpExempt;
-        this.permissions = props.permissions || {
+        this.permissions = props.permissions ?? {
             user: 0,
             bot: 0
         };
