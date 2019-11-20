@@ -29,10 +29,10 @@ class GenreInfoCommand extends Command {
         const content: string = data.wiki.content.replace(snippets.hrefRegex, ``);
         const embed = new FMcordEmbed(message)
             .setTitle(`Information about ${data.name}`)
-            .addField(`Total uses of the genre`, data.total, true)
-            .addField(`Genre listeners`, data.reach, true);
+            .addField(`Total uses of the genre`, data.total)
+            .addField(`Genre listeners`, data.reach);
         if (/ +/gi.test(content)) {
-            embed.addField(`Information`, snippets.truncate(content), true);
+            embed.addField(`Information`, snippets.truncate(content));
         }
         await message.reply(embed);
     }

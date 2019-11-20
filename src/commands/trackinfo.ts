@@ -70,19 +70,19 @@ class TrackInfoCommand extends Command {
             .setURL(trackInfo.url);
         if (trackInfo.album) {
             embed.setThumbnail(trackInfo.album.image[2][`#text`])
-                .addField(`Album`, snippets.clickify(trackInfo.album.title, trackInfo.album.url), true);
+                .addField(`Album`, snippets.clickify(trackInfo.album.title, trackInfo.album.url));
         }
-        embed.addField(`Artist`, snippets.clickify(trackInfo.artist.name, trackInfo.artist.url), true)
-            .addField(`Plays`, trackInfo.playcount, true)
-            .addField(`Listeners`, trackInfo.listeners, true);
+        embed.addField(`Artist`, snippets.clickify(trackInfo.artist.name, trackInfo.artist.url))
+            .addField(`Plays`, trackInfo.playcount)
+            .addField(`Listeners`, trackInfo.listeners);
         if (trackInfo.userplaycount) {
-            embed.addField(`Your plays of the track`, trackInfo.userplaycount, true);
+            embed.addField(`Your plays of the track`, trackInfo.userplaycount);
         }
         if (trackInfo.toptags.tag.length) {
-            embed.addField(`Tags`, trackInfo.toptags.tag.map(x => snippets.clickify(x.name, x.url)).join(` - `), true);
+            embed.addField(`Tags`, trackInfo.toptags.tag.map(x => snippets.clickify(x.name, x.url)).join(` - `));
         }
         if (trackInfo.wiki) {
-            embed.addField(`About the track`, snippets.truncate(trackInfo.wiki.content), true);
+            embed.addField(`About the track`, snippets.truncate(trackInfo.wiki.content));
         }
         await message.channel.send(embed);
     }

@@ -44,18 +44,18 @@ class ArtistInfoCommand extends Command {
         const embed = new FMcordEmbed(message)
             .setTitle(`Information about ${data.name}`)
             .setURL(data.url)
-            .addField(`Listeners`, data.stats.listeners, true)
-            .addField(`Scrobbles`, data.stats.playcount, true);
+            .addField(`Listeners`, data.stats.listeners)
+            .addField(`Scrobbles`, data.stats.playcount);
         if (data.tags.tag.length > 0) {
-            embed.addField(`Tags`, data.tags.tag.map(x => `[${x.name}](${snippets.removeParens(x.url)})`).join(` - `), true);
+            embed.addField(`Tags`, data.tags.tag.map(x => snippets.clickify(x.name, x.url)).join(` - `));
         }
         if (data.stats.userplaycount) {
-            embed.addField(`User play count: `, data.stats.userplaycount, true);
+            embed.addField(`User play count: `, data.stats.userplaycount);
         }
         const href = `<a href="${data.url}">Read more on Last.fm</a>`;
         const desc = data.bio.summary.slice(0, data.bio.summary.length - href.length - 1);
         if (desc.length > 0) {
-            embed.addField(`Summary`, snippets.truncate(desc), true);
+            embed.addField(`Summary`, snippets.truncate(desc));
         }
         await message.channel.send(embed);
     }

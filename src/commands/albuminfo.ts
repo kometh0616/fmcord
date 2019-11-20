@@ -89,16 +89,16 @@ class AlbumInfoCommand extends Command {
                     .addField(`Tracks`, hyperlinks.length < 1024 ? hyperlinks : plainText);
             }
             if (totalDuration !== `0`) {
-                embed.addField(`Total duration`, snippets.formatSeconds(totalDuration), true);
+                embed.addField(`Total duration`, snippets.formatSeconds(totalDuration));
             }
             embed
-                .addField(`Listeners`, albumInfo.listeners, true)
-                .addField(`Playcount`, albumInfo.playcount, true);
+                .addField(`Listeners`, albumInfo.listeners)
+                .addField(`Playcount`, albumInfo.playcount);
             if (albumInfo.userplaycount) {
-                embed.addField(`Your playcount`, albumInfo.userplaycount, true);
+                embed.addField(`Your playcount`, albumInfo.userplaycount);
             }
             if (albumInfo.tags.tag.length) {
-                embed.addField(`Tags`, albumInfo.tags.tag.map(x => snippets.clickify(x.name, x.url)).join(` - `), true);
+                embed.addField(`Tags`, albumInfo.tags.tag.map(x => snippets.clickify(x.name, x.url)).join(` - `));
             }
             await message.channel.send(embed);
         } catch (e) {
