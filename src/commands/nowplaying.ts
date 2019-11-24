@@ -47,7 +47,7 @@ class NowPlayingCommand extends Command {
                     .addField(`Current`, `**${currentTrack.name}** - ${currentTrack.artist[`#text`]} | ${currentAlbum}`)
                     .addField(`Previous`, `**${lastTrack!.name}** - ${lastTrack!.artist[`#text`]} | ${lastAlbum}`)
                     .addField(`Total scrobbles`, userData.playcount)
-                    .setTitle(`Currently listened track by ${userData.name} (${user?.user.tag ?? message.author.tag})`)
+                    .setTitle(`Current track for ${userData.name} (${user?.user.tag ?? message.author.tag})`)
                     .setURL(userData.url)
                     .setThumbnail(currentTrack.image[2][`#text`]);
                 await message.channel.send(embed);
