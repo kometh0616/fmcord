@@ -1,5 +1,5 @@
 import LastFMClient from "./Client";
-import { LastFMAlbumInfoOptions, LastFMAlbumInfo, LastFMRequestParams } from "./typings";
+import { LastFMAlbumInfoOptions, LastFMAlbumInfo } from "./typings";
 import { stringify } from "querystring";
 
 export default class Album extends LastFMClient {
@@ -9,7 +9,7 @@ export default class Album extends LastFMClient {
     }
 
     public async getInfo(artist: string, album: string, options?: LastFMAlbumInfoOptions): Promise<LastFMAlbumInfo> {
-        const params: LastFMRequestParams = {
+        const params = {
             method: `album.getinfo`,
             artist, album, ...options,
             // eslint-disable-next-line @typescript-eslint/camelcase
