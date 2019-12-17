@@ -1,6 +1,6 @@
 import LastFMClient from "./Client";
-import { LastFMUser, LastFMUserRecentTracks, LastFMTopOptions, LastFMUserTopAlbums, LastFMUserTopArtists, LastFMUserTopTracks } from "./typings";
-import { stringify, ParsedUrlQueryInput } from "querystring";
+import { LastFMUser, LastFMRequestParams, LastFMUserRecentTracks, LastFMTopOptions, LastFMUserTopAlbums, LastFMUserTopArtists, LastFMUserTopTracks } from "./typings";
+import { stringify } from "querystring";
 
 const defaultOptions: LastFMTopOptions = {
     period: `overall`,
@@ -15,7 +15,7 @@ export default class User extends LastFMClient {
     }
 
     public async getInfo(user: string): Promise<LastFMUser> {
-        const params: ParsedUrlQueryInput = {
+        const params: LastFMRequestParams = {
             method: `user.getinfo`,
             user,
             // eslint-disable-next-line @typescript-eslint/camelcase
@@ -28,7 +28,7 @@ export default class User extends LastFMClient {
     }
 
     public async getRecentTracks(user: string, from?: string): Promise<LastFMUserRecentTracks> {
-        const params: ParsedUrlQueryInput = {
+        const params: LastFMRequestParams = {
             method: `user.getrecenttracks`,
             user, from,
             // eslint-disable-next-line @typescript-eslint/camelcase
@@ -41,7 +41,7 @@ export default class User extends LastFMClient {
     }
 
     public async getTopAlbums(user: string, options: LastFMTopOptions = defaultOptions): Promise<LastFMUserTopAlbums> {
-        const params: ParsedUrlQueryInput = {
+        const params: LastFMRequestParams = {
             method: `user.gettopalbums`,
             user, ...options,
             // eslint-disable-next-line @typescript-eslint/camelcase
@@ -54,7 +54,7 @@ export default class User extends LastFMClient {
     }
 
     public async getTopArtists(user: string, options: LastFMTopOptions = defaultOptions): Promise<LastFMUserTopArtists> {
-        const params: ParsedUrlQueryInput = {
+        const params: LastFMRequestParams = {
             method: `user.gettopartists`,
             user, ...options,
             // eslint-disable-next-line @typescript-eslint/camelcase
@@ -67,7 +67,7 @@ export default class User extends LastFMClient {
     }
 
     public async getTopTracks(user: string, options: LastFMTopOptions = defaultOptions): Promise<LastFMUserTopTracks> {
-        const params: ParsedUrlQueryInput = {
+        const params: LastFMRequestParams = {
             method: `user.gettoptracks`,
             user, ...options,
             // eslint-disable-next-line @typescript-eslint/camelcase
