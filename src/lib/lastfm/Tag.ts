@@ -1,6 +1,6 @@
 import LastFMClient from "./Client";
-import { LastFMTagInfo, LastFMRequestParams } from "./typings";
-import { stringify } from "querystring";
+import { LastFMTagInfo } from "./typings";
+import { stringify, ParsedUrlQueryInput } from "querystring";
 
 export default class Tag extends LastFMClient {
 
@@ -9,7 +9,7 @@ export default class Tag extends LastFMClient {
     }
 
     public async getInfo(tag: string): Promise<LastFMTagInfo> {
-        const params: LastFMRequestParams = {
+        const params: ParsedUrlQueryInput = {
             method: `tag.getinfo`,
             tag,
             // eslint-disable-next-line @typescript-eslint/camelcase
