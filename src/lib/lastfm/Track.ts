@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import LastFMClient from "./Client";
 import { LastFMTrackInfoOptions, LastFMTrackInfo, LastFMRequestParams } from "./typings";
 import { stringify } from "querystring";

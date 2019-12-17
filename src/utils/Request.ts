@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { LastFMRequestParams } from "../lib/lastfm/typings";
 import { stringify } from "querystring";
 import https from "https";
