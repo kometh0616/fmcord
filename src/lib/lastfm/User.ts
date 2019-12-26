@@ -1,8 +1,6 @@
-// @ts-nocheck
-
 import LastFMClient from "./Client";
 import { LastFMUser, LastFMRequestParams, LastFMUserRecentTracks, LastFMTopOptions, LastFMUserTopAlbums, LastFMUserTopArtists, LastFMUserTopTracks } from "./typings";
-import { stringify } from "querystring";
+import { stringify, ParsedUrlQueryInput } from "querystring";
 
 const defaultOptions: LastFMTopOptions = {
     period: `overall`,
@@ -24,7 +22,7 @@ export default class User extends LastFMClient {
             api_key: this.apikey,
             format: `json`
         };
-        const query = stringify(params);
+        const query = stringify(params as ParsedUrlQueryInput);
         const data: Record<string, unknown> = await this.request(`${this.url}${query}`) as Record<string, unknown>;
         return data.user as LastFMUser;
     }
@@ -37,7 +35,7 @@ export default class User extends LastFMClient {
             api_key: this.apikey,
             format: `json`
         };
-        const query = stringify(params);
+        const query = stringify(params as ParsedUrlQueryInput);
         const data: Record<string, unknown> = await this.request(`${this.url}${query}`);
         return data.recenttracks as LastFMUserRecentTracks;
     }
@@ -50,7 +48,7 @@ export default class User extends LastFMClient {
             api_key: this.apikey,
             format: `json`
         };
-        const query = stringify(params);
+        const query = stringify(params as ParsedUrlQueryInput);
         const data: Record<string, unknown> = await this.request(`${this.url}${query}`);
         return data.topalbums as LastFMUserTopAlbums;
     }
@@ -63,7 +61,7 @@ export default class User extends LastFMClient {
             api_key: this.apikey,
             format: `json`
         };
-        const query = stringify(params);
+        const query = stringify(params as ParsedUrlQueryInput);
         const data: Record<string, unknown> = await this.request(`${this.url}${query}`);
         return data.topartists as LastFMUserTopArtists;
     }
@@ -76,7 +74,7 @@ export default class User extends LastFMClient {
             api_key: this.apikey,
             format: `json`
         };
-        const query = stringify(params);
+        const query = stringify(params as ParsedUrlQueryInput);
         const data: Record<string, unknown> = await this.request(`${this.url}${query}`);
         return data.toptracks as LastFMUserTopTracks;
     }

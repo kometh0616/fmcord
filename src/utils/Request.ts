@@ -1,13 +1,11 @@
-// @ts-nocheck
-
 import { LastFMRequestParams } from "../lib/lastfm/typings";
-import { stringify } from "querystring";
+import { stringify, ParsedUrlQueryInput } from "querystring";
 import https from "https";
 
 const url = `https://ws.audioscrobbler.com/2.0/?`;
 
 export default (params: LastFMRequestParams): Promise<unknown> => {
-    const query: string = stringify(params);
+    const query: string = stringify(params as ParsedUrlQueryInput);
     return new Promise<unknown>((resolve, reject) => {
         https.get(`${url}${query}`, res => {
             if (res.statusCode !== 200) {

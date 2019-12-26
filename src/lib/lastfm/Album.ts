@@ -1,8 +1,6 @@
-// @ts-nocheck
-
 import LastFMClient from "./Client";
 import { LastFMAlbumInfoOptions, LastFMAlbumInfo, LastFMRequestParams } from "./typings";
-import { stringify } from "querystring";
+import { stringify, ParsedUrlQueryInput } from "querystring";
 
 export default class Album extends LastFMClient {
 
@@ -18,7 +16,7 @@ export default class Album extends LastFMClient {
             api_key: this.apikey,
             format: `json`
         };
-        const query = stringify(params);
+        const query = stringify(params as ParsedUrlQueryInput);
         const data = await this.request(`${this.url}${query}`);
         return data.album as LastFMAlbumInfo;
     }

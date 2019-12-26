@@ -21,7 +21,7 @@ class HelpCommand extends Command {
     }
 
     public async run(client: FMcord, message: Message, args: string[]): Promise<void> {
-        const color: ColorResolvable = message.member ? message.member.displayColor : 16777215;
+        const color: ColorResolvable = message.member?.displayColor ?? 16777215;
         const helpCommands: Command[] = client.commands.filter(x => !x.helpExempt);
         if (args[0] === `--manual`) {
             if (message.guild && !message.guild.me.hasPermission(`ADD_REACTIONS`, false, true, true)) {
