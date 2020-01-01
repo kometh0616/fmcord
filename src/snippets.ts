@@ -14,8 +14,8 @@ export default {
     npNoLogin: `you haven't registered your Last.fm ` +
     `account, therefore, I can't check what you're listening to. To set ` +
     `your Last.fm nickname, do \`${config.prefix}login <lastfm username>\`.`,
-    userNotFound: `Couldn't find the user in Discord. Make sure you provided a valid user correctly and try again!`,
-    userNoLogin: `Couldn't find the user in my database. Make sure you provided a valid user correctly and try again!`,
+    userNotFound: `couldn't find the user in Discord. Make sure you provided a valid user correctly and try again!`,
+    userNoLogin: `couldn't find the user in my database. Make sure you provided a valid user correctly and try again!`,
     artistNotFound: (artist: string) => `couldn't find an artist named \`${artist}\`. Please check your artist's name for typos or try a different artist.`,
     arrowLeft: `⬅`,
     arrowRight: `➡`,
@@ -31,7 +31,7 @@ export default {
     },
     languages: [`en`, `de`, `es`, `fr`, `it`, `ja`, `pl`, `ru`, `sv`, `tr`, `zh`],
     hrefRegex: /<a href=.+/gi,
-    truncate: (text: string): string => {
+    truncate(text: string): string {
         const txt = text.replace(/<a href=.+/gi, ``);
         return txt.length > 768 ? `${txt.slice(0, 768)}...` : txt;
     },

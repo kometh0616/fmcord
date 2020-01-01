@@ -12,7 +12,8 @@ class ListCommand extends Command {
             usage: [
                 `list <list type>`, 
                 `list <list type> <time period>`, 
-                `list <list type> <time period> <list length>`
+                `list <list type> <time period> <list length>`,
+                `list <list type> <time period> <list length> <user>`
             ],
             notes: `In \`list type\`, you can have \`artists\` or \`songs\`. ` +
             `In \`time period\`, you can have \`weekly\`, \`monthly\` or ` +

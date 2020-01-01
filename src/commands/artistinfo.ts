@@ -41,6 +41,7 @@ class ArtistInfoCommand extends Command {
         } else {
             data = await lib.artist.getInfo(artistName);
         }
+        const albumData = await lib.artist.getTopAlbums(artistName);
         const embed = new FMcordEmbed(message)
             .setTitle(`Information about ${data.name}`)
             .setURL(data.url)
@@ -56,6 +57,11 @@ class ArtistInfoCommand extends Command {
         const desc = data.bio.summary.slice(0, data.bio.summary.length - href.length - 1);
         if (desc.length > 0) {
             embed.addField(`Summary`, snippets.truncate(desc));
+        }
+        const albumArray = albumData.album.slice(0, 8);
+        if (albumArray.length > 0) {
+            let num = 0;
+            embed.addField(`Top ${albumArray.length} albums`, albumArray.map(album => snippets.clickify(`${++num}. ${album.name}`, album.url)).join(`\n`));
         }
         await message.channel.send(embed);
     }

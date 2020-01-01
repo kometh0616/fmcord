@@ -1,4 +1,4 @@
-import { Message, Snowflake, User } from "discord.js";
+import { Message, Snowflake } from "discord.js";
 import { Users } from "../entities/Users";
 
 export default class UserFetcher {

@@ -1,5 +1,5 @@
 import Command from "../handler/Command";
-import { Message } from "discord.js";
+import { Message, Snowflake, GuildMember } from "discord.js";
 import FMcord from "../handler/FMcord";
 import * as path from "path";
 import { Image, loadImage, Canvas, createCanvas } from "canvas";
@@ -8,6 +8,7 @@ import Library from "../lib/lastfm";
 import { LastFMTimePeriod, LastFMUserTopAlbums } from "../lib/lastfm/typings";
 import snippets from "../snippets";
 import AllSettled, { ResolvedPromise } from "../utils/polyfills/AllSettled";
+import DiscordUserGetter from "../utils/DiscordUserGetter";
 
 const font = `12px ${process.platform === `win32` ? `inconsolata` : `noto-sans`}`;
 
@@ -23,7 +24,9 @@ class ChartCommand extends Command {
                 `chart <time period>`, 
                 `chart <time period> <grid size>`,
                 `chart <time period> [nt/notitles]`,
-                `chart <time period> <grid size> [nt/notitles]`
+                `chart <time period> <grid size> <user>`,
+                `chart <time period> <grid size> [nt/notitles]`,
+                `chart <time period> <grid size> [nt/notitles] <user>`
             ],
             notes: `In time period, you can have "weekly", "monthly" or "alltime".`,
             aliases: [`c`, `grid`],
@@ -40,7 +43,7 @@ class ChartCommand extends Command {
         const noTitles: string[] = [`nt`, `notitles`];
         const usageWarning = `Incorrect usage of a command! Correct usage ` +
         `would be: \`&chart <time period> <grid size> [nt/notitles]\``;
-        let period: LastFMTimePeriod, x: number, y: number, time: string;
+        let period: LastFMTimePeriod, x: number, y: number, time: string, userID: Snowflake = message.author.id;
         if (!args.length) {
             time = `weekly`;
             period = `7day`;
@@ -91,19 +94,40 @@ class ChartCommand extends Command {
                         `not be bigger than 10 tiles!`);
                         return;
                     }
+                    if (args[2] && !noTitles.includes(args[2])) {
+                        console.log(args.slice(2).join(` `));
+                        const member = DiscordUserGetter(message, args.slice(2).join(` `));
+                        if (member !== null) {
+                            userID = member.id;
+                        } else {
+                            await message.reply(snippets.userNotFound);
+                            return;
+                        }
+                    }
                 }
             }
         }
-        const user: string | null = await userFetcher.username();
+        let member: GuildMember | null = null;
+        if (args.length > 3 && userID === message.author.id) {
+            console.log(args.slice(3).join(` `));
+            member = DiscordUserGetter(message, args.slice(3).join(` `));
+            if (member !== null) {
+                userID = member.id;
+            } else {
+                await message.reply(snippets.userNotFound);
+                return;
+            }
+        }
+        const user: string | null = await userFetcher.usernameFromID(userID);
         if (!user) {
-            await message.reply(snippets.noLogin);
+            await message.reply(snippets.userNoLogin);
             return;
         }
         const data: LastFMUserTopAlbums = await lib.user.getTopAlbums(user, {
             period
         });
         if (!data.album.length) {
-            await message.reply(`you have no ${time} albums.`);
+            await message.reply(`${member === null ? `you` : member.user.username} ha${member === null ? `ve` : `s`} no ${time} albums.`);
             return;
         }
         const msg = await message.channel.send(`Please wait until your grid is done...`) as Message; 

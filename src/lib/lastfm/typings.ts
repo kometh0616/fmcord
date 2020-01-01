@@ -278,3 +278,33 @@ export interface LastFMAlbumInfoOptions {
     username?: string;
     lang?: string;
 }
+
+interface LastFMArtistTopAlbum {
+    name: string;
+    playcount: number;
+    mbid: string;
+    url: string;
+    artist: LastFMBasicArtistInfo;
+    image: LastFMImage[];
+}
+
+interface LastFMArtistInfoAttribute {
+    artist: string;
+    page: string;
+    perPage: string;
+    totalPages: string;
+    total: string;
+}
+
+export interface LastFMArtistTopAlbums {
+    album: LastFMArtistTopAlbum[];
+    [`@attr`]: LastFMArtistInfoAttribute;
+}
+
+export interface LastFMArtistTopAlbumsOptions {
+    mbid?: string;
+    autocorrect?: `0` | `1`;
+    username?: string;
+    page?: string;
+    limit?: string;
+}

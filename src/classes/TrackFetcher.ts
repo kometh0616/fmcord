@@ -1,6 +1,6 @@
 import UserFetcher from "./UserFetcher";
 import FMcord from "../handler/FMcord";
-import { Message, Snowflake } from "discord.js";
+import { Message } from "discord.js";
 import { LastFMUserRecentTracks, LastFMUserRecentTrack } from "../lib/lastfm/typings";
 import Library from "../lib/lastfm";
 

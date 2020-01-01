@@ -1,5 +1,5 @@
 import LastFMClient from "./Client";
-import { LastFMArtistInfo, LastFMArtistInfoOptions, LastFMRequestParams } from "./typings";
+import { LastFMArtistInfo, LastFMArtistInfoOptions, LastFMRequestParams, LastFMArtistTopAlbumsOptions, LastFMArtistTopAlbums } from "./typings";
 import { stringify, ParsedUrlQueryInput } from "querystring";
 
 export default class Artist extends LastFMClient {
@@ -21,4 +21,17 @@ export default class Artist extends LastFMClient {
         return data.artist as LastFMArtistInfo;
     }
     
+    public async getTopAlbums(artist: string, options?: LastFMArtistTopAlbumsOptions): Promise<LastFMArtistTopAlbums> {
+        const params: LastFMRequestParams = {
+            method: `artist.gettopalbums`,
+            artist, ...options,
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            api_key: this.apikey,
+            format: `json`
+        };
+        const query = stringify(params as ParsedUrlQueryInput);
+        const data: Record<string, unknown> = await this.request(`${this.url}${query}`);
+        return data.topalbums as LastFMArtistTopAlbums;
+    }
+
 }
