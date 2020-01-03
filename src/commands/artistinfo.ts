@@ -59,7 +59,6 @@ class ArtistInfoCommand extends Command {
             embed.addField(`Summary`, snippets.truncate(desc));
         }
         const albumArray = albumData.album.filter(x => x.name !== `(null)`).slice(0, 8);
-        console.log(albumArray);
         if (albumArray.length > 0) {
             let num = 0;
             embed.addField(`Top ${albumArray.length} albums`, albumArray.map(album => snippets.clickify(`${++num}. ${album.name}`, album.url)).join(`\n`));
