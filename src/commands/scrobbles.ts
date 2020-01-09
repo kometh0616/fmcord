@@ -4,7 +4,6 @@ import { Message } from "discord.js";
 import DiscordUserGetter from "../utils/DiscordUserGetter";
 import UserFetcher from "../classes/UserFetcher";
 import snippets from "../snippets";
-import FMcordEmbed from "../classes/FMcordEmbed";
 import Library from "../lib/lastfm";
 
 class UserInfoCommand extends Command {
