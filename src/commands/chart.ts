@@ -95,9 +95,8 @@ class ChartCommand extends Command {
                         return;
                     }
                     if (args[2] && !noTitles.includes(args[2])) {
-                        console.log(args.slice(2).join(` `));
                         const member = DiscordUserGetter(message, args.slice(2).join(` `));
-                        if (member !== null) {
+                        if (member !== null && member !== undefined) {
                             userID = member.id;
                         } else {
                             await message.reply(snippets.userNotFound);
@@ -107,11 +106,10 @@ class ChartCommand extends Command {
                 }
             }
         }
-        let member: GuildMember | null = null;
+        let member: GuildMember | null | undefined = null;
         if (args.length > 3 && userID === message.author.id) {
-            console.log(args.slice(3).join(` `));
             member = DiscordUserGetter(message, args.slice(3).join(` `));
-            if (member !== null) {
+            if (member !== null && member !== undefined) {
                 userID = member.id;
             } else {
                 await message.reply(snippets.userNotFound);
@@ -127,7 +125,7 @@ class ChartCommand extends Command {
             period
         });
         if (!data.album.length) {
-            await message.reply(`${member === null ? `you` : member.user.username} ha${member === null ? `ve` : `s`} no ${time} albums.`);
+            await message.reply(`${member === null || member === undefined ? `you` : member.user.username} ha${member === null ? `ve` : `s`} no ${time} albums.`);
             return;
         }
         const msg = await message.channel.send(`Please wait until your grid is done...`) as Message; 

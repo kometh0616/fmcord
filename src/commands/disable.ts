@@ -36,14 +36,14 @@ class DisableCommand extends Command {
             }
             const disable: Function = async (): Promise<void> => {
                 const disabled = new Disables();
-                disabled.discordID = guildFlag ? message.guild.id : message.channel.id;
+                disabled.discordID = guildFlag ? message.guild!.id : message.channel.id;
                 disabled.cmdName = name;
                 await disabled.save();
-                await message.reply(`command \`${isValid.name}\` was succesfully disabled in ${guildFlag ? message.guild.name : `this channel`}!`);
+                await message.reply(`command \`${isValid.name}\` was succesfully disabled in ${guildFlag ? message.guild!.name : `this channel`}!`);
             };
             const isDisabled: Disables | undefined = await Disables.findOne({
                 where: [
-                    { discordID: message.guild.id },
+                    { discordID: message.guild!.id },
                     { discordID: message.channel.id }
                 ]
             });
@@ -57,7 +57,7 @@ class DisableCommand extends Command {
                         reply += `this channel.`;
                     }
                 } else {
-                    reply += `${message.guild.name}.`;
+                    reply += `${message.guild!.name}.`;
                 }
                 await message.reply(reply);
             } else {

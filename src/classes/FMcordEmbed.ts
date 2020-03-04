@@ -1,11 +1,11 @@
-import { RichEmbed, Message } from "discord.js";
+import { MessageEmbed, Message } from "discord.js";
 
-export default class FMcordEmbed extends RichEmbed {
+export default class FMcordEmbed extends MessageEmbed {
 
     public constructor(message: Message) {
         super();
         this.setColor(message.member?.displayColor ?? 16777215)
-            .setFooter(`Command executed by ${message.author.tag}`, message.author.avatarURL)
+            .setFooter(`Command executed by ${message.author.tag}`, message.author.avatarURL() ?? undefined)
             .setTimestamp();
     }
 

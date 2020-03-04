@@ -1,5 +1,8 @@
 import { Message, Snowflake } from "discord.js";
 import { Users } from "../entities/Users";
+import { Modes } from "../entities/Modes";
+import NowPlayingMode from "../enums/NowPlayingMode";
+import { GuildModes } from "../entities/GuildModes";
 
 export default class UserFetcher {
 
@@ -34,6 +37,59 @@ export default class UserFetcher {
         const user: Users | undefined = await this.getByID(id);
         if (user) {
             return user.lastFMUsername;
+        } else {
+            return null;
+        }
+    }
+
+    private async guildMode(): Promise<NowPlayingMode | undefined> {
+        const guildMode = await GuildModes.findOne({
+            discordID: this.message.guild?.id
+        });
+        return guildMode?.nowPlayingMode;
+    }
+
+    public async mode(): Promise<NowPlayingMode | null> {
+        const user = await this.getAuthor();
+        if (user !== null) {
+            const mode = await Modes.findOne({
+                user
+            });
+            const guildMode = await this.guildMode();
+            if (mode !== undefined) {
+                if (guildMode) {
+                    return Math.max(mode.nowPlayingMode, guildMode);
+                } else {
+                    return mode.nowPlayingMode;
+                }
+            } else if (guildMode !== undefined) {
+                return guildMode;
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    public async modeFromID(id: Snowflake): Promise<NowPlayingMode | null> {
+        const user = await this.getByID(id);
+        if (user !== null) {
+            const mode = await Modes.findOne({
+                user
+            });
+            const guildMode = await this.guildMode();
+            if (mode !== undefined) {
+                if (guildMode !== undefined) {
+                    return Math.max(mode.nowPlayingMode, guildMode);
+                } else {
+                    return mode.nowPlayingMode;
+                }
+            } else if (guildMode !== undefined) {
+                return guildMode;
+            } else {
+                return null;
+            }
         } else {
             return null;
         }

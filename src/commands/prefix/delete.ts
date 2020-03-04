@@ -13,11 +13,11 @@ class PrefixDeleteSubcommand extends Subcommand {
 
     public async run(client: FMcord, message: Message): Promise<void> {
         const hasPrefix = await Prefixes.count({
-            guildID: message.guild.id
+            guildID: message.guild!.id
         });
         if (hasPrefix) {
             await Prefixes.delete({
-                guildID: message.guild.id
+                guildID: message.guild!.id
             });
             await message.reply(`prefix${hasPrefix > 2 ? `es` : ``} ha${hasPrefix > 2 ? `ve` : `s`} been ` +
             `removed succesfully!`);

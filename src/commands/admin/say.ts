@@ -1,6 +1,6 @@
 import Subcommand from "../../handler/Subcommand";
 import FMcord from "../../handler/FMcord";
-import { Message, Snowflake } from "discord.js";
+import { Message, Snowflake, TextChannel } from "discord.js";
 
 class SaySubcommand extends Subcommand {
 
@@ -25,7 +25,7 @@ class SaySubcommand extends Subcommand {
                 .replace(`"`, `\\"`);
             const scriptlet = `
                 (async () => {
-                    const channel = this.channels.get('${channelID}');
+                    const channel = this.channels.cache.get('${channelID}');
                     if (channel) {
                         await channel.send("${content}")
                         return true;
@@ -34,12 +34,23 @@ class SaySubcommand extends Subcommand {
                     }
                 })()
             `;
-            const sent: boolean[] = await client.shard.broadcastEval(scriptlet);
-            if (sent.some(x => x)) {
-                await message.channel.send(`:white_check_mark:`);
+            if (client.shard !== null) {
+                const sent: boolean[] = await client.shard.broadcastEval(scriptlet);
+                if (sent.some(x => x)) {
+                    await message.channel.send(`:white_check_mark:`);
+                } else {
+                    await message.channel.send(`:x:`);
+                }
             } else {
-                await message.channel.send(`:x:`);
-            }
+                const channel = client.channels.cache.get(channelID);
+                const content = args.slice(1).join(` `);
+                if (channel !== undefined && channel instanceof TextChannel) {
+                    await channel.send(content);
+                    await message.channel.send(`:white_check_mark:`);
+                } else {
+                    await message.channel.send(`:x:`);
+                }
+            }            
         }
     }
 

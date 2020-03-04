@@ -19,7 +19,7 @@ class PrefixSetSubcommand extends Subcommand {
         const prefix = args[0];
         if (prefix.length < 3 && prefix !== client.defaultPrefix) {
             const hasPrefix = await Prefixes.count({
-                guildID: message.guild.id,
+                guildID: message.guild!.id,
                 prefix
             });
             if (hasPrefix) {
@@ -28,11 +28,11 @@ class PrefixSetSubcommand extends Subcommand {
                 return;
             } else {
                 const newPrefix = new Prefixes();
-                newPrefix.guildID = message.guild.id;
+                newPrefix.guildID = message.guild!.id;
                 newPrefix.prefix = prefix;
                 await newPrefix.save();
             }
-            await message.reply(`prefix in ${message.guild.name} has been set to \`${prefix}\` succesfully!`);
+            await message.reply(`prefix in ${message.guild!.name} has been set to \`${prefix}\` succesfully!`);
         } else if (prefix.length >= 3) {
             await message.reply(`your prefix is too long! It cannot be longer than 2 symbols.`);
         } else if (prefix === client.defaultPrefix) {

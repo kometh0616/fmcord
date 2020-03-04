@@ -25,7 +25,7 @@ class PrefixCommand extends Command {
 
     public async run(client: FMcord, message: Message): Promise<void> {
         const hasPrefix = await Prefixes.findOne({
-            guildID: message.guild.id
+            guildID: message.guild!.id
         });
         if (hasPrefix) {
             await message.reply(`prefix in this guild is \`${hasPrefix.prefix}\`. You can always ` +

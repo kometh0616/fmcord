@@ -63,7 +63,7 @@ class SongListSubcommand extends Subcommand {
         if (args.length > 2) {
             const member = DiscordUserGetter(message, args.slice(2).join(` `));
             if (member !== null) {
-                userID = member.id;
+                userID = member!.id;
             } else {
                 await message.reply(snippets.userNotFound);
                 return;

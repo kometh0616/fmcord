@@ -95,7 +95,7 @@ export default class FMcord extends Client {
         });
     }
 
-    private async getPrefix(guild?: Guild): Promise<string | null> {
+    private async getPrefix(guild?: Guild | null): Promise<string | null> {
         if (guild) {
             const prefix: Prefixes | undefined = await Prefixes.findOne({
                 guildID: guild.id
@@ -137,7 +137,6 @@ export default class FMcord extends Client {
             dbl.on(`posted`, () => {
                 console.log(`Server count posted to discordbots.org!`);
             });
-            
             dbl.on(`error`, e => {
                 console.error(`DBL error: ${e}`);
             });
@@ -146,7 +145,7 @@ export default class FMcord extends Client {
             this.getPrefix(message.guild).then(x => {
                 this.prefix = x ?? this.defaultPrefix;
                 const mention = message.mentions.users.firstKey();
-                if (mention && mention === this.user.id) {
+                if (mention && mention === this.user?.id) {
                     message.reply(`my prefix in this server is \`${this.prefix}\`. ` + 
                     `Do \`${this.prefix}help\` to find out more about my functionality.`);
                     return;
@@ -161,7 +160,7 @@ export default class FMcord extends Client {
                 if (name) {
                     const commandName: string = name.toLowerCase();
                     const command: Command | undefined = this.commands.find((x: Command) => {
-                        return x.name === commandName || x.aliases && x.aliases.includes(commandName);
+                        return x.name === commandName || x.aliases?.includes(commandName);
                     });
                     if (command) {
                         command.execute(this, message, args);

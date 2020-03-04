@@ -3,7 +3,7 @@ import FMcord from "../handler/FMcord";
 import { Message } from "discord.js";
 import UserFetcher from "../classes/UserFetcher";
 
-class MynickCommand extends Command {
+class MyNickCommand extends Command {
     
     public constructor() {
         super({
@@ -24,4 +24,4 @@ class MynickCommand extends Command {
 
 }
 
-module.exports = MynickCommand;
+module.exports = MyNickCommand;

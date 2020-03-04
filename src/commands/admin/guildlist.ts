@@ -16,10 +16,10 @@ class GuildListSubcommand extends Subcommand {
     public async run(client: FMcord, message: Message): Promise<void> {
         let num = 0;
         const dir = path.join(__dirname, `res.txt`);
-        const guilds: string[][] = await client.shard.broadcastEval(`
+        const guilds: string[][] = client.shard ? await client.shard.broadcastEval(`
             this.guilds.sort((a, b) => b.memberCount - a.memberCount)
                 .map(x => \`\${x.name} with \${x.memberCount} members\`)
-        `);
+        `) : [client.guilds.cache.sort((a, b) => b.memberCount - a.memberCount).map(x => `${x.name} with ${x.memberCount} members`)];
         const list: string = guilds.flat().map(x => `${++num}. ${x}`).join(`\r\n`);
         await fs.writeFile(dir, list);
         await message.channel.send({ files: [{

@@ -1,8 +1,8 @@
 import { Message, GuildMember } from "discord.js";
 
 export default (message: Message, user: string): GuildMember | null => {
-    if (message.mentions.members.first()) {
-        return message.mentions.members.first();
+    if (message.mentions.members?.first() !== undefined) {
+        return message.mentions.members.first()!;
     } else {
         type MatchingFunction = (member: GuildMember) => boolean;
         const matchingFunctions: MatchingFunction[] = [
@@ -18,8 +18,8 @@ export default (message: Message, user: string): GuildMember | null => {
             }
         ];
         for (const fn of matchingFunctions) {
-            if (message.guild.members.some(fn)) {
-                return message.guild.members.find(fn);
+            if (message.guild?.members.cache.some(fn)) {
+                return message.guild?.members.cache.find(fn)!;
             }
         }
         return null;

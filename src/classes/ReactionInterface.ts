@@ -11,7 +11,7 @@ export default class ReactionInterface {
 
     public destroy(): void {
         this.client.reactionListeners.get(this.message.id)!.clear();
-        this.message.reactions.filter(x => x.me).forEach(x => { x.remove(); });
+        this.message.reactions.cache.filter(x => x.me).forEach(x => { x.remove(); });
     }
 
     public constructor(client: FMcord, message: Message, author: User) {

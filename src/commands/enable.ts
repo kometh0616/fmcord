@@ -35,7 +35,7 @@ class EnableCommand extends Command {
         }
         const disabled: Disables | undefined = await Disables.findOne({
             where: [
-                { discordID: message.guild.id, cmdName: name },
+                { discordID: message.guild!.id, cmdName: name },
                 { discordID: message.channel.id, cmdName: name }
             ]
         });
@@ -50,13 +50,13 @@ class EnableCommand extends Command {
             });
             await message.reply(`command \`${isValid.name}\` enabled in this channel succesfully!`);
         } else {
-            const ids = message.guild.channels.filter(x => x.type === `text`)
+            const ids = message.guild!.channels.cache.filter(x => x.type === `text`)
                 .map(x => x.id);
             await Disables.delete({
-                discordID: In<string>([...ids, message.guild.id]),
+                discordID: In<string>([...ids, message.guild!.id]),
                 cmdName: name
             });
-            await message.reply(`command \`${isValid.name}\` enabled in ${message.guild.name} succesfully!`);
+            await message.reply(`command \`${isValid.name}\` enabled in ${message.guild!.name} succesfully!`);
         }
     }
 

@@ -19,21 +19,21 @@ class LastFMCommand extends Command {
     public async run(client: FMcord, message: Message, args: string[]): Promise<void> {
         const userFetcher = new UserFetcher(message);
         let discordUser: GuildMember | null;
-        if (args.length) {
+        if (args.length > 0) {
             discordUser = DiscordUserGetter(message, args.join(` `));
-            if (!discordUser) {
+            if (discordUser === null) {
                 await message.reply(`\`${args.join(` `)}\` is not a valid user.`);
                 return;
             }
         } else {
             discordUser = message.member;
         }
-        const user = await userFetcher.usernameFromID(discordUser.id);
+        const user = await userFetcher.usernameFromID(discordUser!.id);
         if (user) {
             const URL = `https://last.fm/user/${user}`;
-            await message.reply(`${discordUser.user.username}'s\` Last.fm URL: ${URL}`);
+            await message.reply(`${discordUser!.user.username}'s\` Last.fm URL: ${URL}`);
         } else {
-            await message.reply(`\`${discordUser.user.username}\` does not have a Last.fm account, ` +
+            await message.reply(`\`${discordUser!.user.username}\` does not have a Last.fm account, ` +
             `or has not set their nickname.`);
         }
     }

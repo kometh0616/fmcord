@@ -87,7 +87,7 @@ export default abstract class Command implements CommandOptions {
     private verifyUserPermissions(message: Message): boolean {
         if (message.guild) {
             if (this.permissions && this.permissions.user) {
-                if (message.member.hasPermission(this.permissions.user, false, true, true)) {
+                if (message.member?.hasPermission(this.permissions.user, { checkAdmin: true, checkOwner: true })) {
                     return true;
                 } else {
                     message.reply(`you do not have a permission \`${this.permissions.user}\` to ` +
@@ -105,7 +105,7 @@ export default abstract class Command implements CommandOptions {
     private verifyBotPermissions(message: Message): boolean {
         if (message.guild) {
             if (this.permissions && this.permissions.bot) {
-                if (message.member.hasPermission(this.permissions.bot, false, true, true)) {
+                if (message.member?.hasPermission(this.permissions.bot, { checkAdmin: true, checkOwner: true })) {
                     return true;
                 } else {
                     message.reply(`you do not have a permission \`${this.permissions.bot}\` to ` +

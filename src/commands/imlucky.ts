@@ -28,7 +28,7 @@ class ImLuckyCommand extends Command {
         const lib = new Library(client.apikeys.lastFM);
         const users: Users[] = await Users.find({
             where: [
-                ...message.guild.members.map(x => ({ discordUserID: x.id }))
+                ...message.guild!.members.cache.map(x => ({ discordUserID: x.id }))
             ]
         });
         if (!users.length) {
@@ -37,7 +37,7 @@ class ImLuckyCommand extends Command {
         }
         
         const names = new RandomArray<UserCredentials>(...users.map(x => ({
-            discord: message.guild.members.get(x.discordUserID)!,
+            discord: message.guild!.members.cache.get(x.discordUserID)!,
             lastFM: x.lastFMUsername
         })));
         const username: UserCredentials = names.random;
@@ -53,14 +53,20 @@ class ImLuckyCommand extends Command {
             .setTitle(`Random song from ${username.lastFM} (${username.discord.user.username})`)
             .setURL(userURL)
             .addField(`Artist`, `[${track.artist.name}](${snippets.removeParens(track.artist.url)})`, true)
-            .addField(`Track`, `[${track.name}](${snippets.removeParens(track.url)})`, true)
-            .setThumbnail(username.discord.user.avatarURL);
+            .addField(`Track`, `[${track.name}](${snippets.removeParens(track.url)})`, true);
+        const userAvatar = username.discord.user.avatarURL();
+        if (userAvatar !== null) {
+            embed.setThumbnail(userAvatar);
+        }
         if (trackInfo.album) {
             embed.addField(`Album`, `[${trackInfo.album.title}](${snippets.removeParens(trackInfo.album.url)})`, true);
             if (trackInfo.album.image.length) {
                 embed.setThumbnail(trackInfo.album.image[1][`#text`]);
             } else {
-                embed.setThumbnail(username.discord.user.avatarURL);
+                const userAvatar = username.discord.user.avatarURL();
+                if (userAvatar !== null) {
+                    embed.setThumbnail(userAvatar);
+                }
             }
         }
         embed.addField(`Listens by ${username.lastFM}`, track.playcount, true);

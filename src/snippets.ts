@@ -50,12 +50,13 @@ export default {
             throw new Error(`The parameter must be a string number.`);
         }
         const hours = Math.floor(toInt / 3600);
-        const minutes = hours ? Math.floor((toInt - hours * 3600) / 60) : Math.floor(toInt / 60);
-        const secs = hours ? Math.floor((toInt - hours * 3600) - (minutes * 60)) : Math.floor(toInt - minutes * 60);
-        if (hours) {
+        const minutes = hours !== 0 ? Math.floor((toInt - hours * 3600) / 60) : Math.floor(toInt / 60);
+        const secs = hours !== 0 ? Math.floor((toInt - hours * 3600) - (minutes * 60)) : Math.floor(toInt - minutes * 60);
+        if (hours !== 0) {
             return `${hours}:${minutes < 10 ? `0${minutes}` : minutes}:${secs < 10 ? `0${secs}` : secs}`;
         } else {
             return `${minutes}:${secs < 10 ? `0${secs}` : secs}`;
         }
-    }
+    },
+    noClientUser: `this should not be occuring. If a bot has been just launched, give it some time. If not, please report this issue to our Discord server.`
 }

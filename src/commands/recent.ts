@@ -1,6 +1,6 @@
 import Command from "../handler/Command";
 import FMcord from "../handler/FMcord";
-import { Message, GuildMember } from "discord.js";
+import { Message, GuildMember, User } from "discord.js";
 import DiscordUserGetter from "../utils/DiscordUserGetter";
 import snippets from "../snippets";
 import UserFetcher from "../classes/UserFetcher";
@@ -32,7 +32,7 @@ class RecentCommand extends Command {
 
     public async run(client: FMcord, message: Message, args: string[]): Promise<void> {
         const songArg = args.findIndex(x => x.startsWith(`s:`) || x.startsWith(`songs:`));
-        let user: GuildMember, songLimit: number;
+        let user: GuildMember | User, songLimit: number;
         if (songArg !== -1) {
             if (!songArg && args[1]) {
                 await message.reply(`incorrect usage of a command! Correct usage would be:\n` +
@@ -55,7 +55,7 @@ class RecentCommand extends Command {
                     return;
                 }
             } else {
-                user = message.member;
+                user = message.member ?? message.author;
             }
         } else {
             songLimit = 5;
@@ -66,7 +66,7 @@ class RecentCommand extends Command {
                     return;
                 }
             } else {
-                user = message.member;
+                user = message.member ?? message.author;
             }
         }
         const userFetcher = new UserFetcher(message);
