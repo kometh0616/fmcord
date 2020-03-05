@@ -45,6 +45,7 @@ class SetModeSubcommand extends Subcommand {
             const settable = (modes.get(modeArg))!;
             if (mode === undefined) {
                 const newMode = new Modes();
+                newMode.user = user;
                 newMode.nowPlayingMode = settable;
                 await newMode.save();
             } else {
