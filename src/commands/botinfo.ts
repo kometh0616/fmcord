@@ -35,7 +35,7 @@ export default class BotInfoCommand extends CommandParams {
             .addField(`Total servers`, String(guilds), true)
             .addField(`Total users`, String(users), true)
             .addField(`Total logged in users`, String(nicknames), true)
-            .addField(`Used library`, `discord.js`, true)
+            .addField(`Used library`, `eris`, true)
             .addField(`Developed by`, `${dev!.username}#${dev!.discriminator}`, true)
             .addField(`Amount of servers shared with command invoker`, String(shared), true);
         await message.channel.createMessage({ embed });
