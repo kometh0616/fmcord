@@ -8,6 +8,7 @@ import snippets from "../snippets";
 import Library from "../lib/lastfm";
 import { LastFMAlbumInfo } from "../lib/lastfm/typings";
 import FMcord from "../handler/FMcord";
+import { Canvas, loadImage } from "canvas";
 
 export default class CoverCommand extends CommandParams {
 
@@ -80,9 +81,11 @@ export default class CoverCommand extends CommandParams {
                 albumInfo = await lib.album.getInfo(artistName, albumName);
             }
             if (albumInfo.image[3]) {
+                const image = await loadImage(albumInfo.image[3][`#text`]);
+                const buffer = image.src;
                 await message.channel.createMessage(`Album cover for \`${albumInfo.artist} - ${albumInfo.name}\``, { 
                     name: `file.jpg`,
-                    file: albumInfo.image[3][`#text`] 
+                    file: buffer
                 });
             } else {
                 await message.channel.createMessage(`${message.author.mention}, no cover for an album found.`);
