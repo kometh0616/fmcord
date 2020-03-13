@@ -1,0 +1,31 @@
+{
+  "name": "fmcord",
+  "version": "1.7.5",
+  "description": "A Discord bot with Last.fm utilities.",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "launch": "node ./dist/src/index.js",
+    "start": "npm run build && npm run launch",
+    "lint": "eslint src/**/**.ts src/**/**/*.ts",
+    "lint-fix": "eslint src/**/**.ts src/**/**/*.ts --fix",
+    "test": "npm run lint"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "canvas": "^2.6.1",
+    "eris": "github:abalabahaha/eris#dev",
+    "express": "^4.17.1",
+    "sqlite3": "^4.1.1",
+    "typeorm": "^0.2.24"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.3",
+    "@types/node": "^13.7.7",
+    "@typescript-eslint/eslint-plugin": "^2.22.0",
+    "@typescript-eslint/parser": "^2.22.0",
+    "eslint": "^6.8.0",
+    "typescript": "^3.8.3"
+  }
+}
