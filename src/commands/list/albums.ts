@@ -1,6 +1,7 @@
 import CommandParams from "../../handler/CommandParams";
 import StartTyping from "../../hooks/StartTyping";
 import PostCheck from "../../hooks/PostCheck";
+import UsernameAndNotDisabled from "../../checks/UsernameAndNotDisabled";
 import { Message } from "eris";
 import FMcord from "../../handler/FMcord";
 import Library from "../../lib/lastfm";
@@ -9,12 +10,11 @@ import UserFetcher from "../../classes/UserFetcher";
 import DiscordUserGetter from "../../utils/DiscordUserGetter";
 import snippets from "../../snippets";
 import FMcordEmbed from "../../classes/FMcordEmbed";
-import UsernameAndNotDisabled from "../../checks/UsernameAndNotDisabled";
 
-export default class SongsSubcommand extends CommandParams {
+export default class AlbumsSubcommand extends CommandParams {
 
     public constructor() {
-        super(`songs`, {
+        super(`albums`, {
             hooks: {
                 preCommand: StartTyping,
                 postCheck: PostCheck
@@ -22,7 +22,7 @@ export default class SongsSubcommand extends CommandParams {
             requirements: {
                 custom: UsernameAndNotDisabled
             },
-            aliases: [`s`],
+            aliases: [`ab`],
         });
     }
 
@@ -81,11 +81,11 @@ export default class SongsSubcommand extends CommandParams {
         }
         const username = await userFetcher.usernameFromID(userID);
         if (username !== null) {
-            const list = await lib.user.getTopTracks(username, {
+            const list = await lib.user.getTopAlbums(username, {
                 period: timePeriod
             });
             const userInfo = await lib.user.getInfo(username);
-            const arr = list.track.slice(0, length);
+            const arr = list.album.slice(0, length);
             if (!arr.length) {
                 const author = userID === message.author.id;
                 await message.channel.createMessage(`${message.author.mention}, ${author ? `you` : username} do${author ? `` : `es`}n't have any ${embedPeriod} artists.`);
@@ -93,7 +93,7 @@ export default class SongsSubcommand extends CommandParams {
             }
             const embed = new FMcordEmbed(message)
                 .setDescription(arr.map(x => `${++num}. **${x.name}** by **${x.artist.name}** with ${x.playcount} plays`).join(`\n`))
-                .setTitle(`${username}'s top ${arr.length} ${embedPeriod} songs`)
+                .setTitle(`${username}'s top ${arr.length} ${embedPeriod} albums`)
                 .setURL(userInfo.url);
             await message.channel.createMessage({ embed });
         } else {

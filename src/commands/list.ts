@@ -29,13 +29,17 @@ export default class ListCommand extends CommandParams {
                 postCheck: PostCheck
             },
             argsRequired: true,
-            invalidUsageMessage: (message: Message) => `${message.author.mention}, you need to define a proper list type!`,
+            invalidUsageMessage: (message: Message) => {
+                const subs = [...Object.values(message.command!.subcommands)];
+                return `${message.author.mention}, you need to define a proper list type! Proper list types are: \`${subs.map(x => x.label).join(`, `)}\`.`;
+            },
         });
     }
 
     public async execute(message: Message, args: string[]): Promise<void> {
-        if (![`artists`, `a`, `songs`, `s`].includes(args[0])) {
-            await message.channel.createMessage(`${message.author.mention}, you need to define a proper list type!`);
+        const subs = [...Object.values(message.command!.subcommands)];
+        if (![...subs.map(x => x.label), ...subs.map(x => x.aliases).flat()].includes(args[0])) {
+            await message.channel.createMessage(`${message.author.mention}, you need to define a proper list type! Proper list types are: \`${subs.map(x => x.label).join(`, `)}\`.`);
         }
     }
 }
