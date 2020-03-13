@@ -3,6 +3,9 @@
   "version": "1.7.5",
   "description": "A Discord bot with Last.fm utilities.",
   "main": "index.js",
+  "engines": {
+    "node": "12.x"
+  },
   "scripts": {
     "build": "tsc",
     "launch": "node ./dist/src/index.js",
