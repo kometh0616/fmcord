@@ -54,11 +54,17 @@ export default class SetnickCommand extends CommandParams {
     public async execute(message: Message, args: string[]): Promise<void> {
         const username = args.join(` `);
         const lib = new Library((message.channel.client as FMcord).apikeys.lastFM);
-        const user = await lib.user.getInfo(username);
-        const newUser = new Users();
-        newUser.discordUserID = message.author.id;
-        newUser.lastFMUsername = user.name;
-        await newUser.save();
-        await message.channel.createMessage(`${message.author.mention}, your nickname \`${user.name}\` was created succesfully!`);
+        try {
+            const user = await lib.user.getInfo(username);
+            const newUser = new Users();
+            newUser.discordUserID = message.author.id;
+            newUser.lastFMUsername = user.name;
+            await newUser.save();
+            await message.channel.createMessage(`${message.author.mention}, your nickname \`${user.name}\` was created succesfully!`);
+        } catch (e) {
+            if (e.message.endsWith(`404`)) {
+                await message.channel.createMessage(`${message.author.mention}, no user with the name \`${args.join(` `)}\` found in Last.fm`);
+            }
+        }
     }
 }
