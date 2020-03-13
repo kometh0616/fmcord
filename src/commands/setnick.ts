@@ -63,7 +63,7 @@ export default class SetnickCommand extends CommandParams {
             await message.channel.createMessage(`${message.author.mention}, your nickname \`${user.name}\` was created succesfully!`);
         } catch (e) {
             if (e.message.endsWith(`404`)) {
-                await message.channel.createMessage(`${message.author.mention}, no user with the name \`${args.join(` `)}\` found in Last.fm`);
+                await message.channel.createMessage(`${message.author.mention}, no user with the name \`${args.join(` `)}\` found in Last.fm.`);
             }
         }
     }

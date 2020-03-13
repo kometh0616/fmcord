@@ -92,6 +92,7 @@ interface LastFMUserTopAlbum {
     url: string;
     name: string;
     mbid?: string;
+    playcount?: string;
 }
 
 export interface LastFMUserTopAlbums {
