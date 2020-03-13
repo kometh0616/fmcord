@@ -85,7 +85,7 @@ export default class CoverCommand extends CommandParams {
                 const buffer = image.src;
                 await message.channel.createMessage(`Album cover for \`${albumInfo.artist} - ${albumInfo.name}\``, { 
                     name: `file.jpg`,
-                    file: buffer
+                    file: Buffer.from(buffer)
                 });
             } else {
                 await message.channel.createMessage(`${message.author.mention}, no cover for an album found.`);
