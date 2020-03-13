@@ -85,7 +85,6 @@ export default class CoverCommand extends CommandParams {
                 const ctx = canvas.getContext(`2d`);
                 const image = await loadImage(albumInfo.image[3][`#text`]);
                 ctx.drawImage(image, 0, 0);
-                const buffer = image.src;
                 await message.channel.createMessage(`Album cover for \`${albumInfo.artist} - ${albumInfo.name}\``, { 
                     name: `file.jpg`,
                     file: canvas.toBuffer()
