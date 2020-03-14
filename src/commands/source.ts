@@ -32,7 +32,7 @@ export default class SourceCommand extends CommandParams {
             const command = commands.find(x => x.label === cmd || x.aliases.includes(cmd));
             if (command) {
                 const { label } = command;
-                await message.channel.createMessage(`${message.author.mention}, here is a source to a command \`${label}\`: ${snippets.getSource(name)}`);
+                await message.channel.createMessage(`${message.author.mention}, here is a source to a command \`${label}\`: ${snippets.getSource(label)}`);
             } else {
                 await message.channel.createMessage(`${message.author.mention}, I can't find a command, called \`${cmd}\`.`);
             }
