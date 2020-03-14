@@ -32,6 +32,7 @@ export default class LastFMCommand extends CommandParams {
             discordUser = DiscordUserGetter(message, args.join(` `));
             if (discordUser === null) {
                 await message.channel.createMessage(`${message.author.mention}, \`${args.join(` `)}\` is not a valid user.`);
+                return;
             }
         } else {
             discordUser = message.member!;
