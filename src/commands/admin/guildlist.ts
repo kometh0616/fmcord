@@ -21,10 +21,12 @@ export default class GuildListSubcommand extends CommandParams {
 
     public async execute(message: Message): Promise<void> {
         let num = 0;
-        const guilds = message.channel.client.guilds
+        const guildArray = [...message.channel.client.guilds.values()];
+        const guildList = guildArray
+            .sort((a, b) => b.memberCount - a.memberCount)
             .map(x => `${++num}. ${x.name} with ${x.memberCount} members`).join(`\r\n`);
         await message.channel.createMessage(``, {
-            file: guilds,
+            file: guildList,
             name: `guildlist.txt`
         });
     }
