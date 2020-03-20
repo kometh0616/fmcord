@@ -110,8 +110,8 @@ export default class FMcord extends CommandClient {
 
     private async loadPrefixes(): Promise<this> {
         const prefixes = await Prefixes.find();
-        prefixes.forEach(prefixData => {
-            this.registerGuildPrefix(prefixData.guildID, prefixData.prefix);
+        prefixes.forEach(({ guildID, prefix }) => {
+            this.registerGuildPrefix(guildID, prefix);
         });
         return this;
     }
