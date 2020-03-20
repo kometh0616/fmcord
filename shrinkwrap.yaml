@@ -2422,7 +2422,7 @@ specifiers:
   eris: 'github:abalabahaha/eris#dev'
   eslint: ^6.8.0
   express: ^4.17.1
-  minimist: ^1.2.2
+  minimist: ^1.2.5
   sqlite3: ^4.1.1
   typeorm: ^0.2.24
   typescript: ^3.8.3
