@@ -1,6 +1,6 @@
 {
   "name": "fmcord",
-  "version": "1.7.5",
+  "version": "1.7.6",
   "description": "A Discord bot with Last.fm utilities.",
   "main": "index.js",
   "engines": {
