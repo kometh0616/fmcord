@@ -162,10 +162,15 @@ export default class ChartCommand extends CommandParams {
                 name: `${user}_grid.jpg`
             });
         } else {
-            const names: string[] = data.album.map(x => `${x.artist.name} - ${x.name}`);
-            const longest: string = [...names].sort((a, b) => b.length - a.length)[0];
-            const length = ctx.measureText(longest);
-            const xAxis = x * 100 + 170 + length.width;
+            const namesAndLength = new Map<string, TextMetrics>(
+                data.album.map(x => {
+                    const text = `${x.artist.name} - ${x.name}`;
+                    return [text, ctx.measureText(text)];
+                })
+            );
+            const names: string[] = [...namesAndLength.keys()];
+            const length = Math.max(...[...namesAndLength.values()].map(x => x.width));
+            const xAxis = x * 100 + 170 + length;
             const yAxis = y * 100 + 50;
             const finalCanvas = createCanvas(xAxis, yAxis);
             const fctx = finalCanvas.getContext(`2d`);
