@@ -30,8 +30,11 @@ export default class ChartCommand extends CommandParams {
                 `chart <time period> <grid size> [nt/notitles] <user>`
             ].join(`, `),
             description: `Builds a grid out of your most listened albums with names to the side.`,
-            fullDescription: `You can attach an image to the command to have that image as your ` +
-            `chart's background.`,
+            fullDescription: `Time period can be either \`weekly\`, \`monthly\` or \`alltime\`. ` +
+            `You can use the first letter of time period as a shortcut. Grid size is to be formatted ` +
+            `like this: AxB, where A is how many grids you want on X axis, and B is how many grids you want on ` +
+            `Y axis. A must not be more than 5 and B must not be more than 10. You can attach an image to ` +
+            `the command to have that image as your chart's background.`,
             cooldown: 5000,
             cooldownMessage: snippets.cooldown,
             requirements: {
