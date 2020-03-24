@@ -147,6 +147,7 @@ export default class ChartCommand extends CommandParams {
         const imgs = loaded.map(x => x.status === `fulfilled` ? x.value! : failed);
         const canv = createCanvas(x * 100, y * 100);
         const ctx = canv.getContext(`2d`);
+        ctx.font = `12px ${font}`;
         let iter = 0;
         for (let yAxis = 0; yAxis < y * 100; yAxis += 100) {
             if (imgs[iter]) {
@@ -173,7 +174,7 @@ export default class ChartCommand extends CommandParams {
             );
             const names: string[] = [...namesAndLength.keys()];
             const length = Math.max(...[...namesAndLength.values()].map(x => x.width));
-            const xAxis = x * 100 + 170 + length;
+            const xAxis = x * 100 + 65 + length;
             const yAxis = y * 100 + 50;
             const finalCanvas = createCanvas(xAxis, yAxis);
             const fctx = finalCanvas.getContext(`2d`);
