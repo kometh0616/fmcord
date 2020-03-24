@@ -174,7 +174,7 @@ export default class ChartCommand extends CommandParams {
             );
             const names: string[] = [...namesAndLength.keys()];
             const length = Math.max(...[...namesAndLength.values()].map(x => x.width));
-            const xAxis = x * 100 + 65 + length;
+            const xAxis = x * 100 + 75 + length;
             const yAxis = y * 100 + 50;
             const finalCanvas = createCanvas(xAxis, yAxis);
             const fctx = finalCanvas.getContext(`2d`);
