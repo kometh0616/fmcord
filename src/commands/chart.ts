@@ -135,7 +135,7 @@ export default class ChartCommand extends CommandParams {
             return;
         }
         const data = await lib.user.getTopAlbums(user, {
-            period
+            period, limit: `${x * y}`
         });
         if (!data.album.length) {
             await message.channel.createMessage(`${message.author.mention}, ${member?.username ?? `you`} ha${member === null ? `ve` : `s`} no ${time} albums.`);
