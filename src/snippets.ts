@@ -48,7 +48,7 @@ export default {
     formatSeconds(seconds: string): string {
         const toInt = parseInt(seconds);
         if (isNaN(toInt)) {
-            throw new Error(`The parameter must be a string number.`);
+            throw new TypeError(`The parameter must be a string number.`);
         }
         const hours = Math.floor(toInt / 3600);
         const minutes = hours !== 0 ? Math.floor((toInt - hours * 3600) / 60) : Math.floor(toInt / 60);
