@@ -13,6 +13,7 @@ export default class ArtistInfoCommand extends CommandParams {
     public constructor() {
         super(`artistinfo`, {
             description: `Returns information about a provided artist.`,
+            fullDescription: `Album hyperlinks may not always work if the track names are too long.`,
             usage: [`artistinfo`, `artistinfo <artist name>`].join(`, `),
             aliases: [`ai`],
             hooks: {
@@ -63,7 +64,15 @@ export default class ArtistInfoCommand extends CommandParams {
         const albumArray = albumData.album.filter(x => x.name !== `(null)`).slice(0, 8);
         if (albumArray.length > 0) {
             let num = 0;
-            embed.addField(`Top ${albumArray.length} albums`, albumArray.map(album => snippets.clickify(`${++num}. ${album.name}`, album.url)).join(`\n`));
+            const withHyperlinks = albumArray.map(album => snippets.clickify(`${++num}. ${album.name}`, album.url)).join(`\n`);
+            let albumList: string;
+            if (withHyperlinks.length <= 1024) {
+                albumList = withHyperlinks;
+            } else {
+                num = 0;
+                albumList = albumArray.map(album => `${++num}. ${album.name}`).join(`\n`);
+            }
+            embed.addField(`Top ${albumArray.length} albums`, albumList);
         }
         await message.channel.createMessage({ embed });
     }
