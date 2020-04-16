@@ -60,7 +60,7 @@ export default class SetnickCommand extends CommandParams {
             newUser.discordUserID = message.author.id;
             newUser.lastFMUsername = user.name;
             await newUser.save();
-            await message.channel.createMessage(`${message.author.mention}, your nickname \`${user.name}\` was created succesfully!`);
+            await message.channel.createMessage(`${message.author.mention}, your nickname \`${user.name}\` was created successfully!`);
         } catch (e) {
             if (e.message.endsWith(`404`)) {
                 await message.channel.createMessage(`${message.author.mention}, no user with the name \`${args.join(` `)}\` found in Last.fm.`);
