@@ -27,6 +27,7 @@ export default class ImportCommand extends CommandParams {
     public constructor() {
         super(`import`, {
             description: `Imports all your users from a JSON file.`,
+            usage: `import`,
             fullDescription: `Compatible with Chuu and .fmbot's user imports. ` +
             `Users that are already in the database are skipped.\n` +
             `This command requires Manage Server permission. Can be overriden ` +
