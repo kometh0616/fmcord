@@ -11,6 +11,7 @@ export default class ExportCommand extends CommandParams {
     public constructor() {
         super(`export`, {
             description: `Exports a list of users in your server.`,
+            usage: `export`,
             fullDescription: `The list is exported in JSON format as ` +
             `an array of objects with discordUserID and lastFMUsername ` +
             `as their properties.\n` +
