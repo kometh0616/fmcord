@@ -53,7 +53,6 @@ const options: ClientOptions = {
         voiceStateUpdate: true,
         webhooksUpdate: true,
     },
-    disableEveryone: true
 };
 
 const commandOptions: CommandClientOptions = {
