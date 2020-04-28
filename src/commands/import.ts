@@ -22,6 +22,20 @@ function downloadFile(message: Message, filePath: string): Promise<void> {
     });
 }
 
+interface LoginCredentials {
+    discordUserID: string;
+    lastFMUsername: string;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function isValidFormat(format: any): format is LoginCredentials[] {
+    return format?.every?.(
+        (x: Record<string, string>) => 
+            typeof x?.discordUserID === `string` && 
+            typeof x?.lastFMUsername === `string`
+    );
+}
+
 export default class ImportCommand extends CommandParams {
 
     public constructor() {
@@ -68,10 +82,11 @@ export default class ImportCommand extends CommandParams {
         await downloadFile(message, filePath);
         try {
             const users = require(filePath);
-            if (users?.every?.((x: Record<string, string>) => typeof x?.discordUserID === `string` && typeof x?.lastFMUsername === `string`)) {
+            if (isValidFormat(users)) {
                 const allUsers = await Users.find();
                 const IDs = allUsers.map(x => x.discordUserID);
-                const filteredUsers = users.filter((x: Record<string, string>) => !IDs.includes(x.discordUserID));
+                const guildMemberIDs = message.member!.guild.members.map(x => x.id);
+                const filteredUsers = users.filter(x => !IDs.includes(x.discordUserID) && guildMemberIDs.includes(x.discordUserID));
                 if (filteredUsers.length > 0) {
                     await getConnection()
                         .createQueryBuilder()
