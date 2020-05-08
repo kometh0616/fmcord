@@ -4,6 +4,6 @@ export default (client: FMcord): void => {
     console.log(`I am ready.`);
     setTimeout(() => client.editStatus(`online`, {
         type: 0,
-        name: `with ${client.guilds.size} servers | Do ${client.prefix}help!`
+        name: `#ProjectBlurple | Do ${client.prefix}help!`
     }), 60000);
 };
