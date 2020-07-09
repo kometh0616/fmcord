@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import config from "../config.json";
+import config from "./config";
 import { Message } from "eris";
 
 export default {  

@@ -1,6 +1,6 @@
 import { ClientOptions, CommandClientOptions } from "eris";
-import config from "../config.json";
-import FMcord, { FMcordOptions } from "./handler/FMcord.js";
+import config from "./config";
+import FMcord, { FMcordOptions } from "./handler/FMcord";
 import snippets from "./snippets";
 import canvas from "canvas";
 import * as path from "path";
@@ -83,11 +83,11 @@ const botOptions: FMcordOptions = {
 const bot = new FMcord(config.token, options, commandOptions, botOptions);
 
 if (process.platform === `win32`) {
-    canvas.registerFont(path.join(__dirname, `..`, `..`, `fonts`, `Inconsolata.otf`), {
+    canvas.registerFont(path.join(__dirname, `..`, `fonts`, `Inconsolata.otf`), {
         family: `inconsolata`
     });
 } else {
-    canvas.registerFont(path.join(__dirname, `..`, `..`, `fonts`, `NotoSansCJK-Regular.ttc`), {
+    canvas.registerFont(path.join(__dirname, `..`, `fonts`, `NotoSansCJK-Regular.ttc`), {
         family: `noto-sans`
     });
 }
