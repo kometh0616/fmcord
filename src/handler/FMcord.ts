@@ -45,7 +45,7 @@ export default class FMcord extends CommandClient {
     private loadCommands(dir: string = path.join(__dirname, `..`, `commands`)): this {
         const files = fs.readdirSync(dir);
         files.forEach(file => {
-            if (file.endsWith(`.js`)) {
+            if (file.endsWith(`.js`) || file.endsWith(`.ts`)) {
                 const CommandParam = require(path.join(dir, file)).default;
                 const cParams: CommandParams = new CommandParam();
                 const command = this.registerCommand(cParams.name, cParams.execute as CommandGenerator, cParams.options);
@@ -63,7 +63,7 @@ export default class FMcord extends CommandClient {
                 } catch (e) {
                     if (!e.message.startsWith(`ENOENT`)) {
                         console.error(e);
-                    } 
+                    }
                 }
             }
         });
@@ -73,7 +73,7 @@ export default class FMcord extends CommandClient {
     private loadEvents(dir: string = path.join(__dirname, `..`, `events`)): this {
         const files = fs.readdirSync(dir);
         files.forEach(file => {
-            if (file.endsWith(`.js`)) {
+            if (file.endsWith(`.js`) || file.endsWith(`.ts`)) {
                 const event: Function = require(path.join(dir, file)).default;
                 const eventName = file.substring(0, file.length - 3);
                 this.on(eventName, event.bind(null, this));
@@ -82,10 +82,10 @@ export default class FMcord extends CommandClient {
         return this;
     }
 
-    private async loadEntities(dir: string = path.join(__dirname, `..`, `entities/*.js`)): Promise<this> {
+    private async loadEntities(dir: string = path.join(__dirname, `..`, `entities/*.{ts,js}`)): Promise<this> {
         await createConnection({
             type: `sqlite`,
-            database: path.join(__dirname, `../database.sqlite`),
+            database: path.join(__dirname, `..`, `../database.sqlite`),
             entities: [dir],
             synchronize: true
         });
