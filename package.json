@@ -7,8 +7,9 @@
     "node": "12.x"
   },
   "scripts": {
+    "dev": "nodemon src/index.ts",
     "build": "tsc",
-    "launch": "node ./dist/src/index.js",
+    "launch": "node ./dist/index.js",
     "start": "npm run launch",
     "lint": "eslint src/**/**.ts src/**/**/*.ts",
     "lint-fix": "eslint src/**/**.ts src/**/**/*.ts --fix",
@@ -17,7 +18,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/dotenv": "^8.2.0",
     "canvas": "^2.6.1",
+    "dotenv": "^8.2.0",
     "eris": "github:abalabahaha/eris#dev",
     "express": "^4.17.1",
     "sqlite3": "^4.1.1",
@@ -30,6 +33,8 @@
     "@typescript-eslint/parser": "^2.23.0",
     "eslint": "^6.8.0",
     "minimist": "^1.2.5",
+    "nodemon": "^2.0.4",
+    "ts-node": "^8.10.2",
     "typescript": "^3.8.3"
   }
 }
