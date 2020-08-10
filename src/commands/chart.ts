@@ -48,7 +48,7 @@ export default class ChartCommand extends CommandParams {
     }
 
     public async execute(message: Message, args: string[]): Promise<void> {
-        const failed = await loadImage(path.join(__dirname, `../../..`, `images`, `failed_to_load.png`));
+        const failed = await loadImage(path.join(__dirname, `../..`, `images`, `failed_to_load.png`));
         const client = message.channel.client as FMcord;
         const userFetcher = new UserFetcher(message);
         const lib = new Library(client.apikeys.lastFM);
@@ -142,7 +142,7 @@ export default class ChartCommand extends CommandParams {
             return;
         }
         const imageLinks = data.album.map(x => x.image[2][`#text`]);
-        const proms = imageLinks.map(x => x.length > 0 ? loadImage(x) : loadImage(path.join(__dirname, `..`, `..`, `..`, `images`, `no_album.png`)));
+        const proms = imageLinks.map(x => x.length > 0 ? loadImage(x) : loadImage(path.join(__dirname, `../..`, `images`, `no_album.png`)));
         const loaded = await AllSettled<Image>(proms);
         const imgs = loaded.map(x => x.status === `fulfilled` ? x.value! : failed);
         const canv = createCanvas(x * 100, y * 100);
