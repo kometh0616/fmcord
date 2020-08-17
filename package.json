@@ -10,7 +10,7 @@
     "dev": "nodemon src/index.ts",
     "build": "tsc",
     "launch": "node ./dist/index.js",
-    "start": "npm run dev",
+    "start": "npm run launch",
     "lint": "eslint src/**/**.ts src/**/**/*.ts",
     "lint-fix": "eslint src/**/**.ts src/**/**/*.ts --fix",
     "test": "npm run lint"
