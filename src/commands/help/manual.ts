@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/require-await */
 import CommandParams from "../../handler/CommandParams";
-import { Message, MessageContent } from "eris";
+import { Emoji, Message, MessageContent } from "eris";
 import StartTyping from "../../hooks/StartTyping";
 import snippets from "../../snippets";
 import FMcord from "../../handler/FMcord";
@@ -47,6 +47,9 @@ export default class ManualSubcommand extends CommandParams {
             },
             reactionButtons: [{
                 emoji: snippets.arrowLeft,
+                filter: (message: Message, _emoji: Emoji, userID: string): boolean => {
+                    return message.author.id === userID;
+                },
                 type: `edit`,
                 response: (message: Message): void => {
                     const previousCommand = message.embeds[0].title?.slice(`Command `.length);
@@ -63,6 +66,9 @@ export default class ManualSubcommand extends CommandParams {
             }, {
                 emoji: snippets.arrowRight,
                 type: `edit`,
+                filter: (message: Message, _emoji: Emoji, userID: string): boolean => {
+                    return message.author.id === userID;
+                },
                 response: (message: Message): void => {
                     const previousCommand = message.embeds[0].title?.slice(`Command `.length);
                     const commands = [...Object.values((message.channel.client as FMcord).commands)]
@@ -77,6 +83,9 @@ export default class ManualSubcommand extends CommandParams {
                 }
             }, {
                 emoji: snippets.exit,
+                filter: (message: Message, _emoji: Emoji, userID: string): boolean => {
+                    return message.author.id === userID;
+                },
                 type: `cancel`,
                 response: (): void => {
                     return;
