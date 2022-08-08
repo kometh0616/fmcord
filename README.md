@@ -15,7 +15,3 @@ FMCord also has small moderation support which allows admins/mods to disable cer
 FMCord is written in a TypeScript language. The libraries for development used are:
 - [Eris](https://abal.moe/Eris) - for interaction with Discord API
 - [node-canvas](https://www.npmjs.com/package/canvas) - for image manipulation
-
-Want to report an issue/bug? Head over to "Issues" tab and submit one, or join an [official FMCord Discord Server](https://discord.gg/BrJ6zEk) and ask your questions there.
-
-You can invite the bot to your Discord server with this [link.](https://discordbots.org/bot/521041865999515650)
